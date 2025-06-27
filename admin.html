@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Trimzales – Complete Fixed Version</title>
+    <title>USEP Library</title>
 
     <!-- TailwindCSS + USeP colors -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -42,70 +42,152 @@
         #overlay {
             z-index: 40;
         }
+
+        /* Collapsed state */
+        .sidebar-collapsed {
+            width: 80px !important;
+        }
+        .sidebar-collapsed .nav-text {
+            display: none;
+        }
+        .sidebar-collapsed .section-title {
+            display: none;
+        }
+        .sidebar-collapsed .logo-text {
+            display: none;
+        }
+        .sidebar-collapsed .badge {
+            display: none;
+        }
+        .sidebar-collapsed .toggle-btn {
+            left: 60px;
+        }
+        .sidebar-collapsed ~ #main-content {
+            margin-left: 80px !important;
+        }
+
+        /* Submenu styles */
+        .has-submenu {
+            position: relative;
+        }
+
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .has-submenu:hover .submenu {
+            max-height: 200px;
+        }
+
+
+        .nav-item:hover {
+            background-color: rgba(255, 215, 0, 0.2) !important;
+            border-left: 3px solid #FFD700;
+        }
+
+        /* Make sure submenu items stay visible when hovering */
+        .submenu:hover {
+            max-height: 200px;
+        }
+
+        /* Fix for collapsed state */
+        .sidebar-collapsed .has-submenu:hover .submenu {
+            display: block;
+            max-height: none;
+        }
+
+        /* Ensure submenu items are hoverable */
+        .submenu a {
+            display: block;
+        }
+
+        .submenu a:hover {
+            background-color: rgba(255, 215, 0, 0.2) !important;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
 
 <div class="flex min-h-screen relative">
 
-    <!-- Sidebar - Now fully visible -->
+    <!-- Sidebar -->
     <aside
             id="sidebar"
             class="fixed inset-y-0 left-0 w-64 bg-usepmaroon text-white shadow-lg
              transform -translate-x-full md:translate-x-0
              transition-slow flex flex-col z-50"
     >
-        <!-- Logo + Close -->
-        <div class="flex items-center justify-between px-6 border-b border-usepgold/50 h-[72px]">
-            <div class="flex items-center gap-2">
-                <img src="https://via.placeholder.com/32/800000/ffffff?text=T" alt="Logo" class="w-8 h-8 rounded"/>
-                <span class="text-xl font-bold">USEP Library</span>
+        <!-- Logo + Close + Toggle -->
+        <div class="flex items-center justify-between px-6 border-b border-usepgold/50 h-[72px] relative">
+            <div class="flex items-center gap-3">
+                <img src="https://via.placeholder.com/40/800000/ffffff?text=USEP" alt="Logo"
+                     class="w-10 h-10 rounded md:w-12 md:h-12 transition-slow">
+                <span class="text-xl md:text-2xl font-medium logo-text transition-slow">USEP Library</span>
             </div>
             <button id="closeBtn" class="md:hidden text-white hover:text-usepgold text-2xl transition-slow">
                 <i class="fa-solid fa-xmark"></i>
             </button>
+            <button id="toggleBtn" class="hidden md:block absolute -right-4 top-1/2 -translate-y-1/2 bg-usepmaroon text-usepgold border-2 border-usepgold w-8 h-8 rounded-full flex items-center justify-center transition-slow toggle-btn hover:bg-usepgold hover:text-usepmaroon">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
         </div>
 
-        <!-- Nav Links - Now clearly visible -->
-        <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1 text-sm">
-            <p class="px-2 text-xs font-semibold uppercase text-usepgold tracking-wider mb-3">Home</p>
+        <!-- Nav Links -->
+        <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-2 md:space-y-3 text-sm md:text-base">
+            <p class="px-2 text-xs md:text-sm font-semibold uppercase text-usepgold tracking-wider mb-3 section-title">Home</p>
 
-            <a href="#" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-house w-5 text-center text-usepgold"></i>
-                <span>Dashboard</span>
+            <a href="#" id="dashboardBtn" class="nav-item active flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-gauge-high w-6 text-center text-usepgold md:text-xl"></i>
+                <span class="nav-text font-medium md:text-lg">Dashboard</span>
             </a>
 
-            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-bookmark w-5 text-center text-white"></i>
-                <span>Bookmarks</span>
-                <span class="ml-auto bg-usepgold text-usepmaroon text-xs px-2 py-0.5 rounded-full font-bold">8</span>
+            <!-- Add with dropdown -->
+            <div class="relative has-submenu">
+                <a href="#" id="addMenuBtn" class="nav-item flex items-center justify-between px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-square-plus w-6 text-center text-white md:text-xl"></i>
+                        <span class="nav-text font-medium md:text-lg">Add</span>
+                    </div>
+                    <div class="flex items-center">
+                        <span class="bg-usepgold text-usepmaroon text-xs md:text-sm px-2 py-0.5 rounded-full font-bold badge">8</span>
+                        <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
+                    </div>
+                </a>
+
+                <!-- Submenu -->
+                <div class="submenu pl-4 space-y-1">
+                    <a href="#" class="add-submenu-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow" data-page="user">
+                        <i class="fa-solid fa-user-plus w-5 text-center text-usepgold"></i>
+                        <span class="text-sm font-medium">User</span>
+                    </a>
+                    <a href="#" class="add-submenu-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow" data-page="school">
+                        <i class="fa-solid fa-school w-5 text-center text-usepgold"></i>
+                        <span class="text-sm font-medium">School Information</span>
+                    </a>
+                </div>
+            </div>
+
+            <a href="#" id="updateMenuBtn" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-pen-to-square w-6 text-center text-white md:text-xl"></i>
+                <span class="nav-text font-medium md:text-lg">Update</span>
+                <span class="ml-auto bg-usepgold text-usepmaroon text-xs md:text-sm px-2 py-0.5 rounded-full font-bold badge">2</span>
             </a>
 
-            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-users w-5 text-center text-white"></i>
-                <span>Team</span>
+            <a href="#" id="accountsMenuBtn" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-user-gear w-6 text-center text-white md:text-xl"></i>
+                <span class="nav-text font-medium md:text-lg">Accounts</span>
             </a>
 
-            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-comments w-5 text-center text-white"></i>
-                <span>Messages</span>
-                <span class="ml-auto bg-usepgold text-usepmaroon text-xs px-2 py-0.5 rounded-full font-bold">2</span>
-            </a>
-
-            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-calendar-days w-5 text-center text-white"></i>
-                <span>Calendar</span>
-            </a>
-
-            <hr class="my-4 border-usepgold/30"/>
-
+            <hr class="my-4 border-usepgold/30 section-title"/>
         </nav>
 
         <!-- Logout -->
         <div class="px-4 py-4 border-t border-usepgold/30 mt-auto">
-            <a href="#" class="flex items-center gap-3 text-usepgold hover:bg-usepgold/10 px-3 py-2.5 rounded-lg transition-slow">
-                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
-                <span>Logout</span>
+            <a href="#" class="flex items-center gap-3 text-usepgold hover:bg-usepgold/10 px-3 py-2.5 md:py-3 rounded-lg transition-slow">
+                <i class="fa-solid fa-right-from-bracket w-6 text-center md:text-xl"></i>
+                <span class="nav-text font-medium md:text-lg">Logout</span>
             </a>
         </div>
     </aside>
@@ -113,8 +195,8 @@
     <!-- Overlay - Only shows on mobile -->
     <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden transition-slow"></div>
 
-    <!-- Main Content Area - Now properly offset -->
-    <div class="flex-1 flex flex-col md:ml-64">
+    <!-- Main Content Area -->
+    <div id="main-content" class="flex-1 flex flex-col md:ml-64 transition-slow">
 
         <!-- Topbar -->
         <header class="sticky top-0 z-20 flex items-center justify-between bg-white border-b shadow px-6 h-[72px]">
@@ -123,7 +205,6 @@
                 <button id="mobileMenuBtn" class="md:hidden text-usepmaroon hover:text-usepgold text-2xl transition-slow">
                     <i class="fa-solid fa-bars"></i>
                 </button>
-                <!-- Search -->
             </div>
             <div class="flex items-center gap-6">
                 <button class="relative text-gray-600 hover:text-usepmaroon transition-slow">
@@ -137,51 +218,267 @@
             </div>
         </header>
 
-        <!-- Main Content - Now visible! -->
+        <!-- Main Content Container -->
         <main class="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100">
-            <div class="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col items-center justify-center p-8 text-center space-y-6">
-                <i class="fa-solid fa-gem text-6xl text-usepmaroon"></i>
-                <h1 class="text-4xl font-bold text-usepmaroon">Welcome to Trimzales</h1>
+            <div id="content-container" class="h-full bg-white border border-gray-200 rounded-lg shadow-sm p-8 space-y-6">
+                <!-- Default Dashboard Content -->
+                <div id="dashboard-content">
+                    <!-- Year Filter -->
+                    <div class="flex justify-between items-center mb-6">
+                        <h1 class="text-3xl font-bold text-usepmaroon">Library Dashboard</h1>
+                        <div class="flex items-center gap-4">
+                            <div class="relative">
+                                <select class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
+                                    <option>ALL</option>
+                                    <option>2025</option>
+                                    <option>2024</option>
+                                    <option>2023</option>
+                                    <option>2022</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
+                    <!-- Stats Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                        <!-- Total Books Card -->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-500 font-medium">Total Books in System</p>
+                                    <h2 class="text-3xl font-bold text-usepmaroon mt-2">12,458</h2>
+                                </div>
+                                <div class="bg-usepgold/20 p-4 rounded-full">
+                                    <i class="fa-solid fa-book text-2xl text-usepmaroon"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">
+                                <span class="text-green-500 font-medium">+5.2%</span> from last year
+                            </p>
+                        </div>
+
+                        <!-- Borrowed Books Card -->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-500 font-medium">Books Borrowed This Year</p>
+                                    <h2 class="text-3xl font-bold text-usepmaroon mt-2">3,217</h2>
+                                </div>
+                                <div class="bg-usepgold/20 p-4 rounded-full">
+                                    <i class="fa-solid fa-book-open-reader text-2xl text-usepmaroon"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">
+                                <span class="text-green-500 font-medium">+12.8%</span> from last year
+                            </p>
+                        </div>
+
+                        <!-- Total Users Card -->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <p class="text-gray-500 font-medium">Total Users in System</p>
+                                    <h2 class="text-3xl font-bold text-usepmaroon mt-2">2,843</h2>
+                                </div>
+                                <div class="bg-usepgold/20 p-4 rounded-full">
+                                    <i class="fa-solid fa-users text-2xl text-usepmaroon"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">
+                                <span class="text-green-500 font-medium">+8.7%</span> from last year
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Borrowing Graph -->
+                    <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="text-xl font-semibold text-gray-800">Borrowing Trends</h3>
+                            <div class="flex gap-2">
+                                <button class="px-3 py-1 text-sm bg-usepmaroon text-white rounded-lg">Monthly</button>
+                                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg">Yearly</button>
+                            </div>
+                        </div>
+
+                        <!-- Graph Placeholder -->
+                        <div class="h-64 bg-gray-50 rounded-lg border border-dashed border-gray-300 flex items-center justify-center">
+                            <div class="text-center text-gray-400">
+                                <i class="fa-solid fa-chart-line text-4xl mb-2"></i>
+                                <p>Borrowing data visualization</p>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex justify-between text-sm text-gray-500">
+                            <span>Jan</span>
+                            <span>Feb</span>
+                            <span>Mar</span>
+                            <span>Apr</span>
+                            <span>May</span>
+                            <span>Jun</span>
+                            <span>Jul</span>
+                            <span>Aug</span>
+                            <span>Sep</span>
+                            <span>Oct</span>
+                            <span>Nov</span>
+                            <span>Dec</span>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </main>
     </div>
-    </main>
-</div>
 </div>
 
-<!-- Sidebar Toggle Script -->
 <script>
+    // Sidebar and overlay controls
     const sidebar = document.getElementById('sidebar');
     const openBtn = document.getElementById('mobileMenuBtn');
     const closeBtn = document.getElementById('closeBtn');
     const overlay = document.getElementById('overlay');
+    const toggleBtn = document.getElementById('toggleBtn');
+    const contentContainer = document.getElementById('content-container');
+    const dashboardContent = document.getElementById('dashboard-content');
 
-    // Open sidebar
+    // Sidebar collapse toggle
+    function toggleSidebar() {
+        sidebar.classList.toggle('sidebar-collapsed');
+        toggleBtn.innerHTML = sidebar.classList.contains('sidebar-collapsed')
+            ? '<i class="fa-solid fa-chevron-right"></i>'
+            : '<i class="fa-solid fa-chevron-left"></i>';
+    }
+
+    // Sidebar open/close for mobile
     function openSidebar() {
         sidebar.classList.remove('-translate-x-full');
         overlay.classList.remove('hidden');
-        openBtn.classList.add('hidden');
         document.body.style.overflow = 'hidden';
     }
-
-    // Close sidebar
     function closeSidebar() {
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
-        openBtn.classList.remove('hidden');
         document.body.style.overflow = '';
     }
 
-    // Event listeners
+    // Dashboard navigation
+    document.getElementById('dashboardBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        showDashboard();
+    });
+
+    // Add menu navigation
+    document.getElementById('addMenuBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        loadAddContent('user');
+    });
+
+    // Add submenu navigation
+    document.querySelectorAll('.add-submenu-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            loadAddContent(page);
+        });
+    });
+
+    // Update navigation
+    document.getElementById('updateMenuBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        loadUpdateContent();
+    });
+
+    // Accounts navigation
+    document.getElementById('accountsMenuBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        loadAccountsContent();
+    });
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+    // Add content loader
+    function loadAddContent(page) {
+        fetch('add.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('addMenuBtn').classList.add('active');
+                // Load sub-content
+                if (page === 'user') {
+                    fetch('user.html')
+                        .then(response => response.text())
+                        .then(userHtml => {
+                            const addContent = document.getElementById('add-content');
+                            if (addContent) {
+                                addContent.innerHTML = userHtml;
+                                document.querySelectorAll('.add-submenu-item').forEach(i => i.classList.remove('active'));
+                                document.querySelector('.add-submenu-item[data-page="user"]').classList.add('active');
+                            }
+                        });
+                } else if (page === 'school') {
+                    fetch('school.html')
+                        .then(response => response.text())
+                        .then(schoolHtml => {
+                            const addContent = document.getElementById('add-content');
+                            if (addContent) {
+                                addContent.innerHTML = schoolHtml;
+                                document.querySelectorAll('.add-submenu-item').forEach(i => i.classList.remove('active'));
+                                document.querySelector('.add-submenu-item[data-page="school"]').classList.add('active');
+                            }
+                        });
+                }
+            });
+    }
+
+    // Update content loader
+    function loadUpdateContent() {
+        fetch('update.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('updateMenuBtn').classList.add('active');
+            });
+    }
+
+    // Accounts content loader
+    function loadAccountsContent() {
+        fetch('accounts.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('accountsMenuBtn').classList.add('active');
+            });
+    }
+
+    // Dashboard loader
+    function showDashboard() {
+        contentContainer.innerHTML = dashboardContent.innerHTML;
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('dashboardBtn').classList.add('active');
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////
+    // Sidebar and overlay event listeners
     openBtn.addEventListener('click', openSidebar);
     closeBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
+    toggleBtn.addEventListener('click', toggleSidebar);
 
-    // Set active nav item
-    document.querySelectorAll('.nav-item').forEach(item => {
-        item.addEventListener('click', function() {
-            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-            this.classList.add('active');
+    // Submenu hover logic
+    document.querySelectorAll('.has-submenu').forEach(menu => {
+        const submenu = menu.querySelector('.submenu');
+        menu.addEventListener('mouseenter', () => {
+            submenu.style.maxHeight = '200px';
+        });
+        menu.addEventListener('mouseleave', () => {
+            if (!submenu.matches(':hover')) {
+                submenu.style.maxHeight = '0';
+            }
+        });
+        submenu.addEventListener('mouseleave', () => {
+            submenu.style.maxHeight = '0';
         });
     });
 </script>
