@@ -328,7 +328,11 @@
                     </div>
                 </div>
             </div>
+
         </main>
+        <footer class="w-full bg-usepmaroon text-usepgold text-center py-3 mt-auto">
+        USEP Library | TAGUM-MABINI campus
+    </footer>
     </div>
 </div>
 
@@ -368,10 +372,16 @@
         showDashboard();
     });
 
-    // Add menu navigation
+    // Add menu navigation (only loads add.html)
     document.getElementById('addMenuBtn').addEventListener('click', function(e) {
         e.preventDefault();
-        loadAddContent('user');
+        fetch('add.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('addMenuBtn').classList.add('active');
+            });
     });
 
     // Add submenu navigation
@@ -394,8 +404,8 @@
         e.preventDefault();
         loadAccountsContent();
     });
-///////////////////////////////////////////////////////////////////////////////////////////////////////
-    // Add content loader
+
+    // Add content loader (for submenu)
     function loadAddContent(page) {
         fetch('add.html')
             .then(response => response.text())
@@ -459,28 +469,21 @@
         document.getElementById('dashboardBtn').classList.add('active');
     }
 
-    ///////////////////////////////////////////////////////////////////////////////////////////////
     // Sidebar and overlay event listeners
     openBtn.addEventListener('click', openSidebar);
     closeBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
     toggleBtn.addEventListener('click', toggleSidebar);
 
-    // Submenu hover logic
-    document.querySelectorAll('.has-submenu').forEach(menu => {
-        const submenu = menu.querySelector('.submenu');
-        menu.addEventListener('mouseenter', () => {
-            submenu.style.maxHeight = '200px';
+    // Submenu toggle logic (arrow only)
+    const addSubmenuArrow = document.getElementById('addSubmenuArrow');
+    if (addSubmenuArrow) {
+        const addMenu = addSubmenuArrow.closest('.has-submenu');
+        addSubmenuArrow.addEventListener('click', function(e) {
+            e.stopPropagation();
+            addMenu.classList.toggle('submenu-open');
         });
-        menu.addEventListener('mouseleave', () => {
-            if (!submenu.matches(':hover')) {
-                submenu.style.maxHeight = '0';
-            }
-        });
-        submenu.addEventListener('mouseleave', () => {
-            submenu.style.maxHeight = '0';
-        });
-    });
+    }
 </script>
 </body>
 </html>

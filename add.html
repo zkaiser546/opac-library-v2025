@@ -1,12 +1,230 @@
-<!-- add.html -->
-<div id="add-content" class="h-full bg-white border border-gray-200 rounded-lg shadow-sm p-8 space-y-6">
-    <h2 class="text-2xl font-bold text-usepmaroon mb-4">Add Page</h2>
-    <div class="text-gray-600">This is the add page container.</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>USEP Library - Add</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        usepmaroon: '#800000',
+                        usepgold: '#FFD700',
+                        usepgoldlight: 'rgba(255, 215, 0, 0.1)',
+                    }
+                }
+            }
+        };
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+
+    <style>
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .desktop-tab {
+            transition: all 0.2s ease;
+            position: relative;
+        }
+        .desktop-tab:hover:not(.active-tab) {
+            background-color: rgba(255, 215, 0, 0.2);
+        }
+        .desktop-tab.active-tab {
+            background-color: white;
+            color: #800000;
+            font-weight: 600;
+        }
+        .desktop-tab.active-tab::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background-color: #FFD700;
+        }
+
+        .mobile-dropdown-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .mobile-dropdown-content.show {
+            max-height: 500px;
+        }
+        .mobile-tab-option:hover {
+            background-color: rgba(255, 215, 0, 0.1);
+        }
+
+        @media (min-width: 768px) {
+            .mobile-dropdown { display: none; }
+        }
+        @media (max-width: 767px) {
+            .desktop-tabs { display: none; }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+<div class="container mx-auto p-4 max-w-6xl">
+
+    <!-- Desktop Tabs -->
+    <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden">
+        <div class="flex">
+            <button onclick="switchTab(1)" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-book mr-2"></i>Books
+            </button>
+            <button onclick="switchTab(2)" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-laptop-code mr-2"></i>Electronic
+            </button>
+            <button onclick="switchTab(3)" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-newspaper mr-2"></i>Periodical
+            </button>
+            <button onclick="switchTab(4)" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-graduation-cap mr-2"></i>Thesis
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Dropdown -->
+    <div class="mobile-dropdown mb-6">
+        <button onclick="toggleDropdown()" class="w-full bg-gray-100 py-3 px-4 rounded-lg flex justify-between items-center border border-gray-300">
+            <span id="mobile-tab-label">
+                <i class="fas fa-book mr-2"></i>Books
+            </span>
+            <i id="dropdown-chevron" class="fas fa-chevron-down transition-transform"></i>
+        </button>
+        <div id="mobile-dropdown-content" class="mobile-dropdown-content bg-white border border-gray-200 rounded-b-lg shadow-sm">
+            <button onclick="selectMobileTab(1)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-book mr-3 text-usepmaroon"></i>Books
+                <span id="mobile-tab-1-check" class="ml-auto text-usepmaroon">
+                    <i class="fas fa-check"></i>
+                </span>
+            </button>
+            <button onclick="selectMobileTab(2)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-laptop-code mr-3 text-usepmaroon"></i>Electronic
+                <span id="mobile-tab-2-check" class="ml-auto text-usepmaroon opacity-0">
+                    <i class="fas fa-check"></i>
+                </span>
+            </button>
+            <button onclick="selectMobileTab(3)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-newspaper mr-3 text-usepmaroon"></i>Periodical
+                <span id="mobile-tab-3-check" class="ml-auto text-usepmaroon opacity-0">
+                    <i class="fas fa-check"></i>
+                </span>
+            </button>
+            <button onclick="selectMobileTab(4)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center">
+                <i class="fas fa-graduation-cap mr-3 text-usepmaroon"></i>Thesis
+                <span id="mobile-tab-4-check" class="ml-auto text-usepmaroon opacity-0">
+                    <i class="fas fa-check"></i>
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Tab Contents -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
+        <div id="tab-1" class="tab-content">
+            <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add New Book</h3>
+            <p class="text-gray-600">You're viewing the Books section.</p>
+        </div>
+        <div id="tab-2" class="tab-content">
+            <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Electronic Resource</h3>
+            <p class="text-gray-600">You're viewing the Electronic Resources section.</p>
+        </div>
+        <div id="tab-3" class="tab-content">
+            <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Periodical</h3>
+            <p class="text-gray-600">You're viewing the Periodicals section.</p>
+        </div>
+        <div id="tab-4" class="tab-content">
+            <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Thesis/Dissertation</h3>
+            <p class="text-gray-600">You're viewing the Thesis section.</p>
+        </div>
+    </div>
 </div>
+
 <script>
-    // JavaScript to handle the add page functionality
+    let currentTab = 1;
+    const tabIcons = ['fa-book', 'fa-laptop-code', 'fa-newspaper', 'fa-graduation-cap'];
+    const tabLabels = ['Books', 'Electronic', 'Periodical', 'Thesis'];
+
+    function switchTab(tabNumber) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        // Show selected tab content
+        document.getElementById(`tab-${tabNumber}`).classList.add('active');
+
+        // Update desktop tabs
+        document.querySelectorAll('.desktop-tab').forEach((tab, index) => {
+            if (index === tabNumber - 1) {
+                tab.classList.add('active-tab');
+            } else {
+                tab.classList.remove('active-tab');
+            }
+        });
+
+        // Update mobile dropdown label
+        document.getElementById('mobile-tab-label').innerHTML =
+            `<i class="fas ${tabIcons[tabNumber - 1]} mr-2"></i>${tabLabels[tabNumber - 1]}`;
+
+        // Update checkmarks
+        for (let i = 1; i <= 4; i++) {
+            const check = document.getElementById(`mobile-tab-${i}-check`);
+            if (check) {
+                if (i === tabNumber) {
+                    check.classList.remove('opacity-0');
+                } else {
+                    check.classList.add('opacity-0');
+                }
+            }
+        }
+
+        currentTab = tabNumber;
+    }
+
+    function toggleDropdown() {
+        const dropdown = document.getElementById('mobile-dropdown-content');
+        dropdown.classList.toggle('show');
+        const chevron = document.getElementById('dropdown-chevron');
+        chevron.classList.toggle('fa-chevron-down');
+        chevron.classList.toggle('fa-chevron-up');
+    }
+
+    function selectMobileTab(tabNumber) {
+        switchTab(tabNumber);
+        toggleDropdown();
+    }
+
     document.addEventListener('DOMContentLoaded', function() {
-        console.log('Add page loaded');
-        // Additional functionality can be added here
+        // Set up hover effects for desktop tabs
+        document.querySelectorAll('.desktop-tab').forEach(tab => {
+            tab.addEventListener('mouseenter', function() {
+                if (!this.classList.contains('active-tab')) {
+                    this.style.backgroundColor = 'rgba(255, 215, 0, 0.2)';
+                }
+            });
+            tab.addEventListener('mouseleave', function() {
+                if (!this.classList.contains('active-tab')) {
+                    this.style.backgroundColor = '';
+                }
+            });
+        });
+        // Set initial tab
+        switchTab(1);
     });
 </script>
+</body>
+</html>
