@@ -42,6 +42,9 @@
         #overlay {
             z-index: 40;
         }
+        #profile-dropdown {
+            z-index: 60;
+        }
 
         /* Collapsed state */
         .sidebar-collapsed {
@@ -81,7 +84,6 @@
             max-height: 200px;
         }
 
-
         .nav-item:hover {
             background-color: rgba(255, 215, 0, 0.2) !important;
             border-left: 3px solid #FFD700;
@@ -105,6 +107,20 @@
 
         .submenu a:hover {
             background-color: rgba(255, 215, 0, 0.2) !important;
+        }
+
+        /* Profile dropdown */
+        .profile-dropdown {
+            display: none;
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        .profile-dropdown.show {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
@@ -177,7 +193,7 @@
 
             <a href="#" id="accountsMenuBtn" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
                 <i class="fa-solid fa-user-gear w-6 text-center text-white md:text-xl"></i>
-                <span class="nav-text font-medium md:text-lg">Accounts</span>
+                <span class="nav-text font-medium md:text-lg">System Accounts</span>
             </a>
 
             <hr class="my-4 border-usepgold/30 section-title"/>
@@ -211,9 +227,28 @@
                     <i class="fa-solid fa-bell text-xl"></i>
                     <span class="absolute -top-1 -right-2 bg-usepmaroon text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
                 </button>
-                <div class="flex items-center gap-2">
-                    <img src="https://via.placeholder.com/40/800000/ffffff?text=JD" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow"/>
-                    <span class="hidden md:block font-medium text-usepmaroon">John Doe</span>
+
+                <!-- Profile Dropdown Trigger -->
+                <div class="relative">
+                    <div id="profile-trigger" class="flex items-center gap-2 cursor-pointer">
+                        <img src="https://via.placeholder.com/40/800000/ffffff?text=JD" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow"/>
+                        <span class="hidden md:block font-medium text-usepmaroon">John Doe</span>
+                        <i class="fa-solid fa-chevron-down text-xs ml-1 text-usepmaroon"></i>
+                    </div>
+
+                    <!-- Profile Dropdown -->
+                    <div id="profile-dropdown" class="profile-dropdown absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow" onclick="loadAccountSettings()">
+                            <i class="fa-solid fa-user-gear mr-2"></i> Account Settings
+                        </a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
+                            <i class="fa-solid fa-clock-rotate-left mr-2"></i> History
+                        </a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
+                            <i class="fa-solid fa-right-from-bracket mr-2"></i> Logout
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>
@@ -328,11 +363,10 @@
                     </div>
                 </div>
             </div>
-
         </main>
         <footer class="w-full bg-usepmaroon text-usepgold text-center py-3 mt-auto">
-        USEP Library | TAGUM-MABINI campus
-    </footer>
+            USEP Library | TAGUM-MABINI campus
+        </footer>
     </div>
 </div>
 
@@ -345,6 +379,23 @@
     const toggleBtn = document.getElementById('toggleBtn');
     const contentContainer = document.getElementById('content-container');
     const dashboardContent = document.getElementById('dashboard-content');
+
+    // Profile dropdown controls
+    const profileTrigger = document.getElementById('profile-trigger');
+    const profileDropdown = document.getElementById('profile-dropdown');
+
+    // Toggle profile dropdown
+    profileTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+    });
+
+    // Close dropdown when clicking elsewhere
+    document.addEventListener('click', function(e) {
+        if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.remove('show');
+        }
+    });
 
     // Sidebar collapse toggle
     function toggleSidebar() {
@@ -372,7 +423,7 @@
         showDashboard();
     });
 
-    // Add menu navigation (only loads add.html)
+    // Add menu navigation (loads add.html)
     document.getElementById('addMenuBtn').addEventListener('click', function(e) {
         e.preventDefault();
         fetch('add.html')
@@ -384,12 +435,30 @@
             });
     });
 
-    // Add submenu navigation
+    // Add submenu navigation (loads user.html or school.html directly)
     document.querySelectorAll('.add-submenu-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
             const page = this.getAttribute('data-page');
-            loadAddContent(page);
+            if (page === 'user') {
+                fetch('user.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        contentContainer.innerHTML = html;
+                        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                        document.getElementById('addMenuBtn').classList.add('active');
+                    });
+            } else if (page === 'school') {
+                fetch('school.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        contentContainer.innerHTML = html;
+                        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                        document.getElementById('addMenuBtn').classList.add('active');
+                    });
+            } else {
+                loadAddContent(page);
+            }
         });
     });
 
@@ -405,7 +474,18 @@
         loadAccountsContent();
     });
 
-    // Add content loader (for submenu)
+    // Account Settings navigation
+    function loadAccountSettings() {
+        fetch('account-settings.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                profileDropdown.classList.remove('show');
+            });
+    }
+
+    // Add content loader (for other add.html subpages)
     function loadAddContent(page) {
         fetch('add.html')
             .then(response => response.text())
@@ -413,30 +493,6 @@
                 contentContainer.innerHTML = html;
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 document.getElementById('addMenuBtn').classList.add('active');
-                // Load sub-content
-                if (page === 'user') {
-                    fetch('user.html')
-                        .then(response => response.text())
-                        .then(userHtml => {
-                            const addContent = document.getElementById('add-content');
-                            if (addContent) {
-                                addContent.innerHTML = userHtml;
-                                document.querySelectorAll('.add-submenu-item').forEach(i => i.classList.remove('active'));
-                                document.querySelector('.add-submenu-item[data-page="user"]').classList.add('active');
-                            }
-                        });
-                } else if (page === 'school') {
-                    fetch('school.html')
-                        .then(response => response.text())
-                        .then(schoolHtml => {
-                            const addContent = document.getElementById('add-content');
-                            if (addContent) {
-                                addContent.innerHTML = schoolHtml;
-                                document.querySelectorAll('.add-submenu-item').forEach(i => i.classList.remove('active'));
-                                document.querySelector('.add-submenu-item[data-page="school"]').classList.add('active');
-                            }
-                        });
-                }
             });
     }
 
@@ -474,16 +530,6 @@
     closeBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
     toggleBtn.addEventListener('click', toggleSidebar);
-
-    // Submenu toggle logic (arrow only)
-    const addSubmenuArrow = document.getElementById('addSubmenuArrow');
-    if (addSubmenuArrow) {
-        const addMenu = addSubmenuArrow.closest('.has-submenu');
-        addSubmenuArrow.addEventListener('click', function(e) {
-            e.stopPropagation();
-            addMenu.classList.toggle('submenu-open');
-        });
-    }
 </script>
 </body>
 </html>
