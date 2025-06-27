@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Trimzales – Complete Fixed Version</title>
+
+    <!-- TailwindCSS + USeP colors -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        usepmaroon: '#800000',
+                        usepgold: '#FFD700',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Smooth transitions */
+        .transition-slow {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Active nav item */
+        .nav-item.active {
+            background-color: rgba(255, 215, 0, 0.2);
+            border-left: 3px solid #FFD700;
+        }
+
+        /* Ensure proper layering */
+        #sidebar {
+            z-index: 50;
+        }
+        #overlay {
+            z-index: 40;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans antialiased">
+
+<div class="flex min-h-screen relative">
+
+    <!-- Sidebar - Now fully visible -->
+    <aside
+            id="sidebar"
+            class="fixed inset-y-0 left-0 w-64 bg-usepmaroon text-white shadow-lg
+             transform -translate-x-full md:translate-x-0
+             transition-slow flex flex-col z-50"
+    >
+        <!-- Logo + Close -->
+        <div class="flex items-center justify-between px-6 border-b border-usepgold/50 h-[72px]">
+            <div class="flex items-center gap-2">
+                <img src="https://via.placeholder.com/32/800000/ffffff?text=T" alt="Logo" class="w-8 h-8 rounded"/>
+                <span class="text-xl font-bold">USEP Library</span>
+            </div>
+            <button id="closeBtn" class="md:hidden text-white hover:text-usepgold text-2xl transition-slow">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <!-- Nav Links - Now clearly visible -->
+        <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-1 text-sm">
+            <p class="px-2 text-xs font-semibold uppercase text-usepgold tracking-wider mb-3">Home</p>
+
+            <a href="#" class="nav-item active flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-house w-5 text-center text-usepgold"></i>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-bookmark w-5 text-center text-white"></i>
+                <span>Bookmarks</span>
+                <span class="ml-auto bg-usepgold text-usepmaroon text-xs px-2 py-0.5 rounded-full font-bold">8</span>
+            </a>
+
+            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-users w-5 text-center text-white"></i>
+                <span>Team</span>
+            </a>
+
+            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-comments w-5 text-center text-white"></i>
+                <span>Messages</span>
+                <span class="ml-auto bg-usepgold text-usepmaroon text-xs px-2 py-0.5 rounded-full font-bold">2</span>
+            </a>
+
+            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                <i class="fa-solid fa-calendar-days w-5 text-center text-white"></i>
+                <span>Calendar</span>
+            </a>
+
+            <hr class="my-4 border-usepgold/30"/>
+
+        </nav>
+
+        <!-- Logout -->
+        <div class="px-4 py-4 border-t border-usepgold/30 mt-auto">
+            <a href="#" class="flex items-center gap-3 text-usepgold hover:bg-usepgold/10 px-3 py-2.5 rounded-lg transition-slow">
+                <i class="fa-solid fa-right-from-bracket w-5 text-center"></i>
+                <span>Logout</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Overlay - Only shows on mobile -->
+    <div id="overlay" class="fixed inset-0 bg-black bg-opacity-50 hidden z-40 md:hidden transition-slow"></div>
+
+    <!-- Main Content Area - Now properly offset -->
+    <div class="flex-1 flex flex-col md:ml-64">
+
+        <!-- Topbar -->
+        <header class="sticky top-0 z-20 flex items-center justify-between bg-white border-b shadow px-6 h-[72px]">
+            <div class="flex items-center gap-4">
+                <!-- Mobile toggle -->
+                <button id="mobileMenuBtn" class="md:hidden text-usepmaroon hover:text-usepgold text-2xl transition-slow">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <!-- Search -->
+            </div>
+            <div class="flex items-center gap-6">
+                <button class="relative text-gray-600 hover:text-usepmaroon transition-slow">
+                    <i class="fa-solid fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-2 bg-usepmaroon text-white text-xs w-5 h-5 rounded-full flex items-center justify-center font-bold">3</span>
+                </button>
+                <div class="flex items-center gap-2">
+                    <img src="https://via.placeholder.com/40/800000/ffffff?text=JD" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow"/>
+                    <span class="hidden md:block font-medium text-usepmaroon">John Doe</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content - Now visible! -->
+        <main class="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+            <div class="h-full bg-white border border-gray-200 rounded-lg shadow-sm flex flex-col items-center justify-center p-8 text-center space-y-6">
+                <i class="fa-solid fa-gem text-6xl text-usepmaroon"></i>
+                <h1 class="text-4xl font-bold text-usepmaroon">Welcome to Trimzales</h1>
+
+            </div>
+    </div>
+    </main>
+</div>
+</div>
+
+<!-- Sidebar Toggle Script -->
+<script>
+    const sidebar = document.getElementById('sidebar');
+    const openBtn = document.getElementById('mobileMenuBtn');
+    const closeBtn = document.getElementById('closeBtn');
+    const overlay = document.getElementById('overlay');
+
+    // Open sidebar
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        openBtn.classList.add('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    // Close sidebar
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        openBtn.classList.remove('hidden');
+        document.body.style.overflow = '';
+    }
+
+    // Event listeners
+    openBtn.addEventListener('click', openSidebar);
+    closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+
+    // Set active nav item
+    document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', function() {
+            document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>
