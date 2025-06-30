@@ -41,6 +41,7 @@
         .submenu a:hover { background-color: rgba(255, 215, 0, 0.2) !important; }
         .profile-dropdown { display: none; opacity: 0; transform: translateY(-10px); transition: opacity 0.2s ease, transform 0.2s ease; }
         .profile-dropdown.show { display: block; opacity: 1; transform: translateY(0); }
+        .chart-container { position: relative; height: 300px; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -171,7 +172,7 @@
                         <h1 class="text-3xl font-bold text-usepmaroon">Library Dashboard</h1>
                         <div class="flex items-center gap-4">
                             <div class="relative">
-                                <select class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
+                                <select id="year-selector" class="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
                                     <option>2025</option>
                                     <option>2024</option>
                                     <option>2023</option>
@@ -182,7 +183,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+                    <!-- Statistics Cards -->
+
+                    <!--total books-->
+                    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -197,20 +202,8 @@
                                 <span class="text-green-500 font-medium">+5.2%</span> from last year
                             </p>
                         </div>
-                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
-                            <div class="flex items-center justify-between">
-                                <div>
-                                    <div class="text-2xl font-bold text-usepmaroon">2,345</div>
-                                    <div class="text-gray-500">Borrowed Books</div>
-                                </div>
-                                <div class="bg-usepgold/20 p-4 rounded-full">
-                                    <i class="fa-solid fa-book-open-reader text-2xl text-usepgold"></i>
-                                </div>
-                            </div>
-                            <p class="text-sm text-gray-500 mt-4">
-                                <span class="text-green-500 font-medium">+12.8%</span> from last year
-                            </p>
-                        </div>
+
+                        <!--total users-->
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -225,25 +218,67 @@
                                 <span class="text-green-500 font-medium">+8.7%</span> from last year
                             </p>
                         </div>
+
+                        <!--borrowed books-->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-usepmaroon">2,345</div>
+                                    <div class="text-gray-500">Borrowed Books</div>
+                                </div>
+                                <div class="bg-usepgold/20 p-4 rounded-full">
+                                    <i class="fa-solid fa-book-open-reader text-2xl text-usepgold"></i>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-500 mt-4">
+                                <span class="text-green-500 font-medium">+12.8%</span> from last year
+                            </p>
+                        </div>
+
+                        <!--monthly users-->
+                        <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <div class="text-2xl font-bold text-usepmaroon">345</div>
+                                    <div class="text-gray-500">Monthly Users Borrow</div>
+                                </div>
+                                <div class="bg-usepgold/20 p-4 rounded-full">
+                                    <i class="fa-solid fa-calendar-days text-2xl text-usepgold"></i>
+                                </div>
+                            </div>
+                            <div class="relative mt-2">
+                                <select id="month-selector" class="appearance-none w-full bg-white border border-gray-300 rounded-lg px-3 py-1 pr-8 text-sm focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
+                                    <option value="1">January</option>
+                                    <option value="2">February</option>
+                                    <option value="3">March</option>
+                                    <option value="4">April</option>
+                                    <option value="5">May</option>
+                                    <option value="6">June</option>
+                                    <option value="7">July</option>
+                                    <option value="8">August</option>
+                                    <option value="9">September</option>
+                                    <option value="10">October</option>
+                                    <option value="11">November</option>
+                                    <option value="12">December</option>
+                                </select>
+                                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+
+                    <!-- Borrowing Trends Chart -->
                     <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                         <div class="flex justify-between items-center mb-6">
                             <h3 class="text-xl font-semibold text-gray-800">Borrowing Trends</h3>
                             <div class="flex gap-2">
-                                <button class="px-3 py-1 text-sm bg-usepmaroon text-white rounded-lg">Monthly</button>
-                                <button class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg">Yearly</button>
+                                <button id="monthly-btn" class="px-3 py-1 text-sm bg-usepmaroon text-white rounded-lg">Monthly</button>
+                                <button id="yearly-btn" class="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded-lg">Yearly</button>
                             </div>
                         </div>
-                        <div class="h-64 bg-gray-50 rounded-lg border border-dashed border-gray-300 flex items-center justify-center">
-                            <div class="text-center text-gray-400">
-                                <i class="fa-solid fa-chart-line text-4xl mb-2"></i>
-                                <p>Borrowing data visualization</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex justify-between text-sm text-gray-500">
-                            <span>Jan</span><span>Feb</span><span>Mar</span><span>Apr</span>
-                            <span>May</span><span>Jun</span><span>Jul</span><span>Aug</span>
-                            <span>Sep</span><span>Oct</span><span>Nov</span><span>Dec</span>
+                        <div class="chart-container">
+                            <canvas id="borrowingChart"></canvas>
                         </div>
                     </div>
                 </div>
@@ -254,6 +289,10 @@
         </footer>
     </div>
 </div>
+
+<!-- Include Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 <script>
     // Sidebar and overlay controls
     const sidebar = document.getElementById('sidebar');
@@ -263,42 +302,193 @@
     const toggleBtn = document.getElementById('toggleBtn');
     const contentContainer = document.getElementById('content-container');
     const dashboardContent = document.getElementById('dashboard-content');
+
     // Profile dropdown controls
     const profileTrigger = document.getElementById('profile-trigger');
     const profileDropdown = document.getElementById('profile-dropdown');
+
+    // Chart variables
+    let borrowingChart;
+    let currentView = 'monthly'; // 'monthly' or 'yearly'
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize Chart
+        initChart();
+
+        // Set current month as selected
+        const currentMonth = new Date().getMonth() + 1;
+        document.getElementById('month-selector').value = currentMonth;
+
+        // Set current year as selected
+        const currentYear = new Date().getFullYear();
+        const yearSelector = document.getElementById('year-selector');
+        if (!Array.from(yearSelector.options).some(option => option.value == currentYear)) {
+            const option = document.createElement('option');
+            option.value = currentYear;
+            option.text = currentYear;
+            yearSelector.insertBefore(option, yearSelector.firstChild);
+        }
+        yearSelector.value = currentYear;
+
+        // Update chart when year changes
+        yearSelector.addEventListener('change', updateChartData);
+
+        // Update chart when month changes
+        document.getElementById('month-selector').addEventListener('change', updateChartData);
+
+        // Toggle between monthly and yearly views
+        document.getElementById('monthly-btn').addEventListener('click', function() {
+            if (currentView !== 'monthly') {
+                currentView = 'monthly';
+                this.classList.add('bg-usepmaroon', 'text-white');
+                this.classList.remove('bg-gray-100', 'text-gray-600');
+                document.getElementById('yearly-btn').classList.add('bg-gray-100', 'text-gray-600');
+                document.getElementById('yearly-btn').classList.remove('bg-usepmaroon', 'text-white');
+                updateChartData();
+            }
+        });
+
+        document.getElementById('yearly-btn').addEventListener('click', function() {
+            if (currentView !== 'yearly') {
+                currentView = 'yearly';
+                this.classList.add('bg-usepmaroon', 'text-white');
+                this.classList.remove('bg-gray-100', 'text-gray-600');
+                document.getElementById('monthly-btn').classList.add('bg-gray-100', 'text-gray-600');
+                document.getElementById('monthly-btn').classList.remove('bg-usepmaroon', 'text-white');
+                updateChartData();
+            }
+        });
+    });
+
+    // Initialize Chart.js
+    function initChart() {
+        const ctx = document.getElementById('borrowingChart').getContext('2d');
+        borrowingChart = new Chart(ctx, {
+            type: 'line',
+            data: getChartData(),
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            precision: 0
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    // Get chart data based on current view
+    function getChartData() {
+        const year = document.getElementById('year-selector').value;
+        const month = document.getElementById('month-selector').value;
+
+        if (currentView === 'monthly') {
+            return {
+                labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                datasets: [{
+                    label: 'Borrowed Books',
+                    data: [45, 60, 75, 55],
+                    borderColor: '#800000',
+                    backgroundColor: 'rgba(128, 0, 0, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }, {
+                    label: 'Returned Books',
+                    data: [35, 50, 65, 45],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            };
+        } else {
+            // Yearly view
+            return {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                datasets: [{
+                    label: 'Borrowed Books',
+                    data: [320, 290, 350, 380, 400, 420, 450, 470, 410, 390, 360, 330],
+                    borderColor: '#800000',
+                    backgroundColor: 'rgba(128, 0, 0, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }, {
+                    label: 'Returned Books',
+                    data: [300, 270, 330, 360, 380, 400, 430, 450, 390, 370, 340, 310],
+                    borderColor: '#FFD700',
+                    backgroundColor: 'rgba(255, 215, 0, 0.1)',
+                    tension: 0.3,
+                    fill: true
+                }]
+            };
+        }
+    }
+
+    // Update chart data
+    function updateChartData() {
+        const newData = getChartData();
+        borrowingChart.data.labels = newData.labels;
+        borrowingChart.data.datasets[0].data = newData.datasets[0].data;
+        borrowingChart.data.datasets[1].data = newData.datasets[1].data;
+        borrowingChart.update();
+    }
+
+    // Profile dropdown
     profileTrigger.addEventListener('click', function(e) {
         e.stopPropagation();
         profileDropdown.classList.toggle('show');
     });
+
     document.addEventListener('click', function(e) {
         if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
             profileDropdown.classList.remove('show');
         }
     });
+
     function toggleSidebar() {
         sidebar.classList.toggle('sidebar-collapsed');
         toggleBtn.innerHTML = sidebar.classList.contains('sidebar-collapsed')
             ? '<i class="fa-solid fa-chevron-right"></i>'
             : '<i class="fa-solid fa-chevron-left"></i>';
     }
+
     function openSidebar() {
         sidebar.classList.remove('-translate-x-full');
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
+
     function closeSidebar() {
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
         document.body.style.overflow = '';
     }
+
+    // Navigation functions
     document.getElementById('dashboardBtn').addEventListener('click', function(e) {
         e.preventDefault();
         showDashboard();
     });
+
     document.getElementById('addMenuBtn').addEventListener('click', function(e) {
         e.preventDefault();
         loadAddContent();
     });
+
     document.querySelectorAll('.add-submenu-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
@@ -324,10 +514,12 @@
             }
         });
     });
+
     document.getElementById('updateMenuBtn').addEventListener('click', function(e) {
         e.preventDefault();
         loadUpdateContent();
     });
+
     document.querySelectorAll('.update-submenu-item').forEach(item => {
         item.addEventListener('click', function(e) {
             e.preventDefault();
@@ -353,10 +545,12 @@
             }
         });
     });
+
     document.getElementById('accountsMenuBtn').addEventListener('click', function(e) {
         e.preventDefault();
         loadAccountsContent();
     });
+
     function loadAccountSettings() {
         fetch('account-settings.html')
             .then(response => response.text())
@@ -366,28 +560,31 @@
                 profileDropdown.classList.remove('show');
             });
     }
-    // --- FIX: Load and execute scripts for add.html ---
+
+    ///important functions for loading content tabbing
     function loadAddContent(page) {
         fetch('add.html')
             .then(response => response.text())
             .then(html => {
                 contentContainer.innerHTML = html;
-                // Execute scripts in loaded HTML
-                const scripts = contentContainer.querySelectorAll('script');
-                scripts.forEach(oldScript => {
-                    const newScript = document.createElement('script');
-                    if (oldScript.src) {
-                        newScript.src = oldScript.src;
-                    } else {
-                        newScript.textContent = oldScript.textContent;
+
+                // Find and execute the script in add.html
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
                     }
-                    document.body.appendChild(newScript);
-                    oldScript.remove();
-                });
+                }
+
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
                 document.getElementById('addMenuBtn').classList.add('active');
             });
     }
+
+
     function loadUpdateContent(page) {
         fetch('update.html')
             .then(response => response.text())
@@ -397,6 +594,7 @@
                 document.getElementById('updateMenuBtn').classList.add('active');
             });
     }
+
     function loadAccountsContent() {
         fetch('accounts.html')
             .then(response => response.text())
@@ -406,15 +604,31 @@
                 document.getElementById('accountsMenuBtn').classList.add('active');
             });
     }
+
     function showDashboard() {
         contentContainer.innerHTML = dashboardContent.innerHTML;
         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
         document.getElementById('dashboardBtn').classList.add('active');
+        // Reinitialize chart when showing dashboard
+        initChart();
     }
+
+    // Event listeners
     openBtn.addEventListener('click', openSidebar);
     closeBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
     toggleBtn.addEventListener('click', toggleSidebar);
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        } else if (!sidebar.classList.contains('-translate-x-full') && !sidebar.classList.contains('sidebar-collapsed')) {
+            sidebar.classList.add('-translate-x-full');
+        }
+    });
 </script>
 </body>
 </html>

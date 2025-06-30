@@ -1,130 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>USEP Library - Add</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        usepmaroon: '#800000',
-                        usepgold: '#FFD700',
-                        usepgoldlight: 'rgba(255, 215, 0, 0.1)',
-                    }
-                }
-            }
-        };
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
-    <style>
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        .tab-content.active {
-            display: block;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(5px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .desktop-tab {
-            transition: all 0.2s ease;
-            position: relative;
-        }
-        .desktop-tab:hover:not(.active-tab) {
-            background-color: rgba(255, 215, 0, 0.2);
-        }
-        .desktop-tab.active-tab {
-            background-color: white;
-            color: #800000;
-            font-weight: 600;
-        }
-        .desktop-tab.active-tab::after {
-            content: '';
-            position: absolute;
-            bottom: -1px;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background-color: #FFD700;
-        }
-
-        .mobile-dropdown-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-        }
-        .mobile-dropdown-content.show {
-            max-height: 500px;
-        }
-        .mobile-tab-option:hover {
-            background-color: rgba(255, 215, 0, 0.1);
-        }
-
-        @media (min-width: 768px) {
-            .mobile-dropdown { display: none; }
-        }
-        @media (max-width: 767px) {
-            .desktop-tabs { display: none; }
-        }
-    </style>
-</head>
-<body class="bg-gray-50 font-sans">
-<div class="container mx-auto p-4 max-w-6xl">
-
-    <!-- Desktop Tabs -->
-    <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden">
+<!-- add.html -->
+<div id="add-content" class="h-full bg-white border border-gray-200 rounded-lg shadow-sm p-8 space-y-6">
+    <h2 class="text-2xl font-bold text-usepmaroon mb-4">Add</h2>
+    <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden hidden md:block">
         <div class="flex">
-            <button onclick="switchTab(1)" class="desktop-tab flex-1 py-3 px-4 text-center active-tab">
+            <button data-tab="books" class="desktop-tab flex-1 py-3 px-4 text-center active-tab">
                 <i class="fas fa-book mr-2"></i>Books
             </button>
-            <button onclick="switchTab(2)" class="desktop-tab flex-1 py-3 px-4 text-center">
+            <button data-tab="electronic" class="desktop-tab flex-1 py-3 px-4 text-center">
                 <i class="fas fa-laptop-code mr-2"></i>Electronic
             </button>
-            <button onclick="switchTab(3)" class="desktop-tab flex-1 py-3 px-4 text-center">
+            <button data-tab="periodical" class="desktop-tab flex-1 py-3 px-4 text-center">
                 <i class="fas fa-newspaper mr-2"></i>Periodical
             </button>
-            <button onclick="switchTab(4)" class="desktop-tab flex-1 py-3 px-4 text-center">
+            <button data-tab="thesis" class="desktop-tab flex-1 py-3 px-4 text-center">
                 <i class="fas fa-graduation-cap mr-2"></i>Thesis
             </button>
         </div>
     </div>
-
-    <!-- Mobile Dropdown -->
-    <div class="mobile-dropdown mb-6">
-        <button onclick="toggleDropdown()" class="w-full bg-gray-100 py-3 px-4 rounded-lg flex justify-between items-center border border-gray-300">
+    <div class="mobile-dropdown mb-6 block md:hidden">
+        <button class="w-full bg-gray-100 py-3 px-4 rounded-lg flex justify-between items-center border border-gray-300">
             <span id="mobile-tab-label">
                 <i class="fas fa-book mr-2"></i>Books
             </span>
             <i id="dropdown-chevron" class="fas fa-chevron-down transition-transform"></i>
         </button>
-        <div id="mobile-dropdown-content" class="mobile-dropdown-content bg-white border border-gray-200 rounded-b-lg shadow-sm">
-            <button onclick="selectMobileTab(1)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+        <div id="mobile-dropdown-content" class="mobile-dropdown-content bg-white border border-gray-200 rounded-b-lg shadow-sm hidden">
+            <button data-tab="books" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
                 <i class="fas fa-book mr-3 text-usepmaroon"></i>Books
                 <span id="mobile-tab-1-check" class="ml-auto text-usepmaroon">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button onclick="selectMobileTab(2)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+            <button data-tab="electronic" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
                 <i class="fas fa-laptop-code mr-3 text-usepmaroon"></i>Electronic
                 <span id="mobile-tab-2-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button onclick="selectMobileTab(3)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+            <button data-tab="periodical" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
                 <i class="fas fa-newspaper mr-3 text-usepmaroon"></i>Periodical
                 <span id="mobile-tab-3-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button onclick="selectMobileTab(4)" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center">
+            <button data-tab="thesis" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center">
                 <i class="fas fa-graduation-cap mr-3 text-usepmaroon"></i>Thesis
                 <span id="mobile-tab-4-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
@@ -132,218 +51,104 @@
             </button>
         </div>
     </div>
-
-    <!-- Tab Contents -->
-    <div id="content-container" class="bg-white border border-gray-200 rounded-lg p-6 shadow-sm">
-        <!-- Content will be loaded here -->
+    <div id="tab-content" class="p-4 border border-gray-200 rounded-lg">
+        Loading books content...
     </div>
 </div>
-
 <script>
-    let currentTab = 1;
-    const tabIcons = ['fa-book', 'fa-laptop-code', 'fa-newspaper', 'fa-graduation-cap'];
-    const tabLabels = ['Books', 'Electronic', 'Periodical', 'Thesis'];
-    const contentContainer = document.getElementById('content-container');
-
-    function loadTabContent(tabNumber) {
-        contentContainer.innerHTML = `
-        <div class="flex items-center justify-center h-64">
-            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-usepmaroon"></div>
-        </div>
-    `;
-        setTimeout(() => {
-            if (tabNumber === 1) {
-                contentContainer.innerHTML = `
-                <div id="tab-1" class="tab-content active">
-                    <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add New Book</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ISBN</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Publication Year</label>
-                            <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-                            <textarea rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon"></textarea>
-                        </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button class="px-4 py-2 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
-                            <i class="fas fa-save mr-2"></i>Save Book
-                        </button>
-                    </div>
-                </div>
-            `;
-            } else if (tabNumber === 2) {
-                contentContainer.innerHTML = `
-                <div id="tab-2" class="tab-content active">
-                    <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Electronic Resource</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Resource Title</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">URL</label>
-                            <input type="url" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Resource Type</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                                <option>E-book</option>
-                                <option>Database</option>
-                                <option>Journal</option>
-                                <option>Multimedia</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Access Level</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                                <option>Public</option>
-                                <option>USEP Only</option>
-                                <option>Restricted</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button class="px-4 py-2 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
-                            <i class="fas fa-save mr-2"></i>Save Resource
-                        </button>
-                    </div>
-                </div>
-            `;
-            } else if (tabNumber === 3) {
-                contentContainer.innerHTML = `
-                <div id="tab-3" class="tab-content active">
-                    <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Periodical</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Journal Title</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">ISSN</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Volume/Issue</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Publication Date</label>
-                            <input type="date" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button class="px-4 py-2 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
-                            <i class="fas fa-save mr-2"></i>Save Periodical
-                        </button>
-                    </div>
-                </div>
-            `;
-            } else if (tabNumber === 4) {
-                contentContainer.innerHTML = `
-                <div id="tab-4" class="tab-content active">
-                    <h3 class="text-xl font-semibold text-usepmaroon mb-4">Add Thesis/Dissertation</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Author</label>
-                            <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Degree</label>
-                            <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                                <option>Bachelor's Thesis</option>
-                                <option>Master's Thesis</option>
-                                <option>Doctoral Dissertation</option>
-                            </select>
-                        </div>
-                        <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
-                            <input type="number" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-medium text-gray-700 mb-1">Abstract</label>
-                            <textarea rows="4" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon"></textarea>
-                        </div>
-                    </div>
-                    <div class="flex justify-end mt-4">
-                        <button class="px-4 py-2 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
-                            <i class="fas fa-save mr-2"></i>Save Thesis/Dissertation
-                        </button>
-                    </div>
-                </div>
-            `;
+    function initAddTabs(container) {
+        let activeTab = 'books';
+        const desktopTabs = container.querySelectorAll('.desktop-tab');
+        const mobileTabOptions = container.querySelectorAll('.mobile-tab-option');
+        const mobileDropdownButton = container.querySelector('.mobile-dropdown button');
+        const mobileDropdownContent = container.querySelector('#mobile-dropdown-content');
+        const dropdownChevron = container.querySelector('#dropdown-chevron');
+        const mobileTabLabel = container.querySelector('#mobile-tab-label');
+        const tabContent = container.querySelector('#tab-content');
+        const tabData = {
+            books: {
+                title: "Books",
+                icon: "fa-book",
+                content: "This is the books form content"
+            },
+            electronic: {
+                title: "Electronic",
+                icon: "fa-laptop-code",
+                content: "This is the electronic resources form content"
+            },
+            periodical: {
+                title: "Periodical",
+                icon: "fa-newspaper",
+                content: "This is the periodicals form content"
+            },
+            thesis: {
+                title: "Thesis",
+                icon: "fa-graduation-cap",
+                content: "This is the thesis/dissertation form content"
             }
-        }, 300);
-    }
-
-    function switchTab(tabNumber) {
-        currentTab = tabNumber;
-        document.querySelectorAll('.desktop-tab').forEach((tab, index) => {
-            if (index === tabNumber - 1) {
-                tab.classList.add('active-tab');
-            } else {
-                tab.classList.remove('active-tab');
-            }
-        });
-        document.getElementById('mobile-tab-label').innerHTML = `
-        <i class="fas ${tabIcons[tabNumber - 1]} mr-2"></i>${tabLabels[tabNumber - 1]}
-    `;
-        for (let i = 1; i <= 4; i++) {
-            const check = document.getElementById(`mobile-tab-${i}-check`);
-            if (i === tabNumber) {
-                check.classList.remove('opacity-0');
-            } else {
-                check.classList.add('opacity-0');
-            }
+        };
+        function updateTabContent(tabName) {
+            const tab = tabData[tabName];
+            tabContent.innerHTML = `
+            <h3 class="text-lg font-semibold text-usepmaroon mb-4">${tab.title} Form</h3>
+            <div class="text-gray-600">${tab.content}</div>
+        `;
         }
-        loadTabContent(tabNumber);
-    }
-
-    function toggleDropdown() {
-        const dropdown = document.getElementById('mobile-dropdown-content');
-        dropdown.classList.toggle('show');
-        const chevron = document.getElementById('dropdown-chevron');
-        chevron.classList.toggle('fa-chevron-down');
-        chevron.classList.toggle('fa-chevron-up');
-    }
-
-    function selectMobileTab(tabNumber) {
-        switchTab(tabNumber);
-        toggleDropdown();
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        document.querySelectorAll('.desktop-tab').forEach(tab => {
-            tab.addEventListener('mouseenter', function() {
-                if (!this.classList.contains('active-tab')) {
-                    this.style.backgroundColor = 'rgba(255, 215, 0, 0.2)';
+        function updateMobileTabSelection(tabName) {
+            const tab = tabData[tabName];
+            mobileTabLabel.innerHTML = `<i class="fas ${tab.icon} mr-2"></i>${tab.title}`;
+            mobileTabOptions.forEach((option, index) => {
+                const checkSpan = container.querySelector(`#mobile-tab-${index+1}-check`);
+                if (option.getAttribute('data-tab') === tabName) {
+                    checkSpan.classList.remove('opacity-0');
+                } else {
+                    checkSpan.classList.add('opacity-0');
                 }
             });
-            tab.addEventListener('mouseleave', function() {
-                if (!this.classList.contains('active-tab')) {
-                    this.style.backgroundColor = '';
+        }
+        function toggleMobileDropdown() {
+            mobileDropdownContent.classList.toggle('hidden');
+            dropdownChevron.classList.toggle('rotate-180');
+        }
+        function switchTab(tabName) {
+            if (activeTab === tabName) return;
+            activeTab = tabName;
+            desktopTabs.forEach(tab => {
+                if (tab.getAttribute('data-tab') === tabName) {
+                    tab.classList.add('active-tab');
+                } else {
+                    tab.classList.remove('active-tab');
                 }
+            });
+            updateMobileTabSelection(tabName);
+            updateTabContent(tabName);
+        }
+        desktopTabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                switchTab(tabName);
             });
         });
-        switchTab(1);
-    });
+        mobileTabOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                switchTab(tabName);
+                toggleMobileDropdown();
+            });
+        });
+        mobileDropdownButton.addEventListener('click', toggleMobileDropdown);
+        // Initialize first tab
+        updateMobileTabSelection(activeTab);
+        updateTabContent(activeTab);
+    }
 </script>
-</body>
-</html>
+<style>
+    .desktop-tab { transition: all 0.3s ease; cursor: pointer; }
+    .desktop-tab.active-tab { background-color: white; color: #800000; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
+    .mobile-dropdown-content { transition: all 0.3s ease; }
+    .rotate-180 { transform: rotate(180deg);}
+    @media (min-width: 768px) {
+        .mobile-dropdown { display: none; }
+        .desktop-tabs { display: block; }
+    }
+</style>
