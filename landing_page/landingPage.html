@@ -114,9 +114,14 @@
     <div class="container mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-4">
         <!-- USEP Library Button -->
         <button class="text-2xl font-bold text-usepmaroon hover:text-usepmaroon/80 transition flex items-center">
-            <img src="https://www.usep.edu.ph/wp-content/uploads/2020/01/cropped-USEP-LOGO.png" alt="USEP Logo" class="h-8 mr-2">
-            USEP Library
+            <img src="images/usep-logo-small.png" alt="USEP Logo" class="h-8 mr-2">
+
+            USeP Library
         </button>
+
+
+
+
 
         <!-- Action Buttons -->
         <div class="flex items-center space-x-4">
@@ -133,12 +138,16 @@
 </nav>
 
 <!-- Hero Section -->
-<section class="hero-pattern bg-usepgold/10">
-    <div class="container mx-auto px-4 py-20 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-usepmaroon mb-6">Welcome to USEP Library</h1>
-        <p class="text-xl text-gray-600 max-w-2xl mx-auto mb-8">
-            Explore our vast collection of books, journals, and digital resources to support your academic journey.
-        </p>
+<section class="relative h-[40vh] bg-cover bg-center flex items-center justify-center"
+         style="background-image: url('images/eagle.jpg');">
+
+    <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+    <div class="relative z-10 text-center text-white">
+        <h1 class="text-3xl font-bold">USeP Campus Library</h1>
+        <p class="text-lg mt-2">Tagum-Mabini</p>
+    </div>
+
+</section>
 
         <!-- Search Bar -->
         <div class="w-full flex justify-center mb-8">
@@ -162,6 +171,7 @@
                             </div>
                         </div>
                     </div>
+
                     <button class="px-4 py-2 bg-usepmaroon text-white rounded-r-md hover:bg-usepmaroon/90 transition flex items-center justify-center shadow hover:shadow-md">
                         <i class="fas fa-search"></i>
                         <span class="ml-2 hidden md:inline">Search</span>
