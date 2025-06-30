@@ -138,24 +138,22 @@
 </nav>
 
 <!-- Hero Section -->
-<section class="relative h-[40vh] bg-cover bg-center flex items-center justify-center"
+<section class="relative h-[40vh] bg-cover bg-center flex flex-col items-center justify-center mb-8 hero-pattern"
          style="background-image: url('images/eagle.jpg');">
-
     <div class="absolute inset-0 bg-black bg-opacity-50"></div>
     <div class="relative z-10 text-center text-white">
         <h1 class="text-3xl font-bold">USeP Campus Library</h1>
         <p class="text-lg mt-2">Tagum-Mabini</p>
     </div>
 
-</section>
-
-        <!-- Search Bar -->
-        <div class="w-full flex justify-center mb-8">
+    <!-- Search Bar - Moved inside hero section -->
+    <div class="relative z-10 w-full px-4 mt-8">
+        <div class="flex justify-center">
             <div class="flex-1 max-w-2xl w-full relative search-container">
                 <div class="flex">
                     <div class="relative flex-1">
                         <input type="text" placeholder="Search the library..."
-                               class="w-full px-4 py-2 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon focus:outline-none">
+                               class="w-full px-4 py-3 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon focus:outline-none">
                         <div class="search-dropdown bg-white border border-gray-300 rounded-b-md shadow-lg mt-0 border-t-0 absolute left-0 top-full w-full">
                             <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100">
                                 <i class="fas fa-book mr-2 text-usepmaroon"></i> Books
@@ -172,14 +170,19 @@
                         </div>
                     </div>
 
-                    <button class="px-4 py-2 bg-usepmaroon text-white rounded-r-md hover:bg-usepmaroon/90 transition flex items-center justify-center shadow hover:shadow-md">
+                    <button class="px-6 py-3 bg-usepmaroon text-white rounded-r-md hover:bg-usepmaroon/90 transition flex items-center justify-center shadow hover:shadow-md">
                         <i class="fas fa-search"></i>
                         <span class="ml-2 hidden md:inline">Search</span>
                     </button>
                 </div>
             </div>
         </div>
+    </div>
+</section>
 
+
+<section>
+    <div>
         <!-- Collection Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
             <!-- Browse Collection Card -->
