@@ -69,46 +69,390 @@
       books: {
         title: "Books",
         icon: "fa-book",
-        content: "This is the books form content"
+        content: `
+        <form class="space-y-4">
+            <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-bold text-usepmaroon">Update Books</h2>
+
+            <!-- Search Bar under text -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
+                <div class="relative w-full md:w-96">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search users...">
+                </div>
+                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Date Received</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Editor</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Series Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Edition</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">DDC</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select DDC</option>
+                        <option>000 – Generalities</option>
+                        <option>100 – Philosophy & Psychology</option>
+                        <option>200 – Religion</option>
+                        <option>300 – Social Sciences</option>
+                        <option>400 – Language</option>
+                        <option>500 – Science</option>
+                        <option>600 – Technology</option>
+                        <option>700 – Arts & Recreation</option>
+                        <option>800 – Literature</option>
+                        <option>900 – History & Geography</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location Symbol</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Call Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Year Published</label>
+                    <input type="number" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Publisher</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Place of Publisher</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">ISBN</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Source</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Cover Type</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Book Cover (Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Purchase Account</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Table of Contents</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Update
+                </button>
+            </div>
+        </form>
+    `
       },
       electronic: {
         title: "Electronic",
         icon: "fa-laptop-code",
-        content: "This is the electronic resources form content"
+        content:  `
+        <form class="space-y-4">
+         <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-bold text-usepmaroon">Update Electronics</h2>
+
+            <!-- Search Bar under text -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
+                <div class="relative w-full md:w-96">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search users...">
+                </div>
+                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Collection</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Copyright Date</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Duration</label>
+                    <input type="text" placeholder="e.g. 1 hr 30 mins" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Electronic Cover (Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Summary</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Update
+                </button>
+            </div>
+        </form>
+    `
       },
       periodical: {
-        title: "Periodical",
-        icon: "fa-newspaper",
-        content: "This is the periodicals form content"
+          title: "Periodical",
+          icon: "fa-newspaper",
+          content: `
+        <form class="space-y-4">
+        <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-bold text-usepmaroon">Update Periodical</h2>
+
+            <!-- Search Bar under text -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
+                <div class="relative w-full md:w-96">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search users...">
+                </div>
+                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Copyright Date</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Remarks 1</option>
+                        <option>100 – Remarks 2</option>
+                        <option>200 – Remarks 3</option>
+                        <option>300 – Remarks 4</option>
+                        <option>400 – Remarks 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Choose File(Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Update
+                </button>
+            </div>
+        </form>
+    `
       },
-      thesis: {
-        title: "Thesis",
-        icon: "fa-graduation-cap",
-        content: "This is the thesis/dissertation form content"
-      }
+        thesis: {
+            title: "Thesis",
+            icon: "fa-graduation-cap",
+            content: `
+        <form class="space-y-4">
+        <div class="w-full md:w-2/3">
+            <h2 class="text-3xl font-bold text-usepmaroon">Update Thesis</h2>
+
+            <!-- Search Bar under text -->
+            <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
+                <div class="relative w-full md:w-96">
+                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <i class="fas fa-search text-gray-400"></i>
+                    </div>
+                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search users...">
+                </div>
+                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+                    <i class="fas fa-search mr-2"></i>Search
+                </button>
+            </div>
+        </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Call Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Adviser</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">School</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Course</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Place</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Type</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Type 1</option>
+                        <option>100 – Type 2</option>
+                        <option>200 – Type 3</option>
+                        <option>300 – Type 4</option>
+                        <option>400 – Type 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Year</label>
+                    <input type="number" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Remarks 1</option>
+                        <option>100 – Remarks 2</option>
+                        <option>200 – Remarks 3</option>
+                        <option>300 – Remarks 4</option>
+                        <option>400 – Remarks 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Scanned Abstract(Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Update
+                </button>
+            </div>
+        </form>
+    `
+        }
     };
-    function updateTabContent(tabName) {
-      const tab = tabData[tabName];
-      tabContent.innerHTML = `
+
+      function updateTabContent(tabName) {
+          const tab = tabData[tabName];
+          tabContent.innerHTML = `
             <h3 class="text-lg font-semibold text-usepmaroon mb-4">${tab.title} Form</h3>
             <div class="text-gray-600">${tab.content}</div>
         `;
-    }
-    function updateMobileTabSelection(tabName) {
-      const tab = tabData[tabName];
-      mobileTabLabel.innerHTML = `<i class="fas ${tab.icon} mr-2"></i>${tab.title}`;
-      mobileTabOptions.forEach((option, index) => {
-        const checkSpan = container.querySelector(`#mobile-tab-${index+1}-check`);
-        if (option.getAttribute('data-tab') === tabName) {
-          checkSpan.classList.remove('opacity-0');
-        } else {
-          checkSpan.classList.add('opacity-0');
-        }
-      });
-    }
-    function toggleMobileDropdown() {
-      mobileDropdownContent.classList.toggle('hidden');
-      dropdownChevron.classList.toggle('rotate-180');
+      }
+
+      function updateMobileTabSelection(tabName) {
+          const tab = tabData[tabName];
+          mobileTabLabel.innerHTML = `<i class="fas ${tab.icon} mr-2"></i>${tab.title}`;
+          mobileTabOptions.forEach((option, index) => {
+              const checkSpan = container.querySelector(`#mobile-tab-${index + 1}-check`);
+              if (option.getAttribute('data-tab') === tabName) {
+                  checkSpan.classList.remove('opacity-0');
+              } else {
+                  checkSpan.classList.add('opacity-0');
+              }
+          });
+      }
+
+      function toggleMobileDropdown() {
+          mobileDropdownContent.classList.toggle('hidden');
+          dropdownChevron.classList.toggle('rotate-180');
     }
     function switchTab(tabName) {
       if (activeTab === tabName) return;
