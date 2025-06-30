@@ -537,9 +537,22 @@
                     .then(response => response.text())
                     .then(html => {
                         contentContainer.innerHTML = html;
+
+                        const tempDiv = document.createElement('div');
+                        tempDiv.innerHTML = html;
+                        const script = tempDiv.querySelector('script');
+                        if (script) {
+                            eval(script.textContent); // Execute the script
+                        }
+
+                        if (typeof initAddTabs === 'function') {
+                            initAddTabs(contentContainer); // Initialize tabs if the function exists
+                        }
+
                         document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                        document.getElementById('updateMenuBtn').classList.add('active');
+                        document.getElementById('addMenuBtn').classList.add('active');
                     });
+
             } else {
                 loadUpdateContent(page);
             }
@@ -590,8 +603,20 @@
             .then(response => response.text())
             .then(html => {
                 contentContainer.innerHTML = html;
+
+                // Find and execute the script in add.html
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                document.getElementById('updateMenuBtn').classList.add('active');
+                document.getElementById('addMenuBtn').classList.add('active');
             });
     }
 
