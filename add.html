@@ -69,22 +69,301 @@
             books: {
                 title: "Books",
                 icon: "fa-book",
-                content: "This is the books form content"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Date Received</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Editor</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Series Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Edition</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">DDC</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select DDC</option>
+                        <option>000 – Generalities</option>
+                        <option>100 – Philosophy & Psychology</option>
+                        <option>200 – Religion</option>
+                        <option>300 – Social Sciences</option>
+                        <option>400 – Language</option>
+                        <option>500 – Science</option>
+                        <option>600 – Technology</option>
+                        <option>700 – Arts & Recreation</option>
+                        <option>800 – Literature</option>
+                        <option>900 – History & Geography</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location Symbol</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Call Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Year Published</label>
+                    <input type="number" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Publisher</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Place of Publisher</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">ISBN</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Source</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Cover Type</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Book Cover (Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Purchase Account</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Table of Contents</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             },
+
             electronic: {
                 title: "Electronic",
                 icon: "fa-laptop-code",
-                content: "This is the electronic resources form content"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Collection</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Copyright Date</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Duration</label>
+                    <input type="text" placeholder="e.g. 1 hr 30 mins" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Electronic Cover (Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Summary</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             },
             periodical: {
                 title: "Periodical",
                 icon: "fa-newspaper",
-                content: "This is the periodicals form content"
-            },
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Copyright Date</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Remarks 1</option>
+                        <option>100 – Remarks 2</option>
+                        <option>200 – Remarks 3</option>
+                        <option>300 – Remarks 4</option>
+                        <option>400 – Remarks 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Choose File(Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block font-medium text-sm text-gray-700">Subject</label>
+                    <textarea class="w-full border border-gray-300 rounded px-3 py-2" rows="2"></textarea>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
+        },
+
             thesis: {
                 title: "Thesis",
                 icon: "fa-graduation-cap",
-                content: "This is the thesis/dissertation form content"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Call Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Adviser</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">School</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Course</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Place</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Type</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Type 1</option>
+                        <option>100 – Type 2</option>
+                        <option>200 – Type 3</option>
+                        <option>300 – Type 4</option>
+                        <option>400 – Type 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Year</label>
+                    <input type="number" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Remarks</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select Remarks</option>
+                        <option>000 – Remarks 1</option>
+                        <option>100 – Remarks 2</option>
+                        <option>200 – Remarks 3</option>
+                        <option>300 – Remarks 4</option>
+                        <option>400 – Remarks 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Scanned Abstract(Upload)</label>
+                    <input type="file" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             }
         };
         function updateTabContent(tabName) {
@@ -137,7 +416,7 @@
             });
         });
         mobileDropdownButton.addEventListener('click', toggleMobileDropdown);
-        // Initialize first tab//
+        // Initialize first tab
         updateMobileTabSelection(activeTab);
         updateTabContent(activeTab);
     }
