@@ -75,25 +75,113 @@
             colleges: {
                 title: "Colleges",
                 icon: "fa-building",
-                content: "This is the colleges management form"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Add College</label>
+                    <input type="text" placeholder="College" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             },
             departments: {
                 title: "Departments",
                 icon: "fa-sitemap",
-                content: "This is the departments management form"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Add Department</label>
+                    <input type="text" placeholder="Department" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">College</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Select College</option>
+                        <option> College of Teacher Education and Technology</option>
+                        <option> College of Agriculture and Related SCience</option>
+                        <option> School of Medicine</option>
+                    </select>
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             },
             programs: {
                 title: "Programs",
                 icon: "fa-graduation-cap",
-                content: "This is the academic programs management form"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Add Program</label>
+                    <input type="text" placeholder="Program" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700" >Program</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2" >
+                        <option value="">Select Program</option>
+                        <option> Bachelor of Elementary Education </option>
+                        <option> Bachelor of Special Needs Education</option>
+                        <option> Bachelor of Early Childhood Education</option>
+                        <option> Bachelor of Secondary Education </option>
+                        <option> Bachelor of Science in Information Technology</option>
+                        <option> Bachelor of Technical-Vocational Teacher Education</option>
+                        <option> Bachelor of Secondary in Agricultural and Biosystem Engineering </option>
+                        <option> Bachelor of Science in Agriculture </option>
+                        <option> Bachelor of Science in Forestry</option>
+                        <option> Doctor of Medicine</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700"></label>
+                    <input type="text" placeholder="Program Acronym" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             },
             office: {
                 title: "Office",
                 icon: "fa-briefcase",
-                content: "This is the office management form"
+                content: `
+        <form class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Add Office</label>
+                    <input type="text" placeholder="Office" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Add Campus</label>
+                    <input type="text" placeholder="Campus" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+            <div class="pt-4 flex justify-end">
+                <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+                    <i class="fas fa-save mr-2"></i>Save
+                </button>
+            </div>
+        </form>
+    `
             }
         };
-
         function updateTabContent(tabName) {
             const tab = tabData[tabName];
             tabContent.innerHTML = `
