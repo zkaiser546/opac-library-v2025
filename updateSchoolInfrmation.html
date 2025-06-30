@@ -1,63 +1,68 @@
-<!-- add.html -->
-<div id="add-content" >
+<div id="add-content">
     <h2 class="text-2xl font-bold text-usepmaroon mb-4">Update School Information</h2>
+
+    <!-- Desktop Tabs -->
     <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden hidden md:block">
         <div class="flex">
-            <button data-tab="books" class="desktop-tab flex-1 py-3 px-4 text-center active-tab">
-                <i class="fas fa-book mr-2"></i>Books
+            <button data-tab="colleges" class="desktop-tab flex-1 py-3 px-4 text-center active-tab">
+                <i class="fas fa-building mr-2"></i>Colleges
             </button>
-            <button data-tab="electronic" class="desktop-tab flex-1 py-3 px-4 text-center">
-                <i class="fas fa-laptop-code mr-2"></i>Electronic
+            <button data-tab="departments" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-sitemap mr-2"></i>Departments
             </button>
-            <button data-tab="periodical" class="desktop-tab flex-1 py-3 px-4 text-center">
-                <i class="fas fa-newspaper mr-2"></i>Periodical
+            <button data-tab="programs" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-graduation-cap mr-2"></i>Programs
             </button>
-            <button data-tab="thesis" class="desktop-tab flex-1 py-3 px-4 text-center">
-                <i class="fas fa-graduation-cap mr-2"></i>Thesis
+            <button data-tab="office" class="desktop-tab flex-1 py-3 px-4 text-center">
+                <i class="fas fa-briefcase mr-2"></i>Office
             </button>
         </div>
     </div>
+
+    <!-- Mobile Dropdown -->
     <div class="mobile-dropdown mb-6 block md:hidden">
         <button class="w-full bg-gray-100 py-3 px-4 rounded-lg flex justify-between items-center border border-gray-300">
             <span id="mobile-tab-label">
-                <i class="fas fa-book mr-2"></i>Books
+                <i class="fas fa-building mr-2"></i>Colleges
             </span>
             <i id="dropdown-chevron" class="fas fa-chevron-down transition-transform"></i>
         </button>
         <div id="mobile-dropdown-content" class="mobile-dropdown-content bg-white border border-gray-200 rounded-b-lg shadow-sm hidden">
-            <button data-tab="books" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
-                <i class="fas fa-book mr-3 text-usepmaroon"></i>Books
+            <button data-tab="colleges" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-building mr-3 text-usepmaroon"></i>Colleges
                 <span id="mobile-tab-1-check" class="ml-auto text-usepmaroon">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button data-tab="electronic" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
-                <i class="fas fa-laptop-code mr-3 text-usepmaroon"></i>Electronic
+            <button data-tab="departments" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-sitemap mr-3 text-usepmaroon"></i>Departments
                 <span id="mobile-tab-2-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button data-tab="periodical" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
-                <i class="fas fa-newspaper mr-3 text-usepmaroon"></i>Periodical
+            <button data-tab="programs" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center border-b border-gray-100">
+                <i class="fas fa-graduation-cap mr-3 text-usepmaroon"></i>Programs
                 <span id="mobile-tab-3-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
-            <button data-tab="thesis" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center">
-                <i class="fas fa-graduation-cap mr-3 text-usepmaroon"></i>Thesis
+            <button data-tab="office" class="mobile-tab-option w-full text-left py-3 px-4 flex items-center">
+                <i class="fas fa-briefcase mr-3 text-usepmaroon"></i>Office
                 <span id="mobile-tab-4-check" class="ml-auto text-usepmaroon opacity-0">
                     <i class="fas fa-check"></i>
                 </span>
             </button>
         </div>
     </div>
+
     <div id="tab-content" class="p-4 border border-gray-200 rounded-lg">
-        Loading books content...
+        Loading colleges content...
     </div>
 </div>
+
 <script>
     function initAddTabs(container) {
-        let activeTab = 'books';
+        let activeTab = 'colleges';
         const desktopTabs = container.querySelectorAll('.desktop-tab');
         const mobileTabOptions = container.querySelectorAll('.mobile-tab-option');
         const mobileDropdownButton = container.querySelector('.mobile-dropdown button');
@@ -65,38 +70,42 @@
         const dropdownChevron = container.querySelector('#dropdown-chevron');
         const mobileTabLabel = container.querySelector('#mobile-tab-label');
         const tabContent = container.querySelector('#tab-content');
+
         const tabData = {
-            books: {
-                title: "Books",
-                icon: "fa-book",
-                content: "This is the books form content"
+            colleges: {
+                title: "Colleges",
+                icon: "fa-building",
+                content: "This is the colleges management form"
             },
-            electronic: {
-                title: "Electronic",
-                icon: "fa-laptop-code",
-                content: "This is the electronic resources form content"
+            departments: {
+                title: "Departments",
+                icon: "fa-sitemap",
+                content: "This is the departments management form"
             },
-            periodical: {
-                title: "Periodical",
-                icon: "fa-newspaper",
-                content: "This is the periodicals form content"
-            },
-            thesis: {
-                title: "Thesis",
+            programs: {
+                title: "Programs",
                 icon: "fa-graduation-cap",
-                content: "This is the thesis/dissertation form content"
+                content: "This is the academic programs management form"
+            },
+            office: {
+                title: "Office",
+                icon: "fa-briefcase",
+                content: "This is the office management form"
             }
         };
+
         function updateTabContent(tabName) {
             const tab = tabData[tabName];
             tabContent.innerHTML = `
-            <h3 class="text-lg font-semibold text-usepmaroon mb-4">${tab.title} Form</h3>
-            <div class="text-gray-600">${tab.content}</div>
-        `;
+                <h3 class="text-lg font-semibold text-usepmaroon mb-4">${tab.title} Management</h3>
+                <div class="text-gray-600">${tab.content}</div>
+            `;
         }
+
         function updateMobileTabSelection(tabName) {
             const tab = tabData[tabName];
             mobileTabLabel.innerHTML = `<i class="fas ${tab.icon} mr-2"></i>${tab.title}`;
+
             mobileTabOptions.forEach((option, index) => {
                 const checkSpan = container.querySelector(`#mobile-tab-${index+1}-check`);
                 if (option.getAttribute('data-tab') === tabName) {
@@ -106,13 +115,18 @@
                 }
             });
         }
+
         function toggleMobileDropdown() {
             mobileDropdownContent.classList.toggle('hidden');
             dropdownChevron.classList.toggle('rotate-180');
         }
+
         function switchTab(tabName) {
             if (activeTab === tabName) return;
+
             activeTab = tabName;
+
+            // Update desktop tabs
             desktopTabs.forEach(tab => {
                 if (tab.getAttribute('data-tab') === tabName) {
                     tab.classList.add('active-tab');
@@ -120,15 +134,22 @@
                     tab.classList.remove('active-tab');
                 }
             });
+
+            // Update mobile dropdown
             updateMobileTabSelection(tabName);
+
+            // Update content
             updateTabContent(tabName);
         }
+
+        // Set up event listeners
         desktopTabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 const tabName = this.getAttribute('data-tab');
                 switchTab(tabName);
             });
         });
+
         mobileTabOptions.forEach(option => {
             option.addEventListener('click', function() {
                 const tabName = this.getAttribute('data-tab');
@@ -136,19 +157,48 @@
                 toggleMobileDropdown();
             });
         });
+
         mobileDropdownButton.addEventListener('click', toggleMobileDropdown);
-        // Initialize first tab//
+
+        // Initialize first tab
         updateMobileTabSelection(activeTab);
         updateTabContent(activeTab);
     }
+
+    // Initialize the tabs when the page loads
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('add-content');
+        initAddTabs(container);
+    });
 </script>
+
 <style>
-    .desktop-tab { transition: all 0.3s ease; cursor: pointer; }
-    .desktop-tab.active-tab { background-color: white; color: #800000; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1);}
-    .mobile-dropdown-content { transition: all 0.3s ease; }
-    .rotate-180 { transform: rotate(180deg);}
+    .desktop-tab {
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .desktop-tab.active-tab {
+        background-color: white;
+        color: #800000; /* USEP maroon color */
+        font-weight: 600;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .mobile-dropdown-content {
+        transition: all 0.3s ease;
+    }
+
+    .rotate-180 {
+        transform: rotate(180deg);
+    }
+
     @media (min-width: 768px) {
-        .mobile-dropdown { display: none; }
-        .desktop-tabs { display: block; }
+        .mobile-dropdown {
+            display: none;
+        }
+        .desktop-tabs {
+            display: block;
+        }
     }
 </style>
