@@ -33,15 +33,15 @@
         .sidebar-collapsed ~ #main-content { margin-left: 80px !important; }
         .has-submenu { position: relative; }
         .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .has-submenu:hover .submenu { max-height: 200px; }
+        .submenu.open { max-height: 200px; }
         .nav-item:hover { background-color: rgba(255, 215, 0, 0.2) !important; border-left: 3px solid #FFD700; }
-        .submenu:hover { max-height: 200px; }
-        .sidebar-collapsed .has-submenu:hover .submenu { display: block; max-height: none; }
         .submenu a { display: block; }
         .submenu a:hover { background-color: rgba(255, 215, 0, 0.2) !important; }
         .profile-dropdown { display: none; opacity: 0; transform: translateY(-10px); transition: opacity 0.2s ease, transform 0.2s ease; }
         .profile-dropdown.show { display: block; opacity: 1; transform: translateY(0); }
         .chart-container { position: relative; height: 300px; }
+        .chevron-btn { pointer-events: auto; }
+        .chevron-btn:hover { color: #FFD700; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -74,7 +74,9 @@
                         <span class="nav-text font-medium md:text-lg">Add</span>
                     </div>
                     <div class="flex items-center">
-                        <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
+                        <button class="chevron-btn text-xs ml-2">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
                     </div>
                 </a>
                 <div class="submenu pl-4 space-y-1">
@@ -96,7 +98,9 @@
                         <span class="nav-text font-medium md:text-lg">Update</span>
                     </div>
                     <div class="flex items-center">
-                        <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
+                        <button class="chevron-btn text-xs ml-2">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
                     </div>
                 </a>
                 <div class="submenu pl-4 space-y-1">
@@ -110,10 +114,30 @@
                     </a>
                 </div>
             </div>
-            <a href="#" id="accountsMenuBtn" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-user-gear w-6 text-center text-white md:text-xl"></i>
-                <span class="nav-text font-medium md:text-lg">Add Accounts</span>
-            </a>
+            <!-- Accounts with dropdown -->
+            <div class="relative has-submenu">
+                <a href="#" id="accountsMenuBtn" class="nav-item flex items-center justify-between px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+                    <div class="flex items-center gap-3">
+                        <i class="fa-solid fa-user-gear w-6 text-center text-white md:text-xl"></i>
+                        <span class="nav-text font-medium md:text-lg">Accounts</span>
+                    </div>
+                    <div class="flex items-center">
+                        <button class="chevron-btn text-xs ml-2">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </button>
+                    </div>
+                </a>
+                <div class="submenu pl-4 space-y-1">
+                    <a href="#" class="accounts-submenu-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow" data-page="addAccounts">
+                        <i class="fa-solid fa-user-plus w-5 text-center text-usepgold"></i>
+                        <span class="nav-text text-sm font-medium">Add Accounts</span>
+                    </a>
+                    <a href="#" class="accounts-submenu-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow" data-page="manageAccounts">
+                        <i class="fa-solid fa-users-gear w-5 text-center text-usepgold"></i>
+                        <span class="nav-text text-sm font-medium">Manage Accounts</span>
+                    </a>
+                </div>
+            </div>
         </nav>
         <div class="px-4 py-4 border-t border-usepgold/30 mt-auto">
             <a href="#" class="flex items-center gap-3 text-usepgold hover:bg-usepgold/10 px-3 py-2.5 md:py-3 rounded-lg transition-slow">
@@ -148,11 +172,9 @@
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow" onclick="loadAccountSettings()">
                             <i class="fa-solid fa-user-cog mr-2"></i> Account Settings
                         </a>
-
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
                             <i class="fa-solid fa-clock-rotate-left mr-2"></i> History
                         </a>
-
                     </div>
                 </div>
             </div>
@@ -178,8 +200,6 @@
                     </div>
 
                     <!-- Statistics Cards -->
-
-                    <!--total books-->
                     <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
@@ -196,7 +216,6 @@
                             </p>
                         </div>
 
-                        <!--total users-->
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -212,7 +231,6 @@
                             </p>
                         </div>
 
-                        <!--borrowed books-->
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -228,7 +246,6 @@
                             </p>
                         </div>
 
-                        <!--monthly users-->
                         <div class="bg-white border border-gray-200 rounded-lg shadow p-6">
                             <div class="flex items-center justify-between">
                                 <div>
@@ -277,8 +294,15 @@
                 </div>
             </div>
         </main>
-        <footer class="w-full bg-usepmaroon text-usepgold text-center py-3 mt-auto">
-            USEP Library | TAGUM-MABINI campus
+
+
+        <footer class="bg-usepmaroon text-white py-2">
+            <div class="container mx-auto px-2">
+                <div class="flex flex-col items-center justify-center text-center space-y-2">
+                    <h3 class="text-2xl font-bold tracking-wide">USEP Library</h3>
+                    <p class="text-usepgold/90 text-lg">Tagum-Mabini Campus</p>
+                </div>
+            </div>
         </footer>
     </div>
 </div>
@@ -350,6 +374,39 @@
                 document.getElementById('monthly-btn').classList.add('bg-gray-100', 'text-gray-600');
                 document.getElementById('monthly-btn').classList.remove('bg-usepmaroon', 'text-white');
                 updateChartData();
+            }
+        });
+
+        // Add event listeners for chevron buttons to toggle submenus
+        document.querySelectorAll('.chevron-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const submenu = this.closest('.has-submenu').querySelector('.submenu');
+                submenu.classList.toggle('open');
+
+                // Rotate chevron icon
+                const icon = this.querySelector('i');
+                if (submenu.classList.contains('open')) {
+                    icon.classList.remove('fa-chevron-down');
+                    icon.classList.add('fa-chevron-up');
+                } else {
+                    icon.classList.remove('fa-chevron-up');
+                    icon.classList.add('fa-chevron-down');
+                }
+            });
+        });
+
+        // Close submenus when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.has-submenu')) {
+                document.querySelectorAll('.submenu').forEach(submenu => {
+                    submenu.classList.remove('open');
+                    const icon = submenu.closest('.has-submenu').querySelector('.chevron-btn i');
+                    if (icon) {
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
+                });
             }
         });
     });
@@ -431,7 +488,7 @@
         }
     }
 
-    // Update chart data//
+    // Update chart data
     function updateChartData() {
         const newData = getChartData();
         borrowingChart.data.labels = newData.labels;
@@ -567,7 +624,6 @@
             });
     }
 
-    ///important functions for loading content tabbing
     function loadAddContent(page) {
         fetch('add.html')
             .then(response => response.text())
@@ -589,7 +645,6 @@
                 document.getElementById('addMenuBtn').classList.add('active');
             });
     }
-
 
     function loadUpdateContent(page) {
         fetch('update.html')
@@ -622,6 +677,24 @@
                 document.getElementById('accountsMenuBtn').classList.add('active');
             });
     }
+
+    document.querySelectorAll('.accounts-submenu-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            const page = this.getAttribute('data-page');
+            if (page === 'manageAccounts') {
+                fetch('manageAccount.html')
+                    .then(response => response.text())
+                    .then(html => {
+                        contentContainer.innerHTML = html;
+                        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                        document.getElementById('accountsMenuBtn').classList.add('active');
+                    });
+            } else if (page === 'addAccounts') {
+                loadAccountsContent();
+            }
+        });
+    });
 
     function showDashboard() {
         contentContainer.innerHTML = dashboardContent.innerHTML;
