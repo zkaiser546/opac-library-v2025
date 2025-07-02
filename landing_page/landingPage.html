@@ -152,25 +152,30 @@
         <div class="flex justify-center">
             <div class="flex-1 max-w-2xl w-full relative search-container">
                 <div class="flex">
-                    <div class="relative flex-1">
-                        <input type="text" placeholder="Search the library..."
-                               class="w-full px-4 py-3 border border-gray-300 rounded-l-md focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon focus:outline-none">
-                        <div class="search-dropdown bg-white border border-gray-300 rounded-b-md shadow-lg mt-0 border-t-0 absolute left-0 top-full w-full">
-                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100">
+                    <!-- Dropdown on the left -->
+                    <div class="relative">
+                        <button id="searchTypeBtn" class="flex items-center px-4 py-3 border border-gray-300 rounded-l-md bg-white hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-usepmaroon">
+                            <span id="searchTypeLabel" class="mr-2">Books</span>
+                            <i class="fas fa-chevron-down text-usepmaroon"></i>
+                        </button>
+                        <div id="searchTypeDropdown" class="absolute left-0 top-full mt-1 w-48 bg-white border border-gray-300 rounded-md shadow-lg z-50 hidden">
+                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100" data-type="Books">
                                 <i class="fas fa-book mr-2 text-usepmaroon"></i> Books
                             </div>
-                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100">
+                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100" data-type="Electronic Collection">
                                 <i class="fas fa-laptop-code mr-2 text-usepmaroon"></i> Electronic Collection
                             </div>
-                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100">
+                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center border-b border-gray-100" data-type="Periodical Magazine">
                                 <i class="fas fa-newspaper mr-2 text-usepmaroon"></i> Periodical Magazine
                             </div>
-                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center">
+                            <div class="dropdown-item px-4 py-2 cursor-pointer flex items-center" data-type="Thesis and Dissertation">
                                 <i class="fas fa-graduation-cap mr-2 text-usepmaroon"></i> Thesis and Dissertation
                             </div>
                         </div>
                     </div>
-
+                    <!-- Search input -->
+                    <input type="text" placeholder="Search Books..."
+                           class="w-full px-4 py-3 border-t border-b border-r border-gray-300 focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon focus:outline-none">
                     <button class="px-6 py-3 bg-usepmaroon text-white rounded-r-md hover:bg-usepmaroon/90 transition flex items-center justify-center shadow hover:shadow-md">
                         <i class="fas fa-search"></i>
                         <span class="ml-2 hidden md:inline">Search</span>
@@ -182,10 +187,11 @@
 </section>
 
 
-<section class="py-12 bg-gray-50">
+
+<section class="py-12 bg-gray-50 -mt-14">
     <div class="container mx-auto">
         <!-- Collection Cards -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-7xl mx-auto px-4 mt-5px">
             <!-- Browse Collection Card -->
             <div class="collection-card group relative bg-gradient-to-br from-white to-gray-50 p-8 rounded-xl shadow-sm hover:shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:border-usepmaroon/20"
                  onclick="showCardModal('Browse Collection', 'Explore our extensive collection of books, journals, and resources.', 'fas fa-book-open', '25,689')">
@@ -653,19 +659,30 @@
     });
 
     // Search functionality
-    document.querySelectorAll('.dropdown-item').forEach(item => {
+    const searchTypeBtn = document.getElementById('searchTypeBtn');
+    const searchTypeDropdown = document.getElementById('searchTypeDropdown');
+    const searchTypeLabel = document.getElementById('searchTypeLabel');
+    const searchInput = document.querySelector('.search-container input[type="text"]');
+
+    searchTypeBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        searchTypeDropdown.classList.toggle('hidden');
+    });
+
+    searchTypeDropdown.querySelectorAll('.dropdown-item').forEach(item => {
         item.addEventListener('click', function() {
-            const searchType = this.textContent.trim();
-            const searchInput = document.querySelector('.search-container input');
-            searchInput.placeholder = `Search ${searchType}...`;
-            // Here you would add actual search type selection logic
+            const type = this.getAttribute('data-type');
+            searchTypeLabel.textContent = type;
+            searchInput.placeholder = `Search ${type}...`;
+            searchTypeDropdown.classList.add('hidden');
         });
     });
 
-    // Make search dropdown stay open when clicking inside
-    document.querySelector('.search-dropdown').addEventListener('click', function(e) {
-        e.stopPropagation();
+    document.addEventListener('click', function() {
+        searchTypeDropdown.classList.add('hidden');
     });
+
+81
 
     // Number counting animation
     function animateCounters() {
