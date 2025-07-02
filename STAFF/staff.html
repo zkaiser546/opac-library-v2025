@@ -39,7 +39,6 @@
         .submenu a:hover { background-color: rgba(255, 215, 0, 0.2) !important; }
         .profile-dropdown { display: none; opacity: 0; transform: translateY(-10px); transition: opacity 0.2s ease, transform 0.2s ease; }
         .profile-dropdown.show { display: block; opacity: 1; transform: translateY(0); }
-        .chart-container { position: relative; height: 300px; }
         .chevron-btn { pointer-events: auto; }
         .chevron-btn:hover { color: #FFD700; }
     </style>
@@ -62,21 +61,20 @@
         </div>
         <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-2 md:space-y-3 text-sm md:text-base">
             <p class="px-2 text-xs md:text-sm font-semibold uppercase text-usepgold tracking-wider mb-3 section-title">Book Circulation</p>
-            <a href="borrowing.html" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+            <a href="#" id="borrowReturnNav" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow active">
                 <i class="fas fa-exchange-alt w-6 text-center text-white md:text-xl"></i>
                 <span class="nav-text font-medium md:text-lg">Borrowing & Returning</span>
             </a>
             <hr class="border-usepgold/30 my-2" />
-            <a href="clearance.html" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
                 <i class="fa-solid fa-file-circle-check w-6 text-center text-white md:text-xl"></i>
                 <span class="nav-text font-medium md:text-lg">Clearance</span>
             </a>
-
             <!-- Reports Section -->
             <div class="relative has-submenu">
                 <a href="#" class="nav-item flex items-center justify-between px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
                     <div class="flex items-center gap-3">
-                        <i class="fa-solid fa-file-lines w-6 text-center text-white md:text-xl"></i>
+                        <i class="fa-solid fa-chart-column w-6 text-center text-white md:text-xl"></i>
                         <span class="nav-text font-medium md:text-lg">Reports</span>
                     </div>
                     <div class="flex items-center">
@@ -86,37 +84,12 @@
                     </div>
                 </a>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="borrowed_items.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-book w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Borrowed Items</span>
-                    </a>
-                    <a href="students_penalty.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-exclamation-circle w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Students with Penalty</span>
-                    </a>
-                    <a href="transaction_profile.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-receipt w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Transaction Profile</span>
-                    </a>
-                    <a href="missing_collection.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-book-skull w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Missing Collection</span>
-                    </a>
-                    <a href="core_collection.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-book-atlas w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Core Collection</span>
-                    </a>
-                    <a href="clearance_report.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-file-certificate w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Clearance Report</span>
-                    </a>
-                    <a href="filipiniana.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-flag w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Filipiniana</span>
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                        <i class="fa-solid fa-file w-5 text-center text-usepgold"></i>
+                        <span class="nav-text text-sm font-medium">Reports</span>
                     </a>
                 </div>
             </div>
-
             <!-- Statistical Data Section -->
             <div class="relative has-submenu">
                 <a href="#" class="nav-item flex items-center justify-between px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
@@ -131,21 +104,12 @@
                     </div>
                 </a>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="comparative_report.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
                         <i class="fa-solid fa-chart-bar w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Comparative Report</span>
-                    </a>
-                    <a href="general_book_loan.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-book-open-reader w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">General Book Loan</span>
-                    </a>
-                    <a href="graduate_book_loan.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-user-graduate w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Graduate Book Loan</span>
+                        <span class="nav-text text-sm font-medium">Data</span>
                     </a>
                 </div>
             </div>
-
             <!-- User Logs Section -->
             <div class="relative has-submenu">
                 <a href="#" class="nav-item flex items-center justify-between px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
@@ -160,27 +124,12 @@
                     </div>
                 </a>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="user_logs_reports.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
                         <i class="fa-solid fa-file w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Reports</span>
                     </a>
-                    <a href="patron_information.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-user-tag w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Patron Information</span>
-                    </a>
-                    <a href="violations.html" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-ban w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Violations</span>
-                    </a>
                 </div>
             </div>
-
-            <!-- Inventory Section -->
-            <a href="inventory.html" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
-                <i class="fa-solid fa-boxes-stacked w-6 text-center text-white md:text-xl"></i>
-                <span class="nav-text font-medium md:text-lg">Inventory</span>
-            </a>
-
         </nav>
         <div class="px-4 py-4 border-t border-usepgold/30 mt-auto">
             <a href="#" class="flex items-center gap-3 text-usepgold hover:bg-usepgold/10 px-3 py-2.5 md:py-3 rounded-lg transition-slow">
@@ -208,7 +157,7 @@
                 <div class="relative">
                     <div id="profile-trigger" class="flex items-center gap-2 cursor-pointer">
                         <img src="https://via.placeholder.com/40/800000/ffffff?text=JD" alt="User" class="w-8 h-8 rounded-full border-2 border-white shadow"/>
-                        <span class="hidden md:block font-medium text-usepmaroon">John Doe</span>
+                        <span class="hidden md:block font-medium text-usepmaroon">Jane Doe</span>
                         <i class="fa-solid fa-chevron-down text-xs ml-1 text-usepmaroon"></i>
                     </div>
                     <div id="profile-dropdown" class="profile-dropdown absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
@@ -223,10 +172,10 @@
             </div>
         </header>
         <!-- Main Content Container -->
+
         <main class="flex-1 p-6 bg-gradient-to-br from-gray-50 to-gray-100">
-            <div class="bg-white rounded-lg shadow p-6">
-                <h1 class="text-2xl font-bold text-usepmaroon mb-6">Welcome to USEP Library System</h1>
-                <p class="text-gray-700">Select an option from the sidebar to get started.</p>
+            <div id="content-container" class="h-full bg-white border border-gray-200 rounded-lg shadow-sm p-8 space-y-6">
+                <!-- Content will be loaded here -->
             </div>
         </main>
 
@@ -240,10 +189,6 @@
         </footer>
     </div>
 </div>
-
-<!-- Include Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
 <script>
     // Sidebar and overlay controls
     const sidebar = document.getElementById('sidebar');
@@ -251,20 +196,52 @@
     const closeBtn = document.getElementById('closeBtn');
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('toggleBtn');
-    const contentContainer = document.getElementById('main-content');
+    const contentContainer = document.getElementById('content-container');
+    const dashboardContent = document.getElementById('dashboard-content');
 
     // Profile dropdown controls
     const profileTrigger = document.getElementById('profile-trigger');
     const profileDropdown = document.getElementById('profile-dropdown');
 
-    // Add event listeners for chevron buttons to toggle submenus
+    // Sidebar toggle
+    function toggleSidebar() {
+        sidebar.classList.toggle('sidebar-collapsed');
+        toggleBtn.innerHTML = sidebar.classList.contains('sidebar-collapsed')
+            ? '<i class="fa-solid fa-chevron-right"></i>'
+            : '<i class="fa-solid fa-chevron-left"></i>';
+    }
+    function openSidebar() {
+        sidebar.classList.remove('-translate-x-full');
+        overlay.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+        sidebar.classList.add('-translate-x-full');
+        overlay.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+    openBtn.addEventListener('click', openSidebar);
+    closeBtn.addEventListener('click', closeSidebar);
+    overlay.addEventListener('click', closeSidebar);
+    toggleBtn.addEventListener('click', toggleSidebar);
+
+    // Profile dropdown
+    profileTrigger.addEventListener('click', function(e) {
+        e.stopPropagation();
+        profileDropdown.classList.toggle('show');
+    });
+    document.addEventListener('click', function(e) {
+        if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
+            profileDropdown.classList.remove('show');
+        }
+    });
+
+    // Submenu chevrons
     document.querySelectorAll('.chevron-btn').forEach(btn => {
         btn.addEventListener('click', function(e) {
             e.stopPropagation();
             const submenu = this.closest('.has-submenu').querySelector('.submenu');
             submenu.classList.toggle('open');
-
-            // Rotate chevron icon
             const icon = this.querySelector('i');
             if (submenu.classList.contains('open')) {
                 icon.classList.remove('fa-chevron-down');
@@ -275,8 +252,6 @@
             }
         });
     });
-
-    // Close submenus when clicking outside
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.has-submenu')) {
             document.querySelectorAll('.submenu').forEach(submenu => {
@@ -290,60 +265,30 @@
         }
     });
 
-    // Profile dropdown
-    profileTrigger.addEventListener('click', function(e) {
-        e.stopPropagation();
-        profileDropdown.classList.toggle('show');
-    });
-
-    document.addEventListener('click', function(e) {
-        if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
-            profileDropdown.classList.remove('show');
-        }
-    });
-
-    function toggleSidebar() {
-        sidebar.classList.toggle('sidebar-collapsed');
-        toggleBtn.innerHTML = sidebar.classList.contains('sidebar-collapsed')
-            ? '<i class="fa-solid fa-chevron-right"></i>'
-            : '<i class="fa-solid fa-chevron-left"></i>';
+    // Navigation: Borrowing & Returning
+    function loadBorrowAndReturn() {
+        fetch('borrowAndReturn.html')
+            .then(response => response.text())
+            .then(html => {
+                const contentContainer = document.getElementById('content-container');
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('borrowReturnNav').classList.add('active');
+            });
     }
-
-    function openSidebar() {
-        sidebar.classList.remove('-translate-x-full');
-        overlay.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
-    }
-
-    function closeSidebar() {
-        sidebar.classList.add('-translate-x-full');
-        overlay.classList.add('hidden');
-        document.body.style.overflow = '';
-    }
-
-    // Navigation functions
-    document.getElementById('dashboardBtn').addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-        this.classList.add('active');
-    });
-
-    // Event listeners
-    openBtn.addEventListener('click', openSidebar);
-    closeBtn.addEventListener('click', closeSidebar);
-    overlay.addEventListener('click', closeSidebar);
-    toggleBtn.addEventListener('click', toggleSidebar);
-
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (window.innerWidth >= 768) {
-            sidebar.classList.remove('-translate-x-full');
-            overlay.classList.add('hidden');
-            document.body.style.overflow = '';
-        } else if (!sidebar.classList.contains('-translate-x-full') && !sidebar.classList.contains('sidebar-collapsed')) {
-            sidebar.classList.add('-translate-x-full');
-        }
-    });
+    // Call on page load
+    loadBorrowAndReturn();
 </script>
 </body>
 </html>
