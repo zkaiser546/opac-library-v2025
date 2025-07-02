@@ -37,6 +37,14 @@
     <div id="tab-content" class="p-4 border border-gray-200 rounded-lg">
         Loading books content...
     </div>
+    <div class="flex justify-end pt-4 gap-4">
+        <button type="button" class="bg-gray-200 text-gray-800 px-6 py-2 rounded hover:bg-gray-300">
+            <i class="fas fa-times mr-2"></i>Clear
+        </button>
+        <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+            <i class="fas fa-save mr-2"></i>Save
+        </button>
+    </div>
 </div>
 <script>
     function initAddTabs(container) {
@@ -53,46 +61,163 @@
                 title: "Borrow",
                 icon: "fa-book",
                 content: `
-                <form class="space-y-4">
-                    <!-- Borrow form fields here -->
-                    <div>
-                        <label class="block font-medium text-sm text-gray-700">Borrower Name</label>
-                        <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
-                    </div>
-                    <div>
-                        <label class="block font-medium text-sm text-gray-700">Book Title</label>
-                        <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
-                    </div>
-                    <div class="pt-4 flex justify-end">
-                        <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
-                            <i class="fas fa-save mr-2"></i>Borrow
-                        </button>
-                    </div>
-                </form>
-            `
+        <form class="space-y-4">
+        <div class="pt-4 flex">
+        <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+             <i class="fas fa-barcode mr-2"></i>Scan
+        </button>
+    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Borrower's ID</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Details</label>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Borrower's Information</label>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" placeholder="Title" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Name</label>
+                    <input type="text" placeholder="Name" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Author</label>
+                    <input type="text" placeholder="Author" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Program</label>
+                    <input type="text" placeholder="Program" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Location</label>
+                    <input type="text" placeholder="Program" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">User Type</label>
+                    <input type="text" placeholder="User Type" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Status</label>
+                    <input type="text" placeholder="Status" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Date Borrowed</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Due Borrowed</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                </div>
+                <!-- Buttons -->
+    </div>
+        </form>
+    `
             },
+
             return: {
                 title: "Return",
                 icon: "fa-laptop-code",
                 content: `
-                <form class="space-y-4">
-                    <!-- Return form fields here -->
-                    <div>
-                        <label class="block font-medium text-sm text-gray-700">Borrower Name</label>
-                        <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
-                    </div>
-                    <div>
-                        <label class="block font-medium text-sm text-gray-700">Book Title</label>
-                        <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
-                    </div>
-                    <div class="pt-4 flex justify-end">
-                        <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
-                            <i class="fas fa-save mr-2"></i>Return
-                        </button>
-                    </div>
-                </form>
-            `
-            }
+        <form class="space-y-4">
+        <div class="pt-4 flex">
+        <button type="submit" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
+             <i class="fas fa-barcode mr-2"></i>Scan
+        </button>
+    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Accession Number</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Borrower's ID</label>
+                    <input type="text" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Details</label>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Borrower's Information</label>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Title</label>
+                    <input type="text" placeholder="Title" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Name</label>
+                    <input type="text" placeholder="Name" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Category Number</label>
+                    <input type="text" placeholder="Category Number" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Program</label>
+                    <input type="text" placeholder="Program" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Date Borrowed</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">User Type</label>
+                    <input type="text" placeholder="User Type" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+            </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4 mt-10">
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Due Borrowed</label>
+                    <input type="date" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Day Elapsed</label>
+                    <input type="text" placeholder="Day Elapsed" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Penalty</label>
+                    <input type="text" placeholder="Penalty" class="w-full border border-gray-300 rounded px-3 py-2" />
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Penalty Staus</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Penalty</option>
+                        <option> Penalty 1</option>
+                        <option> Penalty 2</option>
+                        <option> Penalty 3</option>
+                        <option> Penalty 4</option>
+                        <option> Penalty 5</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block font-medium text-sm text-gray-700">Books Staus</label>
+                    <select class="w-full border border-gray-300 rounded px-3 py-2">
+                        <option value="">Books</option>
+                        <option> Condition</option>
+                        <option> Good</option>
+                        <option> Not Good</option>
+                    </select>
+                </div>
+                </div>
+                <!-- Buttons -->
+    </div>
+        </form>
+    `
+            },
+
         };
         function updateTabContent(tabName) {
             const tab = tabData[tabName];
