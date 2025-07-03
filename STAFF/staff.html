@@ -61,12 +61,12 @@
         </div>
         <nav class="flex-1 overflow-y-auto px-4 py-6 space-y-2 md:space-y-3 text-sm md:text-base">
             <p class="px-2 text-xs md:text-sm font-semibold uppercase text-usepgold tracking-wider mb-3 section-title">Book Circulation</p>
-            <a href="#" id="borrowReturnNav" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow active">
+            <a href="#" id="borrowReturnNav" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
                 <i class="fas fa-exchange-alt w-6 text-center text-white md:text-xl"></i>
                 <span class="nav-text font-medium md:text-lg">Borrowing & Returning</span>
             </a>
             <hr class="border-usepgold/30 my-2" />
-            <a href="#" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
+            <a href="#" id="clearanceNav" class="nav-item flex items-center gap-3 px-3 py-2.5 md:py-3 rounded-lg hover:bg-usepmaroon/90 transition-slow">
                 <i class="fa-solid fa-file-circle-check w-6 text-center text-white md:text-xl"></i>
                 <span class="nav-text font-medium md:text-lg">Clearance</span>
             </a>
@@ -197,11 +197,14 @@
     const overlay = document.getElementById('overlay');
     const toggleBtn = document.getElementById('toggleBtn');
     const contentContainer = document.getElementById('content-container');
-    const dashboardContent = document.getElementById('dashboard-content');
 
     // Profile dropdown controls
     const profileTrigger = document.getElementById('profile-trigger');
     const profileDropdown = document.getElementById('profile-dropdown');
+
+    // Navigation elements
+    const borrowReturnNav = document.getElementById('borrowReturnNav');
+    const clearanceNav = document.getElementById('clearanceNav');
 
     // Sidebar toggle
     function toggleSidebar() {
@@ -265,12 +268,11 @@
         }
     });
 
-    // Navigation: Borrowing & Returninoms
+    // Navigation functions
     function loadBorrowAndReturn() {
         fetch('borrowAndReturn.html')
             .then(response => response.text())
             .then(html => {
-                const contentContainer = document.getElementById('content-container');
                 contentContainer.innerHTML = html;
                 // Execute script and initialize tabs if present
                 const tempDiv = document.createElement('div');
@@ -284,11 +286,63 @@
                 }
                 // Set active nav
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                document.getElementById('borrowReturnNav').classList.add('active');
+                borrowReturnNav.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error loading borrowAndReturn.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
             });
     }
-    // Call on page load
+
+    function loadClearance() {
+        fetch('clearance.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                clearanceNav.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error loading clearance.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
+            });
+    }
+
+    // Event listeners for navigation
+    borrowReturnNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadBorrowAndReturn();
+    });
+
+    clearanceNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadClearance();
+    });
+
+    // Load default content on page load
     loadBorrowAndReturn();
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            sidebar.classList.remove('-translate-x-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        } else if (!sidebar.classList.contains('-translate-x-full') && !sidebar.classList.contains('sidebar-collapsed')) {
+            sidebar.classList.add('-translate-x-full');
+        }
+    });
 </script>
 </body>
 </html>
