@@ -33,7 +33,7 @@
         .sidebar-collapsed ~ #main-content { margin-left: 80px !important; }
         .has-submenu { position: relative; }
         .submenu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
-        .submenu.open { max-height: 200px; }
+        .submenu.open { max-height: 500px; }
         .nav-item:hover { background-color: rgba(255, 215, 0, 0.2) !important; border-left: 3px solid #FFD700; }
         .submenu a { display: block; }
         .submenu a:hover { background-color: rgba(255, 215, 0, 0.2) !important; }
@@ -42,6 +42,7 @@
         .chevron-btn { pointer-events: auto; }
         .chevron-btn:hover { color: #FFD700; }
         .submenu-parent { cursor: pointer; }
+        .submenu-item { padding-left: 2rem; }
     </style>
 </head>
 <body class="bg-gray-50 font-sans antialiased">
@@ -86,7 +87,7 @@
                     </div>
                 </div>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="#" id="libraryBorrowedItemsNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="libraryBorrowedItemsNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <div class="flex items-center">
                             <i class="fa-solid fa-book text-usepgold text-xl mr-3"></i>
                             <div class="flex flex-col leading-tight">
@@ -96,27 +97,27 @@
                         </div>
                     </a>
 
-                    <a href="#" id="studentWithPenaltyNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="studentWithPenaltyNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-exclamation-circle w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Students with Penalty</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="transactionProfileNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-receipt w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Transaction Profile</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="missingCollectionNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-book-skull w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Missing Collection</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="coreCollectionNav" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-book-atlas w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Core Collection</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="clearanceReportNav" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-file-certificate w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Clearance Report</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" id="filipinianaNav" class="nav-item flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-flag w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Filipiniana</span>
                     </a>
@@ -137,15 +138,15 @@
                     </div>
                 </div>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-chart-bar w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Comparative Report</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-book-open-reader w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">General Book Loan</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-user-graduate w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Graduate Book Loan</span>
                     </a>
@@ -166,15 +167,15 @@
                     </div>
                 </div>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-file w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Reports</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-user-tag w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Patron Information</span>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow submenu-item">
                         <i class="fa-solid fa-ban w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Violations</span>
                     </a>
@@ -262,6 +263,9 @@
     const inventoryNav = document.getElementById('inventoryNav');
     const libraryBorrowedItemsNav = document.getElementById('libraryBorrowedItemsNav');
     const studentWithPenaltyNav = document.getElementById('studentWithPenaltyNav');
+    const transactionProfileNav = document.getElementById('transactionProfileNav');
+    const missingCollectionNav = document.getElementById('missingCollectionNav');
+
     // Sidebar toggle
     function toggleSidebar() {
         sidebar.classList.toggle('sidebar-collapsed');
@@ -269,16 +273,19 @@
             ? '<i class="fa-solid fa-chevron-right"></i>'
             : '<i class="fa-solid fa-chevron-left"></i>';
     }
+
     function openSidebar() {
         sidebar.classList.remove('-translate-x-full');
         overlay.classList.remove('hidden');
         document.body.style.overflow = 'hidden';
     }
+
     function closeSidebar() {
         sidebar.classList.add('-translate-x-full');
         overlay.classList.add('hidden');
         document.body.style.overflow = '';
     }
+
     openBtn.addEventListener('click', openSidebar);
     closeBtn.addEventListener('click', closeSidebar);
     overlay.addEventListener('click', closeSidebar);
@@ -289,35 +296,37 @@
         e.stopPropagation();
         profileDropdown.classList.toggle('show');
     });
+
     document.addEventListener('click', function(e) {
         if (!profileTrigger.contains(e.target) && !profileDropdown.contains(e.target)) {
             profileDropdown.classList.remove('show');
         }
     });
 
-    // Submenu functionality - works for both parent click and chevron
-    document.querySelectorAll('.submenu-parent').forEach(parent => {
+    // Improved submenu functionality
+    document.querySelectorAll('.has-submenu').forEach(menu => {
+        const parent = menu.querySelector('.submenu-parent');
         const chevron = parent.querySelector('.chevron-btn');
-        const submenu = parent.closest('.has-submenu').querySelector('.submenu');
+        const submenu = menu.querySelector('.submenu');
 
-        // Click handler for parent
+        // Toggle submenu when clicking anywhere on the parent (including chevron)
         parent.addEventListener('click', function(e) {
-            // Only toggle if not clicking on chevron (chevron has its own handler)
-            if (!chevron.contains(e.target)) {
+            // Only toggle if not clicking on a link inside the submenu
+            if (!e.target.closest('.submenu a')) {
                 submenu.classList.toggle('open');
                 updateChevronIcon(submenu, chevron);
             }
         });
 
-        // Click handler for chevron
-        chevron.addEventListener('click', function(e) {
+        // Prevent submenu from closing when clicking inside it
+        submenu.addEventListener('click', function(e) {
             e.stopPropagation();
-            submenu.classList.toggle('open');
-            updateChevronIcon(submenu, chevron);
         });
     });
 
     function updateChevronIcon(submenu, chevron) {
+        if (!chevron) return;
+
         const icon = chevron.querySelector('i');
         if (submenu.classList.contains('open')) {
             icon.classList.remove('fa-chevron-down');
@@ -333,11 +342,14 @@
         if (!e.target.closest('.has-submenu')) {
             document.querySelectorAll('.submenu').forEach(submenu => {
                 submenu.classList.remove('open');
-                const chevron = submenu.closest('.has-submenu').querySelector('.chevron-btn');
-                if (chevron) {
-                    const icon = chevron.querySelector('i');
-                    icon.classList.remove('fa-chevron-up');
-                    icon.classList.add('fa-chevron-down');
+                const parent = submenu.closest('.has-submenu');
+                if (parent) {
+                    const chevron = parent.querySelector('.chevron-btn');
+                    if (chevron) {
+                        const icon = chevron.querySelector('i');
+                        icon.classList.remove('fa-chevron-up');
+                        icon.classList.add('fa-chevron-down');
+                    }
                 }
             });
         }
@@ -469,6 +481,17 @@
         e.preventDefault();
         studentWithPenalty();
     });
+
+    transactionProfileNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        transactionProfile();
+    });
+
+    missingCollectionNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        missingCollection();
+    });
+
     // Load default content on page load
     loadBorrowAndReturn();
 
@@ -500,12 +523,62 @@
                 }
                 // Set active nav
                 document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                studentWithPenaltyNav.classList.add('active');
             })
             .catch(error => {
                 console.error('Error loading studentWithPenalty.html:', error);
                 contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
             });
+    }
 
+    function transactionProfile() {
+        fetch('transactionProfile.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                transactionProfileNav.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error loading transactionProfile.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
+            });
+    }
+
+    function missingCollection() {
+        fetch('missingCollection.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                missingCollectionNav.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error loading missingCollection.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
+            });
     }
 </script>
 </body>
