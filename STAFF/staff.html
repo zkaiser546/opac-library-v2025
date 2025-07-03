@@ -86,11 +86,17 @@
                     </div>
                 </div>
                 <div class="submenu pl-4 space-y-1">
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
-                        <i class="fa-solid fa-book w-5 text-center text-usepgold"></i>
-                        <span class="nav-text text-sm font-medium">Borrowed Items</span>
+                    <a href="#" id="libraryBorrowedItemsNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+                        <div class="flex items-center">
+                            <i class="fa-solid fa-book text-usepgold text-xl mr-3"></i>
+                            <div class="flex flex-col leading-tight">
+                                <span class="nav-text text-sm font-medium">Library Items</span>
+                                <span class="nav-text text-sm font-medium">Borrowed Items</span>
+                            </div>
+                        </div>
                     </a>
-                    <a href="#" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
+
+                    <a href="#" id="studentWithPenaltyNav" class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-usepmaroon/80 transition-slow">
                         <i class="fa-solid fa-exclamation-circle w-5 text-center text-usepgold"></i>
                         <span class="nav-text text-sm font-medium">Students with Penalty</span>
                     </a>
@@ -254,7 +260,8 @@
     const borrowReturnNav = document.getElementById('borrowReturnNav');
     const clearanceNav = document.getElementById('clearanceNav');
     const inventoryNav = document.getElementById('inventoryNav');
-
+    const libraryBorrowedItemsNav = document.getElementById('libraryBorrowedItemsNav');
+    const studentWithPenaltyNav = document.getElementById('studentWithPenaltyNav');
     // Sidebar toggle
     function toggleSidebar() {
         sidebar.classList.toggle('sidebar-collapsed');
@@ -412,6 +419,31 @@
             });
     }
 
+    function loadLibraryAndBorrowedItems() {
+        fetch('libraryAndBorrowedItems.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                libraryBorrowedItemsNav.classList.add('active');
+            })
+            .catch(error => {
+                console.error('Error loading libraryAndBorrowedItems.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
+            });
+    }
+
     // Event listeners for navigation
     borrowReturnNav.addEventListener('click', function(e) {
         e.preventDefault();
@@ -428,6 +460,15 @@
         loadInventory();
     });
 
+    libraryBorrowedItemsNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        loadLibraryAndBorrowedItems();
+    });
+
+    studentWithPenaltyNav.addEventListener('click', function(e) {
+        e.preventDefault();
+        studentWithPenalty();
+    });
     // Load default content on page load
     loadBorrowAndReturn();
 
@@ -441,6 +482,31 @@
             sidebar.classList.add('-translate-x-full');
         }
     });
+
+    function studentWithPenalty() {
+        fetch('studentsWithPenalty.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+                // Execute script and initialize tabs if present
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+                // Set active nav
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+            })
+            .catch(error => {
+                console.error('Error loading studentWithPenalty.html:', error);
+                contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
+            });
+
+    }
 </script>
 </body>
 </html>
