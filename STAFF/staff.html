@@ -218,7 +218,7 @@
                         <i class="fa-solid fa-chevron-down text-xs ml-1 text-usepmaroon"></i>
                     </div>
                     <div id="profile-dropdown" class="profile-dropdown absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
+                        <a href="#" id="accountSettingsToggle" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
                             <i class="fa-solid fa-user-cog mr-2"></i> Account Settings
                         </a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-usepgold/20 hover:text-usepmaroon transition-slow">
@@ -265,6 +265,7 @@
     const studentWithPenaltyNav = document.getElementById('studentWithPenaltyNav');
     const transactionProfileNav = document.getElementById('transactionProfileNav');
     const missingCollectionNav = document.getElementById('missingCollectionNav');
+    const accountSettingsToggle = document.getElementById('accountSettingsToggle');
 
     // Sidebar toggle
     function toggleSidebar() {
@@ -492,6 +493,11 @@
         missingCollection();
     });
 
+
+    accountSettingsToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        accountSettings();
+    });
     // Load default content on page load
     loadBorrowAndReturn();
 
@@ -580,6 +586,31 @@
                 contentContainer.innerHTML = '<p class="text-red-500">Error loading content. Please try again.</p>';
             });
     }
+
+
+    function accountSettings(page) {
+        fetch('accountSettings.html')
+            .then(response => response.text())
+            .then(html => {
+                contentContainer.innerHTML = html;
+
+                // Find and execute the script in add.html
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = html;
+                const script = tempDiv.querySelector('script');
+                if (script) {
+                    eval(script.textContent);
+                    if (typeof initAddTabs === 'function') {
+                        initAddTabs(contentContainer);
+                    }
+                }
+
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                document.getElementById('addMenuBtn').classList.add('active');
+            });
+    }
+
+
 </script>
 </body>
 </html>
