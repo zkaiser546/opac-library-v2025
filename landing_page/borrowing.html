@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USEP Library Borrowing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+            font-size: 24px;
+            color: #4a5568;
+        }
+        .bg-usepgold { background-color: #FFD700; }
+        .bg-usepmaroon { background-color: #800000; }
+        .text-usepmaroon { color: #800000; }
+        .focus\:ring-usepmaroon:focus { --tw-ring-color: #800000; }
+
+        /* Main container styling */
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 2rem 0;
+        }
+
+        /* Container positioning */
+        #container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            width: 100%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            align-items: stretch;
+        }
+
+        .form-container {
+            flex: 0 1 600px;
+            min-height: 600px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #first-container {
+            opacity: 1;
+            transition: all 0.3s ease;
+        }
+
+        #second-container {
+            opacity: 0;
+            transform: translateX(20px);
+            visibility: hidden;
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        /* Active state for second container */
+        #second-container.show {
+            opacity: 1;
+            transform: translateX(0);
+            visibility: visible;
+            position: relative;
+        }
+
+        /* Container box styling */
+        .form-box {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            padding: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Mobile view */
+        @media (max-width: 1024px) {
+            #container-wrapper {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+
+            .form-container {
+                width: 100%;
+                max-width: 600px;
+                min-height: auto;
+            }
+
+            #second-container {
+                position: relative;
+                transform: translateY(20px);
+            }
+
+            #second-container.show {
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 100;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: white;
+            border-radius: 0.5rem;
+            width: 90%;
+            max-width: 400px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+
+        /* Dropdown styles */
+        .dropdown {
+            position: relative;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: white;
+            min-width: 100%;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            z-index: 1;
+            border-radius: 0.5rem;
+            overflow: hidden;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+<!-- Main Content Area -->
+<div id="main-content">
+    <!-- Container Wrapper -->
+    <div id="container-wrapper">
+        <!-- First Container (Search Form) -->
+        <div id="first-container" class="form-container">
+            <div class="form-box">
+                <div class="text-center mb-8">
+                    <img src="https://www.usep.edu.ph/wp-content/uploads/2023/04/cropped-USeP-Logo-512x512-1-32x32.png" alt="USEP Logo" class="h-10 mx-auto mb-2">
+                    <h1 class="text-2xl font-bold text-usepmaroon">USEP Library Borrowing System</h1>
+                    <p class="text-gray-600 mt-1">Tagum-Mabini Campus</p>
+                </div>
+
+                <div class="space-y-4 flex-grow">
+                    <button id="scan-qr-btn" class="w-full flex items-center justify-center bg-usepmaroon hover:bg-usepmaroon/90 text-white py-3 px-6 rounded-lg text-lg transition-all shadow-md hover:shadow-lg">
+                        <i class="fas fa-qrcode mr-3"></i>
+                        Scan Book QR Code
+                    </button>
+
+                    <div class="relative flex items-center my-4">
+                        <div class="flex-grow border-t border-gray-300"></div>
+                        <span class="flex-shrink mx-4 text-gray-500">OR</span>
+                        <div class="flex-grow border-t border-gray-300"></div>
+                    </div>
+
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">Enter Accession Number:</label>
+                            <input type="text" id="accession-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon">
+                        </div>
+
+                        <div class="relative">
+                            <label class="block text-sm font-medium text-gray-700 mb-1">OR Search by Title/Author:</label>
+                            <input type="text" id="book-search" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="Search books...">
+                            <div id="search-results" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"></div>
+                        </div>
+
+                        <button id="find-book-btn" class="w-full bg-usepgold hover:bg-usepgold/90 text-usepmaroon py-3 px-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg mt-4">
+                            Find Book
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Second Container (Book Details) -->
+        <div id="second-container" class="form-container">
+            <div class="form-box">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-usepmaroon">Book Details</h2>
+                    <button id="close-book-details" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div id="book-details-content" class="flex-grow">
+                    <!-- Content will be inserted here -->
+                </div>
+
+                <div class="mt-2 mb-4">
+                    <h3 class="font-semibold text-usepmaroon mb-3 text-lg">Borrowing Options</h3>
+                </div>
+
+                    <div class="dropdown mb-4">
+                        <button class="w-full text-left p-3 border border-gray-300 rounded-lg bg-white flex justify-between items-center">
+                            <span>Select borrowing type</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="dropdown-content">
+                            <div class="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200" data-type="inside">
+                                <i class="fas fa-book-reader mr-2 text-usepmaroon"></i> Borrow for use inside the library
+                            </div>
+                            <div class="p-3 hover:bg-gray-100 cursor-pointer" data-type="outside">
+                                <i class="fas fa-book mr-2 text-usepmaroon"></i> Borrow to take outside the library
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-left bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg mb-4">
+                        <p class="text-sm text-yellow-800 font-semibold flex items-center">
+                            <i class="fas fa-exclamation-triangle mr-2"></i>
+                            Please make sure to return the book on or before the due date to avoid penalties. Thank you!
+                        </p>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                        <p class="text-sm text-gray-600">Due date: <span id="due-date" class="font-medium"></span></p>
+                    </div>
+
+                    <button id="borrow-btn" class="w-full bg-usepmaroon hover:bg-usepmaroon/90 text-white py-3 px-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg">
+                        Borrow Book
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Student ID Modal -->
+<div id="student-id-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-lg font-bold text-usepmaroon">Enter Student ID</h3>
+            <button id="close-student-modal" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="mb-4">
+            <input type="text" id="student-id" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="e.g. 2023-12345">
+        </div>
+
+        <div id="student-info" class="hidden bg-gray-50 p-4 rounded-lg mb-4">
+            <div class="flex flex-col items-center text-center">
+                <div class="profile-pic mb-3" id="student-pic"></div>
+                <h4 class="font-medium text-gray-800" id="student-name"></h4>
+                <p class="text-sm text-gray-600" id="student-course"></p>
+                <p class="text-xs text-gray-500" id="student-id-display"></p>
+            </div>
+        </div>
+
+        <button id="confirm-borrow" class="w-full bg-usepmaroon hover:bg-usepmaroon/90 text-white py-2 px-4 rounded-lg font-medium transition-all">
+            Confirm Borrow
+        </button>
+    </div>
+</div>
+
+<!-- QR Scanner Modal -->
+<div id="qr-scanner-modal" class="modal">
+    <div class="modal-content">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-usepmaroon">Scan Book QR Code</h2>
+            <button id="close-qr-scanner" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+
+        <div class="border-2 border-gray-300 rounded-lg overflow-hidden mb-4">
+            <video id="qr-video" width="100%" height="auto" playsinline></video>
+        </div>
+
+        <p class="text-sm text-gray-500 text-center">Point your camera at the book's QR code</p>
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="success-modal" class="modal">
+    <div class="modal-content">
+        <div class="mb-6 text-center">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check text-green-500 text-2xl"></i>
+            </div>
+            <h2 class="text-xl font-bold text-green-600">Book Borrowed Successfully!</h2>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
+            <h3 class="font-semibold text-usepmaroon mb-2">Book Details:</h3>
+            <p id="success-book" class="text-gray-700"></p>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
+            <h3 class="font-semibold text-usepmaroon mb-2">Borrower Details:</h3>
+            <p id="success-borrower" class="text-gray-700"></p>
+        </div>
+
+        <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
+            <h3 class="font-semibold text-usepmaroon mb-2">Due Date:</h3>
+            <p id="success-due-date" class="text-gray-700"></p>
+        </div>
+
+        <div class="flex space-x-4">
+            <button id="print-receipt" class="flex-1 bg-usepgold hover:bg-usepgold/90 text-usepmaroon py-2 px-4 rounded-lg font-medium transition-all">
+                Print Receipt
+            </button>
+            <button id="new-transaction" class="flex-1 bg-usepmaroon hover:bg-usepmaroon/90 text-white py-2 px-4 rounded-lg font-medium transition-all">
+                New Transaction
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+<script>
+    // Sample book data
+    const bookDatabase = [
+        {accession: "ACC-001", title: "Introduction to Computer Science", author: "John Doe", available: true, image: "https://m.media-amazon.com/images/I/71tR3ZEQZBL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC-002", title: "Advanced Programming", author: "Jane Smith", available: true, image: "https://m.media-amazon.com/images/I/81s6DUyQCZL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC-003", title: "Database Systems", author: "Robert Johnson", available: false, image: "https://m.media-amazon.com/images/I/61yB0UFlM3L._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC-004", title: "Data Structures", author: "Emily Davis", available: true, image: "https://m.media-amazon.com/images/I/81vpsIs58WL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC-005", title: "Algorithms", author: "Michael Brown", available: true, image: "https://m.media-amazon.com/images/I/71kwaIeQeFL._AC_UF1000,1000_QL80_.jpg"}
+    ];
+
+    // Sample borrower data
+    const borrowerDatabase = [
+        {id: "2023-12345", name: "Juan Dela Cruz", course: "BS Computer Science", initials: "JC"},
+        {id: "2023-54321", name: "Maria Santos", course: "BS Information Technology", initials: "MS"},
+        {id: "2023-67890", name: "Pedro Reyes", course: "BS Electrical Engineering", initials: "PR"}
+    ];
+
+    // DOM elements
+    const containerWrapper = document.getElementById('container-wrapper');
+    const firstContainer = document.getElementById('first-container');
+    const secondContainer = document.getElementById('second-container');
+    const bookDetailsContent = document.getElementById('book-details-content');
+    const studentIdModal = document.getElementById('student-id-modal');
+    const scanQrBtn = document.getElementById('scan-qr-btn');
+    const findBookBtn = document.getElementById('find-book-btn');
+    const accessionInput = document.getElementById('accession-input');
+    const bookSearch = document.getElementById('book-search');
+    const searchResults = document.getElementById('search-results');
+    const studentId = document.getElementById('student-id');
+    const studentInfo = document.getElementById('student-info');
+    const newTransactionBtn = document.getElementById('new-transaction');
+    const closeBookDetails = document.getElementById('close-book-details');
+    const borrowBtn = document.getElementById('borrow-btn');
+    const closeStudentModal = document.getElementById('close-student-modal');
+    const confirmBorrow = document.getElementById('confirm-borrow');
+    const closeQrScanner = document.getElementById('close-qr-scanner');
+    const qrScannerModal = document.getElementById('qr-scanner-modal');
+    const qrVideo = document.getElementById('qr-video');
+    const successModal = document.getElementById('success-modal');
+    const successBook = document.getElementById('success-book');
+    const successBorrower = document.getElementById('success-borrower');
+    const successDueDate = document.getElementById('success-due-date');
+
+    // Current transaction data
+    let currentBook = null;
+    let currentBorrower = null;
+    let qrStream = null;
+    let borrowType = 'inside'; // Default to inside library
+
+    // Show book details container
+    function showBookDetailsContainer(book) {
+        const today = new Date();
+        const dueDateObj = new Date();
+        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14)); // 1 week for inside, 2 weeks for outside
+
+        bookDetailsContent.innerHTML = `
+            <div class="flex mb-6">
+                <img src="${book.image}" alt="${book.title}" class="w-24 h-32 object-cover rounded-lg mr-4">
+                <div>
+                    <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
+                    <p class="text-gray-600">${book.author}</p>
+                    <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Show second container
+        secondContainer.classList.add('show');
+
+        // On desktop, adjust container wrapper to accommodate both containers
+        if (window.innerWidth > 1024) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    }
+
+    // Close book details container
+    function closeBookDetailsContainer() {
+        secondContainer.classList.remove('show');
+
+        // Reset container wrapper width
+        containerWrapper.style.maxWidth = '';
+    }
+
+    // Show modal
+    function showModal(modal) {
+        modal.classList.add('show');
+    }
+
+    // Close modal
+    function closeModal(modal) {
+        modal.classList.remove('show');
+    }
+
+    // Event listeners
+    scanQrBtn.addEventListener('click', () => {
+        showModal(qrScannerModal);
+        startQRScanner();
+    });
+
+    closeQrScanner.addEventListener('click', () => {
+        closeModal(qrScannerModal);
+    });
+
+    closeBookDetails.addEventListener('click', closeBookDetailsContainer);
+
+    closeStudentModal.addEventListener('click', () => {
+        closeModal(studentIdModal);
+    });
+
+    newTransactionBtn.addEventListener('click', () => {
+        resetForms();
+        closeModal(successModal);
+        closeBookDetailsContainer();
+    });
+
+    // Find book by accession or search
+    findBookBtn.addEventListener('click', () => {
+        const accession = accessionInput.value.trim();
+        const searchTerm = bookSearch.value.trim().toLowerCase();
+
+        if (accession) {
+            const book = bookDatabase.find(b => b.accession === accession);
+            if (book) {
+                if (!book.available) {
+                    alert("This book is currently not available for borrowing.");
+                    return;
+                }
+                currentBook = book;
+                showBookDetailsContainer(book);
+            } else {
+                alert("Book not found with that accession number");
+            }
+        } else if (searchTerm) {
+            const results = bookDatabase.filter(book =>
+                (book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm)) &&
+                book.available
+            );
+
+            if (results.length === 1) {
+                currentBook = results[0];
+                showBookDetailsContainer(results[0]);
+            } else if (results.length > 1) {
+                showSearchResults(results);
+            } else {
+                alert("No available books found matching your search");
+            }
+        } else {
+            alert("Please enter either an accession number or search term");
+        }
+    });
+
+    // Show search results dropdown
+    function showSearchResults(results) {
+        searchResults.innerHTML = results.map(book => `
+            <div class="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-0 flex items-center"
+                 data-accession="${book.accession}">
+                <img src="${book.image}" alt="${book.title}" class="w-10 h-14 object-cover mr-3">
+                <div>
+                    <div class="font-medium text-usepmaroon">${book.title}</div>
+                    <div class="text-sm text-gray-600">${book.author}</div>
+                </div>
+            </div>
+        `).join('');
+
+        searchResults.classList.remove('hidden');
+    }
+
+    // Handle search result selection
+    searchResults.addEventListener('click', (e) => {
+        const resultItem = e.target.closest('[data-accession]');
+        if (resultItem) {
+            const accession = resultItem.getAttribute('data-accession');
+            const book = bookDatabase.find(b => b.accession === accession);
+            if (book) {
+                currentBook = book;
+                showBookDetailsContainer(book);
+                searchResults.classList.add('hidden');
+                bookSearch.value = book.title;
+            }
+        }
+    });
+
+    // Hide search results when clicking elsewhere
+    document.addEventListener('click', (e) => {
+        if (!bookSearch.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.add('hidden');
+        }
+    });
+
+    // Set borrow type from dropdown
+    document.querySelectorAll('.dropdown-content div').forEach(item => {
+        item.addEventListener('click', function() {
+            borrowType = this.getAttribute('data-type');
+            const today = new Date();
+            const dueDateObj = new Date();
+            dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+            document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+            });
+        });
+    });
+
+    // Student ID input handler
+    studentId.addEventListener('input', function() {
+        const id = this.value.trim();
+        if (id.length >= 5) {
+            const borrower = borrowerDatabase.find(b => b.id === id);
+            if (borrower) {
+                currentBorrower = borrower;
+                document.getElementById('student-pic').textContent = borrower.initials;
+                document.getElementById('student-name').textContent = borrower.name;
+                document.getElementById('student-course').textContent = borrower.course;
+                document.getElementById('student-id-display').textContent = borrower.id;
+                studentInfo.classList.remove('hidden');
+            } else {
+                studentInfo.classList.add('hidden');
+                currentBorrower = null;
+            }
+        } else {
+            studentInfo.classList.add('hidden');
+            currentBorrower = null;
+        }
+    });
+
+    // Borrow button opens student ID modal
+    borrowBtn.addEventListener('click', function() {
+        if (!currentBook) {
+            alert("Please select a valid book first");
+            return;
+        }
+        showModal(studentIdModal);
+    });
+
+    // Confirm borrow button
+    confirmBorrow.addEventListener('click', function() {
+        if (!currentBook) {
+            alert("Please select a valid book first");
+            return;
+        }
+
+        if (!currentBorrower) {
+            alert("Please enter a valid student ID");
+            return;
+        }
+
+        // Set success page details
+        successBook.textContent = `${currentBook.title} by ${currentBook.author} (${currentBook.accession})`;
+        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id}) - ${currentBorrower.course}`;
+
+        // Calculate due date based on borrow type
+        const today = new Date();
+        const dueDate = new Date();
+        dueDate.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        successDueDate.textContent = dueDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mark book as unavailable in the database
+        const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
+        if (bookIndex !== -1) {
+            bookDatabase[bookIndex].available = false;
+        }
+
+        closeModal(studentIdModal);
+        closeBookDetailsContainer();
+        showModal(successModal);
+    });
+
+    // QR Scanner functionality
+    function startQRScanner() {
+        navigator.mediaDevices.getUserMedia({video: {facingMode: "environment"}})
+            .then(function (stream) {
+                qrStream = stream;
+                qrVideo.srcObject = stream;
+                qrVideo.setAttribute("playsinline", true);
+                qrVideo.play();
+                requestAnimationFrame(scanQR);
+            })
+            .catch(function (err) {
+                console.error("Error accessing camera: ", err);
+                alert("Could not access camera. Please check permissions.");
+            });
+    }
+
+    function scanQR() {
+        if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
+            const canvas = document.createElement('canvas');
+            canvas.width = qrVideo.videoWidth;
+            canvas.height = qrVideo.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(qrVideo, 0, 0, canvas.width, canvas.height);
+
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                handleScannedCode(code.data);
+            } else {
+                requestAnimationFrame(scanQR);
+            }
+        } else {
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    function handleScannedCode(code) {
+        const book = bookDatabase.find(b => b.accession === code);
+
+        if (book) {
+            if (!book.available) {
+                alert("This book is currently not available for borrowing.");
+                requestAnimationFrame(scanQR);
+                return;
+            }
+
+            currentBook = book;
+
+            // Stop scanning
+            qrStream.getTracks().forEach(track => track.stop());
+            qrVideo.srcObject = null;
+            qrStream = null;
+
+            closeModal(qrScannerModal);
+            showBookDetailsContainer(book);
+        } else {
+            alert("Book not found in database. Please try another code.");
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    function resetForms() {
+        // Reset inputs
+        accessionInput.value = '';
+        bookSearch.value = '';
+        studentId.value = '';
+        studentInfo.classList.add('hidden');
+
+        currentBook = null;
+        currentBorrower = null;
+        borrowType = 'inside';
+    }
+
+    // Print receipt
+    document.getElementById('print-receipt').addEventListener('click', function() {
+        window.print();
+    });
+
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (window.innerWidth <= 1024) {
+            containerWrapper.style.maxWidth = '';
+        } else if (secondContainer.classList.contains('show')) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    });
+</script>
+</body>
+</html>

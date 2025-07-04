@@ -1,5 +1,4 @@
 <div id="add-content">
-    <h2 class="flex justify-end pt-4 gap-4 text-2xl font-bold text-usepmaroon mb-4">Staff</h2>
     <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden hidden md:block">
         <div class="flex">
             <button data-tab="clearance" class="desktop-tab flex-1 py-3 px-4 text-center active-tab">
@@ -10,6 +9,31 @@
             </button>
         </div>
     </div>
+   <!-- Search Bar -->
+    <div class="flex flex-wrap items-center gap-2 md:gap-4 pb-4">
+        <div class="relative w-full md:w-96">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search Library/Student ID...">
+        </div>
+        <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+            <i class="fas fa-search mr-2"></i>Search
+        </button>
+        <!-- Download Button -->
+        <div class="flex items-center ml-auto gap-2">
+            <span class="text-sm text-gray-600">Select format:</span>
+            <select class="border border-gray-300 rounded px-3 py-2">
+                <option>CSV</option>
+                <option>Excel</option>
+                <option>PDF</option>
+            </select>
+            <button class="bg-usepgold text-usepmaroon px-4 py-2 rounded hover:bg-yellow-500">
+                Download
+            </button>
+        </div>
+    </div>
+<!-- Mobile Dropdown -->
     <div class="mobile-dropdown mb-6 block md:hidden">
         <button class="w-full bg-gray-100 py-3 px-4 rounded-lg flex justify-between items-center border border-gray-300">
             <span id="mobile-tab-label">
@@ -61,18 +85,6 @@
                 icon: "fa-file-alt",
                 content:`
         <form class="space-y-4">
-        <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
-                <div class="relative w-full md:w-96">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
-                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search Library/Student ID...">
-                </div>
-                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
-                    <i class="fas fa-search mr-2"></i>Search
-                </button>
-            </div>
-
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-usepmaroon text-white">
@@ -151,31 +163,28 @@
     </table>
 </div>
         </form>
-        <div class="flex justify-center mt-12">
-        <nav class="inline-flex rounded-md shadow-sm">
-            <button class="px-3 py-1 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-usepmaroon font-medium">
-                1
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                2
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                3
-            </button>
-            <span class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500">
-                    ...
-                </span>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                8
-            </button>
-            <button class="px-3 py-1 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </nav>
-    </div>
+      <div class="flex items-center justify-between mt-6">
+        <div class="text-sm text-gray-600">
+          Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">12</span> entries
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            Previous
+          </button>
+          <button class="px-3 py-1 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
+            1
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            2
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            3
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            Next
+          </button>
+        </div>
+      </div>
                 `
             },
 
@@ -184,18 +193,6 @@
                 icon: "fa-id-card",
                 content: `
         <form class="space-y-4">
-        <div class="flex flex-col sm:flex-row flex-wrap items-center gap-2 md:gap-4">
-                <div class="relative w-full md:w-96">
-                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
-                    </div>
-                    <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search Library/Student ID...">
-                </div>
-                <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
-                    <i class="fas fa-search mr-2"></i>Search
-                </button>
-            </div>
-
             <div class="bg-white rounded-lg shadow-md overflow-hidden">
     <table class="min-w-full divide-y divide-gray-200">
         <thead class="bg-usepmaroon text-white">
@@ -271,32 +268,28 @@
         </tbody>
     </table>
 </div>
-        </form>
-        <div class="flex justify-center mt-12">
-        <nav class="inline-flex rounded-md shadow-sm">
-            <button class="px-3 py-1 rounded-l-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-usepmaroon font-medium">
-                1
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                2
-            </button>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                3
-            </button>
-            <span class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500">
-                    ...
-                </span>
-            <button class="px-4 py-1 border-t border-b border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                8
-            </button>
-            <button class="px-3 py-1 rounded-r-md border border-gray-300 bg-white text-gray-500 hover:bg-gray-50">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </nav>
-    </div>
+<div class="flex items-center justify-between mt-6">
+        <div class="text-sm text-gray-600">
+          Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">12</span> entries
+        </div>
+        <div class="flex space-x-2">
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            Previous
+          </button>
+          <button class="px-3 py-1 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
+            1
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            2
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            3
+          </button>
+          <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+            Next
+          </button>
+        </div>
+      </div>
 
                 `
             },

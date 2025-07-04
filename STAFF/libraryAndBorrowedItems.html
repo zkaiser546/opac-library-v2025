@@ -48,12 +48,100 @@
         const mobileTabLabel = container.querySelector('#mobile-tab-label');
         const tabContent = container.querySelector('#tab-content');
 
+        // Sample data that would come from backend
+        const libraryItemsData = {
+            books: [
+                {
+                    accessionNumber: "ACC-001",
+                    callNumber: "CN-001",
+                    title: "Introduction to Computer Science",
+                    author: "John Doe",
+                    bookTitle: "Computer Science Basics",
+                    classification: "QA76",
+                    placeOfPublication: "New York",
+                    publisher: "Tech Publishers",
+                    copyrightDate: "2022"
+                },
+                {
+                    accessionNumber: "ACC-002",
+                    callNumber: "CN-002",
+                    title: "Advanced Programming",
+                    author: "Jane Smith",
+                    bookTitle: "Programming Series",
+                    classification: "QA76.6",
+                    placeOfPublication: "San Francisco",
+                    publisher: "Code Masters",
+                    copyrightDate: "2021"
+                }
+            ],
+            electronic: [
+                {
+                    accessionNumber: "E-001",
+                    callNumber: "ECN-001",
+                    title: "Digital Systems",
+                    author: "Robert Johnson",
+                    bookTitle: "Electronics Series",
+                    classification: "TK7868",
+                    placeOfPublication: "Boston",
+                    publisher: "Digital Press",
+                    copyrightDate: "2020"
+                }
+            ],
+            periodical: [
+                {
+                    accessionNumber: "P-001",
+                    callNumber: "PCN-001",
+                    title: "Science Journal",
+                    author: "Various",
+                    bookTitle: "Science Monthly",
+                    classification: "Q1",
+                    placeOfPublication: "Chicago",
+                    publisher: "Science Press",
+                    copyrightDate: "2023"
+                }
+            ],
+            thesis: [
+                {
+                    accessionNumber: "T-001",
+                    callNumber: "TCN-001",
+                    title: "Machine Learning Applications",
+                    author: "Alex Wong",
+                    bookTitle: "CS Thesis Collection",
+                    classification: "QA76.87",
+                    placeOfPublication: "Manila",
+                    publisher: "University Press",
+                    copyrightDate: "2022"
+                }
+            ]
+        };
+
+        const borrowedItemsData = [
+            {
+                accessionNumber: "ACC-001",
+                title: "Introduction to Computer Science",
+                type: "Book",
+                dateBorrowed: "2023-05-15",
+                dateReturned: "2023-06-01",
+                staffIncharge: "Ms. Rodriguez",
+                borrowerName: "Juan Dela Cruz"
+            },
+            {
+                accessionNumber: "ACC-002",
+                title: "Advanced Programming",
+                type: "E-Book",
+                dateBorrowed: "2023-05-20",
+                dateReturned: "-",
+                staffIncharge: "Mr. Smith",
+                borrowerName: "Maria Santos"
+            }
+        ];
+
         const tabData = {
             libraryItems: {
                 title: "Library Items",
                 icon: "fa-book",
                 content: `
-                    <div class="mb-6">
+                    <div class="mb-6" xmlns="http://www.w3.org/1999/html">
                         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
                             <div class="grid grid-cols-1 md:grid-cols-5 gap-2 w-full">
                                 <div>
@@ -106,24 +194,30 @@
                          </div>
                         </div>
 
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                            <div class="relative w-full md:w-1/3">
-                                <input type="text" placeholder="Search..." class="w-full border border-gray-300 rounded px-3 py-2 pl-10">
-                                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm text-gray-600">Select format:</span>
-                                <select class="border border-gray-300 rounded px-3 py-2">
-                                    <option>CSV</option>
-                                    <option>Excel</option>
-                                    <option>PDF</option>
-                                </select>
-                                <button class="bg-usepgold text-usepmaroon px-4 py-2 rounded hover:bg-yellow-500">
-                                    Download
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                        < <!-- Search Bar -->
+    <div class="flex flex-wrap items-center gap-2 md:gap-4 pb-4">
+        <div class="relative w-full md:w-96">
+            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                <i class="fas fa-search text-gray-400"></i>
+            </div>
+            <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search...">
+        </div>
+        <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+            <i class="fas fa-search mr-2"></i>Search
+        </button>
+        <!-- Download Button -->
+        <div class="flex items-center ml-auto gap-2">
+            <span class="text-sm text-gray-600">Select format:</span>
+            <select class="border border-gray-300 rounded px-3 py-2">
+                <option>CSV</option>
+                <option>Excel</option>
+                <option>PDF</option>
+            </select>
+            <button class="bg-usepgold text-usepmaroon px-4 py-2 rounded hover:bg-yellow-500">
+                Download
+            </button>
+        </div>
+    </div>
 
                     <div class="desktop-tabs bg-gray-100 rounded-lg p-1 mb-6 overflow-hidden hidden md:block">
                         <div class="flex">
@@ -178,6 +272,7 @@
                     </div>
 
                     <div id="sub-tab-content">
+                        <!-- Single table that will be populated dynamically -->
                         <div class="overflow-x-auto">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
@@ -193,33 +288,34 @@
                                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copyright Date</th>
                                     </tr>
                                 </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">ACC-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">CN-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Introduction to Computer Science</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">John Doe</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Computer Science Basics</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">QA76</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">New York</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Tech Publishers</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2022</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">ACC-002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">CN-002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Advanced Programming</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Jane Smith</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Programming Series</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">QA76.6</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">San Francisco</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Code Masters</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2021</td>
-                                    </tr>
+                                <tbody id="library-items-body" class="bg-white divide-y divide-gray-200">
+                                    <!-- Data will be populated here -->
                                 </tbody>
                             </table>
                         </div>
                     </div>
+                            <div class="flex items-center justify-between mt-6">
+                            <div class="text-sm text-gray-600">
+                              Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">12</span> entries
+                            </div>
+                            <div class="flex space-x-2">
+                              <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                                Previous
+                              </button>
+                              <button class="px-3 py-1 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
+                                1
+                              </button>
+                              <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                                2
+                              </button>
+                              <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                                3
+                              </button>
+                              <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                                Next
+                              </button>
+                            </div>
+                          </div>
                 `
             },
             borrowedItems: {
@@ -252,29 +348,30 @@
                             </div>
                         </div>
 
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-                            <div class="relative w-full md:w-1/3">
-                                <input type="text" placeholder="Search..." class="w-full border border-gray-300 rounded px-3 py-2 pl-10">
-                                <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <span class="text-sm text-gray-600">Select format:</span>
-                                <select class="border border-gray-300 rounded px-3 py-2">
-                                    <option>CSV</option>
-                                    <option>Excel</option>
-                                    <option>PDF</option>
-                                </select>
-                                <button class="bg-usepgold text-usepmaroon px-4 py-2 rounded hover:bg-yellow-500">
-                                    Download
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="pt-4 mb-4">
-                        <button type="button" class="bg-usepmaroon text-white px-6 py-2 rounded hover:bg-red-900">
-
-                        </button>
+                         <!-- Search Bar -->
+                                <div class="flex flex-wrap items-center gap-2 md:gap-4 pb-4">
+                                    <div class="relative w-full md:w-96">
+                                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                            <i class="fas fa-search text-gray-400"></i>
+                                        </div>
+                                        <input type="text" class="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon shadow-sm input-focus transition" placeholder="Search Library/Student ID...">
+                                    </div>
+                                    <button class="px-5 py-2.5 bg-usepmaroon text-white rounded-lg hover:bg-usepmaroon/90 flex items-center justify-center shadow-sm transition-all hover:shadow-md">
+                                        <i class="fas fa-search mr-2"></i>Search
+                                    </button>
+                                    <!-- Download Button -->
+                                    <div class="flex items-center ml-auto gap-2">
+                                        <span class="text-sm text-gray-600">Select format:</span>
+                                        <select class="border border-gray-300 rounded px-3 py-2">
+                                            <option>CSV</option>
+                                            <option>Excel</option>
+                                            <option>PDF</option>
+                                        </select>
+                                        <button class="bg-usepgold text-usepmaroon px-4 py-2 rounded hover:bg-yellow-500">
+                                            Download
+                                        </button>
+                                    </div>
+                                </div>
                     </div>
 
                     <div class="overflow-x-auto">
@@ -290,28 +387,33 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Borrower's Name</th>
                                 </tr>
                             </thead>
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">ACC-001</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Introduction to Computer Science</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Book</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">2023-05-15</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">2023-06-01</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Ms. Rodriguez</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Juan Dela Cruz</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 whitespace-nowrap">ACC-002</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Advanced Programming</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">E-Book</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">2023-05-20</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">-</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Mr. Smith</td>
-                                    <td class="px-6 py-4 whitespace-nowrap">Maria Santos</td>
-                                </tr>
+                            <tbody id="borrowed-items-body" class="bg-white divide-y divide-gray-200">
+                                <!-- Data will be populated here -->
                             </tbody>
                         </table>
                     </div>
+                    <div class="flex items-center justify-between mt-6">
+                    <div class="text-sm text-gray-600">
+                      Showing <span class="font-medium">1</span> to <span class="font-medium">5</span> of <span class="font-medium">12</span> entries
+                    </div>
+                    <div class="flex space-x-2">
+                      <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                        Previous
+                      </button>
+                      <button class="px-3 py-1 bg-usepmaroon text-white rounded-md hover:bg-usepmaroon/90">
+                        1
+                      </button>
+                      <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                        2
+                      </button>
+                      <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                        3
+                      </button>
+                      <button class="px-3 py-1 border border-gray-300 rounded-md text-gray-600 hover:bg-gray-50">
+                        Next
+                      </button>
+                    </div>
+                  </div>
                 `
             }
         };
@@ -323,7 +425,53 @@
             // Initialize subtabs if they exist
             if (tabName === 'libraryItems') {
                 initSubTabs(container);
+                // Load initial data for library items
+                populateLibraryItemsTable('books');
+            } else if (tabName === 'borrowedItems') {
+                populateBorrowedItemsTable();
             }
+        }
+
+        function populateLibraryItemsTable(category) {
+            const tableBody = document.querySelector('#library-items-body');
+            tableBody.innerHTML = '';
+
+            const items = libraryItemsData[category] || [];
+
+            items.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${item.accessionNumber}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.callNumber}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.author}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.bookTitle}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.classification}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.placeOfPublication}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.publisher}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.copyrightDate}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function populateBorrowedItemsTable() {
+            const tableBody = document.querySelector('#borrowed-items-body');
+            tableBody.innerHTML = '';
+
+            borrowedItemsData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">${item.accessionNumber}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.title}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.type}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.dateBorrowed}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.dateReturned}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.staffIncharge}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">${item.borrowerName}</td>
+                `;
+                tableBody.appendChild(row);
+            });
         }
 
         function initSubTabs(container) {
@@ -334,170 +482,25 @@
             const subMobileDropdownContent = container.querySelector('#sub-mobile-dropdown-content');
             const subDropdownChevron = container.querySelector('#sub-dropdown-chevron');
             const subMobileTabLabel = container.querySelector('#sub-mobile-tab-label');
-            const subTabContent = container.querySelector('#sub-tab-content');
 
             const subTabData = {
                 books: {
                     title: "Books",
-                    icon: "fa-book",
-                    content: `
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accession Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Call Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classification</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Place of Publication</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publisher</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copyright Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">ACC-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">CN-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Introduction to Computer Science</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">John Doe</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Computer Science Basics</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">QA76</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">New York</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Tech Publishers</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2022</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">ACC-002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">CN-002</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Advanced Programming</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Jane Smith</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Programming Series</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">QA76.6</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">San Francisco</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Code Masters</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2021</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    `
+                    icon: "fa-book"
                 },
                 electronic: {
                     title: "Electronic",
-                    icon: "fa-laptop-code",
-                    content: `
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accession Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Call Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classification</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Place of Publication</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publisher</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copyright Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">E-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">ECN-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Digital Systems</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Robert Johnson</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Electronics Series</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">TK7868</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Boston</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Digital Press</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2020</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    `
+                    icon: "fa-laptop-code"
                 },
                 periodical: {
                     title: "Periodical",
-                    icon: "fa-newspaper",
-                    content: `
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accession Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Call Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classification</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Place of Publication</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publisher</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copyright Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">P-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">PCN-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Science Journal</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Various</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Science Monthly</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Q1</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Chicago</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Science Press</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2023</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    `
+                    icon: "fa-newspaper"
                 },
                 thesis: {
                     title: "Thesis",
-                    icon: "fa-graduation-cap",
-                    content: `
-                        <div class="overflow-x-auto">
-                            <table class="min-w-full divide-y divide-gray-200">
-                                <thead class="bg-gray-50">
-                                    <tr>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Accession Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Call Number</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Author</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Book Title</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Classification</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Place of Publication</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Publisher</th>
-                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Copyright Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200">
-                                    <tr>
-                                        <td class="px-6 py-4 whitespace-nowrap">T-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">TCN-001</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Machine Learning Applications</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Alex Wong</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">CS Thesis Collection</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">QA76.87</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">Manila</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">University Press</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">2022</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    `
+                    icon: "fa-graduation-cap"
                 }
             };
-
-            function updateSubTabContent(subTabName) {
-                const subTab = subTabData[subTabName];
-                subTabContent.innerHTML = subTab.content;
-            }
 
             function updateSubMobileTabSelection(subTabName) {
                 const subTab = subTabData[subTabName];
@@ -528,7 +531,7 @@
                     }
                 });
                 updateSubMobileTabSelection(subTabName);
-                updateSubTabContent(subTabName);
+                populateLibraryItemsTable(subTabName);
             }
 
             subDesktopTabs.forEach(tab => {
@@ -550,7 +553,7 @@
 
             // Initialize first subtab
             updateSubMobileTabSelection(activeSubTab);
-            updateSubTabContent(activeSubTab);
+            populateLibraryItemsTable(activeSubTab);
         }
 
         function updateMobileTabSelection(tabName) {
@@ -632,5 +635,13 @@
         .desktop-tabs, .sub-desktop-tabs {
             display: block;
         }
+    }
+    /* Prevent horizontal scrolling */
+    #sub-tab-content {
+        overflow-x: hidden;
+    }
+    .min-w-full {
+        min-width: 100%;
+        width: auto;
     }
 </style>
