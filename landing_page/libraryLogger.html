@@ -256,6 +256,10 @@
 
         if (e.key.length === 1) {
             scannerBuffer += e.key;
+        } else if (e.key === 'Enter') {
+            processStudentId(scannerBuffer);
+            scannerBuffer = '';
+            return;
         }
 
         scannerTimeout = setTimeout(() => {
