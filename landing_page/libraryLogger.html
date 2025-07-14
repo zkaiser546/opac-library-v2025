@@ -7,7 +7,6 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Perfectly sized Profile Picture */
         .profile-pic {
             width: 160px;
             height: 160px;
@@ -21,8 +20,6 @@
             color: #4a5568;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-
-        /* Body Background with Overlay */
         body::before {
             content: "";
             position: absolute;
@@ -30,8 +27,6 @@
             background-color: rgba(255, 255, 255, 0.7);
             z-index: -1;
         }
-
-        /* Comfortable Input Styling */
         .input-field {
             width: 100%;
             padding: 1rem;
@@ -40,18 +35,13 @@
             font-size: 1.15rem;
             margin: 1.25rem 0;
         }
-
-        /* Animation */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
         .fade-in {
             animation: fadeIn 0.5s ease-in;
         }
-
-        /* Noticeable Alert Message */
         .alert-message {
             position: fixed;
             top: 25px;
@@ -69,22 +59,28 @@
             text-align: center;
             min-width: 320px;
         }
-
-        /* Readable Student Info */
         .student-info {
             font-size: 1.25rem;
             margin-bottom: 0.5rem;
         }
-
         .student-name {
             font-size: 1.5rem;
             margin-bottom: 0.75rem;
+        }
+        .scanner-input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
         }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 font-sans relative flex items-center justify-center bg-cover bg-center" style="background-image: url('images/eagle.jpg')">
 <!-- Alert Message -->
 <div id="alert-message" class="alert-message"></div>
+
+<!-- Hidden input for scanner -->
+<input type="text" id="scanner-input" class="scanner-input" autocomplete="off">
 
 <div class="w-full max-w-md mx-4 bg-white rounded-xl shadow-lg p-8 transition-all">
     <div id="header-section" class="text-center">
@@ -106,20 +102,30 @@
     <!-- Input Section -->
     <div id="input-section" class="mt-5">
         <p class="text-lg font-medium text-center mb-3">Please enter your Student ID</p>
-        <input type="text" id="student-id-input" class="input-field" placeholder="e.g. 2023-12345" autofocus>
+        <input type="text" id="student-id-input" class="input-field" placeholder="e.g. 2023-12345 or 202312345" autofocus>
+        <p class="text-sm text-gray-500 mt-2">Or scan your RFID/Libray card Barcode </p>
     </div>
 </div>
 
 <script>
-    // Sample student database
+    // Sample student database with IDs in both formats
     const studentDatabase = [
+        // With hyphens
         { id: "2023-12345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", loggedIn: false },
         { id: "2023-54321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", loggedIn: false },
-        { id: "2023-67890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false }
+        { id: "2023-67890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false },
+        // Without hyphens
+        { id: "202312345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", loggedIn: false },
+        { id: "202354321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", loggedIn: false },
+        { id: "202367890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false },
+        // RFID samples
+        { id: "RFID12345678", name: "ANA CRUZ", program: "BS Civil Engineering", initials: "AC", loggedIn: false },
+        { id: "BC987654321", name: "CARLOS LIM", program: "BS Mechanical Engineering", initials: "CL", loggedIn: false }
     ];
 
     // DOM Elements
     const studentIdInput = document.getElementById('student-id-input');
+    const scannerInput = document.getElementById('scanner-input');
     const studentDisplay = document.getElementById('student-display');
     const studentPic = document.getElementById('student-pic');
     const studentName = document.getElementById('student-name');
@@ -129,53 +135,100 @@
     const headerSection = document.getElementById('header-section');
     const inputSection = document.getElementById('input-section');
 
-    // Event listener for student ID input
+    // Scanner configuration
+    let scannerBuffer = '';
+    let scannerTimeout;
+    const SCANNER_DELAY = 100; // Time to wait for additional scanner input
+
+    // Normalize ID by removing hyphens and converting to uppercase
+    function normalizeId(id) {
+        return id.replace(/-/g, '').toUpperCase();
+    }
+
+    // Function to process ID (handles both formats)
+    function processStudentId(id) {
+        id = id.trim();
+        const normalizedId = normalizeId(id);
+
+        if (normalizedId.length >= 5) {
+            // Find student by either original ID or normalized ID
+            const student = studentDatabase.find(s =>
+                s.id === id || normalizeId(s.id) === normalizedId
+            );
+
+            if (student) {
+                // Display student information
+                studentPic.textContent = student.initials;
+                studentName.textContent = student.name;
+                studentIdDisplay.textContent = `ID: ${student.id}`;
+                studentProgram.textContent = `Program: ${student.program}`;
+
+                // Show the student display and hide other sections
+                studentDisplay.classList.remove('hidden');
+                headerSection.classList.add('hidden');
+                inputSection.classList.add('hidden');
+
+                // Toggle login status and show appropriate message
+                student.loggedIn = !student.loggedIn;
+
+                if (student.loggedIn) {
+                    showAlert(`Welcome ${student.name}! You have been signed in to the library.`, 'success');
+                } else {
+                    showAlert(`${student.name} has been logged out from the library.`, 'success');
+                }
+
+                // Clear the input fields
+                studentIdInput.value = '';
+                scannerInput.value = '';
+                scannerBuffer = '';
+
+                // After 3 seconds, hide student info and show header/input again
+                setTimeout(() => {
+                    studentDisplay.classList.add('hidden');
+                    headerSection.classList.remove('hidden');
+                    inputSection.classList.remove('hidden');
+                    studentIdInput.focus();
+                }, 3000);
+            } else {
+                showAlert("Student ID not found. Please try again.", 'error');
+            }
+        } else {
+            showAlert("Please enter a valid Student ID (at least 5 characters)", 'error');
+        }
+    }
+
+    // Event listener for manual student ID input
     studentIdInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter') {
-            const id = this.value.trim();
-
-            if (id.length >= 5) {
-                const student = studentDatabase.find(s => s.id === id);
-
-                if (student) {
-                    // Display student information
-                    studentPic.textContent = student.initials;
-                    studentName.textContent = student.name;
-                    studentIdDisplay.textContent = `ID: ${student.id}`;
-                    studentProgram.textContent = `Program: ${student.program}`;
-
-                    // Show the student display and hide other sections
-                    studentDisplay.classList.remove('hidden');
-                    headerSection.classList.add('hidden');
-                    inputSection.classList.add('hidden');
-
-                    // Toggle login status and show appropriate message
-                    student.loggedIn = !student.loggedIn;
-
-                    if (student.loggedIn) {
-                        showAlert(`Welcome ${student.name}! You have been signed in to the library.`, 'success');
-                    } else {
-                        showAlert(`${student.name} has been logged out from the library.`, 'success');
-                    }
-
-                    // Clear the input field
-                    this.value = '';
-
-                    // After 3 seconds, hide student info and show header/input again
-                    setTimeout(() => {
-                        studentDisplay.classList.add('hidden');
-                        headerSection.classList.remove('hidden');
-                        inputSection.classList.remove('hidden');
-                        studentIdInput.focus();
-                    }, 3000);
-                } else {
-                    showAlert("Student ID not found. Please try again.", 'error');
-                }
-            } else {
-                showAlert("Please enter a valid Student ID (at least 5 characters)", 'error');
-            }
+            processStudentId(this.value);
         }
     });
+
+    // Enhanced scanner input handling
+    scannerInput.addEventListener('keydown', function(e) {
+        // Clear any existing timeout
+        clearTimeout(scannerTimeout);
+
+        // Append the character to buffer
+        if (e.key.length === 1) {
+            scannerBuffer += e.key;
+        }
+
+        // Set a timeout to process the buffer if no more input comes
+        scannerTimeout = setTimeout(() => {
+            if (scannerBuffer.length > 0) {
+                processStudentId(scannerBuffer);
+                scannerBuffer = '';
+            }
+        }, SCANNER_DELAY);
+    });
+
+    // Focus scanner input on page load (hidden but ready for scanner input)
+    window.onload = function() {
+        scannerInput.focus();
+        // Also focus the visible input for manual entry
+        studentIdInput.focus();
+    };
 
     // Function to show alert message
     function showAlert(message, type = 'success') {
