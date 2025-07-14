@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USEP Library Borrowing System</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Perfectly sized Profile Picture */
+        .profile-pic {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            background-color: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.25rem;
+            font-size: 56px;
+            color: #4a5568;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Body Background with Overlay */
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: -1;
+        }
+
+        /* Comfortable Input Styling */
+        .input-field {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid #800000;
+            border-radius: 0.6rem;
+            font-size: 1.15rem;
+            margin: 1.25rem 0;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        /* Noticeable Alert Message */
+        .alert-message {
+            position: fixed;
+            top: 25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #800000;
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 0.6rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            display: none;
+            font-weight: bold;
+            font-size: 1.15rem;
+            text-align: center;
+            min-width: 320px;
+        }
+
+        /* Readable Student Info */
+        .student-info {
+            font-size: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .student-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gray-50 font-sans relative flex items-center justify-center bg-cover bg-center" style="background-image: url('images/eagle.jpg')">
+<!-- Alert Message -->
+<div id="alert-message" class="alert-message"></div>
+
+<div class="w-full max-w-md mx-4 bg-white rounded-xl shadow-lg p-8 transition-all">
+    <div id="header-section" class="text-center">
+        <img src="images/usep-logo-small.png" alt="USEP Logo" class="h-24 mx-auto mb-3">
+        <h1 class="text-2xl font-bold text-maroon-800 mb-1">USEP CAMPUS LIBRARY</h1>
+        <p class="text-lg text-gray-600">Tagum-Mabini Campus</p>
+    </div>
+
+    <!-- Student Info Section -->
+    <div id="student-display" class="hidden fade-in text-center my-6">
+        <div class="profile-pic" id="student-pic">
+            <i class="fas fa-user"></i>
+        </div>
+        <h3 class="student-name font-bold" id="student-name"></h3>
+        <p class="student-info text-gray-600" id="student-id-display"></p>
+        <p class="student-info text-gray-600" id="student-program"></p>
+    </div>
+
+    <!-- Input Section -->
+    <div id="input-section" class="mt-5">
+        <p class="text-lg font-medium text-center mb-3">Please enter your Student ID</p>
+        <input type="text" id="student-id-input" class="input-field" placeholder="e.g. 2023-12345" autofocus>
+    </div>
+</div>
+
+<script>
+    // Sample student database
+    const studentDatabase = [
+        { id: "2023-12345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", loggedIn: false },
+        { id: "2023-54321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", loggedIn: false },
+        { id: "2023-67890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false }
+    ];
+
+    // DOM Elements
+    const studentIdInput = document.getElementById('student-id-input');
+    const studentDisplay = document.getElementById('student-display');
+    const studentPic = document.getElementById('student-pic');
+    const studentName = document.getElementById('student-name');
+    const studentIdDisplay = document.getElementById('student-id-display');
+    const studentProgram = document.getElementById('student-program');
+    const alertMessage = document.getElementById('alert-message');
+    const headerSection = document.getElementById('header-section');
+    const inputSection = document.getElementById('input-section');
+
+    // Event listener for student ID input
+    studentIdInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            const id = this.value.trim();
+
+            if (id.length >= 5) {
+                const student = studentDatabase.find(s => s.id === id);
+
+                if (student) {
+                    // Display student information
+                    studentPic.textContent = student.initials;
+                    studentName.textContent = student.name;
+                    studentIdDisplay.textContent = `ID: ${student.id}`;
+                    studentProgram.textContent = `Program: ${student.program}`;
+
+                    // Show the student display and hide other sections
+                    studentDisplay.classList.remove('hidden');
+                    headerSection.classList.add('hidden');
+                    inputSection.classList.add('hidden');
+
+                    // Toggle login status and show appropriate message
+                    student.loggedIn = !student.loggedIn;
+
+                    if (student.loggedIn) {
+                        showAlert(`Welcome ${student.name}! You have been signed in to the library.`, 'success');
+                    } else {
+                        showAlert(`${student.name} has been logged out from the library.`, 'success');
+                    }
+
+                    // Clear the input field
+                    this.value = '';
+
+                    // After 3 seconds, hide student info and show header/input again
+                    setTimeout(() => {
+                        studentDisplay.classList.add('hidden');
+                        headerSection.classList.remove('hidden');
+                        inputSection.classList.remove('hidden');
+                        studentIdInput.focus();
+                    }, 3000);
+                } else {
+                    showAlert("Student ID not found. Please try again.", 'error');
+                }
+            } else {
+                showAlert("Please enter a valid Student ID (at least 5 characters)", 'error');
+            }
+        }
+    });
+
+    // Function to show alert message
+    function showAlert(message, type = 'success') {
+        alertMessage.textContent = message;
+        alertMessage.className = 'alert-message'; // Reset classes
+        alertMessage.classList.add(type === 'success' ? 'bg-green-600' : 'bg-red-600');
+        alertMessage.style.display = 'block';
+
+        setTimeout(() => {
+            alertMessage.style.display = 'none';
+        }, 3000);
+    }
+</script>
+</body>
+</html>
