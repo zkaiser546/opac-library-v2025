@@ -7,6 +7,7 @@
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Profile Picture */
         .profile-pic {
@@ -169,30 +170,81 @@
             to { opacity: 1; transform: scale(1); }
         }
 
-        /* Dropdown Styling */
+        /* Improved Dropdown Styling */
         .dropdown {
             position: relative;
+            margin-bottom: 1rem;
+        }
+
+        .dropdown-btn {
+            width: 100%;
+            text-align: left;
+            padding: 0.75rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
         }
 
         .dropdown-content {
             display: none;
             position: absolute;
+            width: 100%;
             background-color: white;
-            min-width: 100%;
             box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
             z-index: 10;
             border-radius: 0.5rem;
             overflow: hidden;
-            transition: all 0.2s ease-in-out;
+            margin-top: 0.25rem;
+            border: 1px solid #e5e7eb;
         }
 
-        .dropdown:hover .dropdown-content {
+        .dropdown-option {
+            padding: 0.75rem;
+            cursor: pointer;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            align-items: center;
+        }
+
+        .dropdown-option:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-option:hover {
+            background-color: #f9fafb;
+        }
+
+        .dropdown-option i {
+            margin-right: 0.5rem;
+            color: #800000;
+        }
+
+        .dropdown.show .dropdown-content {
             display: block;
         }
-    </style>
 
+        .selected-option {
+            font-weight: 500;
+            color: #800000;
+        }
+
+        /* Hidden scanner input */
+        .scanner-input {
+            position: absolute;
+            opacity: 0;
+            height: 0;
+            width: 0;
+        }
+    </style>
 </head>
-<body class="bg-gray-50 font-sans ">
+<body class="bg-gray-50 font-sans">
+<!-- Hidden input for scanner -->
+<input type="text" id="scanner-input" class="scanner-input" autocomplete="off">
+
 <!-- Main Content Area -->
 <div id="main-content">
     <!-- Container Wrapper -->
@@ -206,8 +258,7 @@
                     <p class="text-gray-600 mt-1">Tagum-Mabini Campus</p>
                 </div>
 
-
-        <div class="space-y-4 flex-grow">
+                <div class="space-y-4 flex-grow">
                     <button id="scan-qr-btn" class="w-full flex items-center justify-center bg-usepmaroon hover:bg-usepmaroon/90 text-white py-3 px-6 rounded-lg text-lg transition-all shadow-md hover:shadow-lg">
                         <i class="fas fa-qrcode mr-3"></i>
                         Scan Book QR Code
@@ -222,7 +273,7 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-1">Enter Accession Number:</label>
-                            <input type="text" id="accession-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="e.g. ACC-001">
+                            <input type="text" id="accession-input" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="e.g. ACC-001 or ACC001">
                         </div>
 
                         <div class="relative">
@@ -257,17 +308,20 @@
                     <h3 class="font-semibold text-usepmaroon mb-3 text-lg">Borrowing Options</h3>
                 </div>
 
-                <div class="dropdown mb-4">
-                    <button class="w-full text-left p-3 border border-gray-300 rounded-lg bg-white flex justify-between items-center">
-                        <span>Select borrowing type</span>
+                <!-- Improved Dropdown -->
+                <div class="dropdown" id="borrow-type-dropdown">
+                    <button class="dropdown-btn" id="dropdown-btn">
+                        <span id="selected-option-text">Select borrowing type</span>
                         <i class="fas fa-chevron-down"></i>
                     </button>
                     <div class="dropdown-content">
-                        <div class="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200" data-type="inside">
-                            <i class="fas fa-book-reader mr-2 text-usepmaroon"></i> Borrow for use inside the library
+                        <div class="dropdown-option" data-type="inside">
+                            <i class="fas fa-book-reader"></i>
+                            <span>Borrow for use inside the library</span>
                         </div>
-                        <div class="p-3 hover:bg-gray-100 cursor-pointer" data-type="outside">
-                            <i class="fas fa-book mr-2 text-usepmaroon"></i> Borrow to take outside the library
+                        <div class="dropdown-option" data-type="outside">
+                            <i class="fas fa-book"></i>
+                            <span>Borrow to take outside the library</span>
                         </div>
                     </div>
                 </div>
@@ -302,12 +356,12 @@
         </div>
         <div class="bg-yellow-100 border-l-4 border-yellow-500 p-3 rounded-lg mb-4">
             <p class="text-yellow-900 font-semibold text-base leading-relaxed">
-                You can scan the barcode on your library card RFID (for Graduate School) or just enter your Student ID manually.
+                You can scan your ID card (RFID/barcode) or enter your Student ID manually.
             </p>
         </div>
 
         <div class="mb-4">
-            <input type="text" id="student-id" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="e.g. 2023-12345">
+            <input type="text" id="student-id" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-usepmaroon focus:border-usepmaroon" placeholder="e.g. 2023-12345 or 202312345">
         </div>
 
         <div id="student-info" class="hidden bg-gray-50 p-4 rounded-lg mb-4">
@@ -385,75 +439,319 @@
     let currentBorrower = null;
     let qrStream = null;
     let borrowType = 'inside';
+    let scannerBuffer = '';
+    let scannerTimeout;
+    const SCANNER_DELAY = 100;
 
     // ================== DOM ELEMENTS ================== //
-    // Main UI Elements
     const containerWrapper = document.getElementById('container-wrapper');
     const firstContainer = document.getElementById('first-container');
     const secondContainer = document.getElementById('second-container');
     const bookDetailsContent = document.getElementById('book-details-content');
-
-    // Buttons
     const scanQrBtn = document.getElementById('scan-qr-btn');
     const findBookBtn = document.getElementById('find-book-btn');
     const closeBookDetails = document.getElementById('close-book-details');
     const borrowBtn = document.getElementById('borrow-btn');
-    const printReceiptBtn = document.getElementById('print-receipt');
-    const newTransactionBtn = document.getElementById('new-transaction');
-
-    // Input Fields
     const accessionInput = document.getElementById('accession-input');
     const bookSearch = document.getElementById('book-search');
     const studentId = document.getElementById('student-id');
-
-    // Search Results
     const searchResults = document.getElementById('search-results');
-
-    // Modals
     const studentIdModal = document.getElementById('student-id-modal');
     const qrScannerModal = document.getElementById('qr-scanner-modal');
-    const successModal = document.getElementById('success-modal');
     const closeStudentModal = document.getElementById('close-student-modal');
     const closeQrScanner = document.getElementById('close-qr-scanner');
     const confirmBorrow = document.getElementById('confirm-borrow');
-
-    // Video Elements
     const qrVideo = document.getElementById('qr-video');
-
-    // Success Modal Elements
-    const successBook = document.getElementById('success-book');
-    const successBorrower = document.getElementById('success-borrower');
-    const successDueDate = document.getElementById('success-due-date');
-
-    // Student Info Elements
     const studentInfo = document.getElementById('student-info');
     const studentPic = document.getElementById('student-pic');
     const studentName = document.getElementById('student-name');
     const studentCourse = document.getElementById('student-course');
     const studentIdDisplay = document.getElementById('student-id-display');
+    const scannerInput = document.getElementById('scanner-input');
+    const dropdown = document.getElementById('borrow-type-dropdown');
+    const dropdownBtn = document.getElementById('dropdown-btn');
+    const selectedOptionText = document.getElementById('selected-option-text');
+    const successBook = document.getElementById('success-book');
+    const successBorrower = document.getElementById('success-borrower');
+    const successDueDate = document.getElementById('success-due-date');
+    const printReceiptBtn = document.getElementById('print-receipt');
+    const newTransactionBtn = document.getElementById('new-transaction');
 
     // ================== SAMPLE DATA ================== //
     const bookDatabase = [
         {accession: "ACC-001", title: "Introduction to Computer Science", author: "John Doe", available: true, image: "https://m.media-amazon.com/images/I/71tR3ZEQZBL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC001", title: "Introduction to Computer Science", author: "John Doe", available: true, image: "https://m.media-amazon.com/images/I/71tR3ZEQZBL._AC_UF1000,1000_QL80_.jpg"},
         {accession: "ACC-002", title: "Advanced Programming", author: "Jane Smith", available: true, image: "https://m.media-amazon.com/images/I/81s6DUyQCZL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC002", title: "Advanced Programming", author: "Jane Smith", available: true, image: "https://m.media-amazon.com/images/I/81s6DUyQCZL._AC_UF1000,1000_QL80_.jpg"},
         {accession: "ACC-003", title: "Database Systems", author: "Robert Johnson", available: false, image: "https://m.media-amazon.com/images/I/61yB0UFlM3L._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC003", title: "Database Systems", author: "Robert Johnson", available: false, image: "https://m.media-amazon.com/images/I/61yB0UFlM3L._AC_UF1000,1000_QL80_.jpg"},
         {accession: "ACC-004", title: "Data Structures", author: "Emily Davis", available: true, image: "https://m.media-amazon.com/images/I/81vpsIs58WL._AC_UF1000,1000_QL80_.jpg"},
-        {accession: "ACC-005", title: "Algorithms", author: "Michael Brown", available: true, image: "https://m.media-amazon.com/images/I/71kwaIeQeFL._AC_UF1000,1000_QL80_.jpg"}
+        {accession: "ACC004", title: "Data Structures", author: "Emily Davis", available: true, image: "https://m.media-amazon.com/images/I/81vpsIs58WL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC-005", title: "Algorithms", author: "Michael Brown", available: true, image: "https://m.media-amazon.com/images/I/71kwaIeQeFL._AC_UF1000,1000_QL80_.jpg"},
+        {accession: "ACC005", title: "Algorithms", author: "Michael Brown", available: true, image: "https://m.media-amazon.com/images/I/71kwaIeQeFL._AC_UF1000,1000_QL80_.jpg"}
     ];
 
     const borrowerDatabase = [
         {id: "2023-12345", name: "Juan Dela Cruz", course: "BS Computer Science", initials: "JC"},
+        {id: "202312345", name: "Juan Dela Cruz", course: "BS Computer Science", initials: "JC"},
         {id: "2023-54321", name: "Maria Santos", course: "BS Information Technology", initials: "MS"},
-        {id: "2023-67890", name: "Pedro Reyes", course: "BS Electrical Engineering", initials: "PR"}
+        {id: "202354321", name: "Maria Santos", course: "BS Information Technology", initials: "MS"},
+        {id: "2023-67890", name: "Pedro Reyes", course: "BS Electrical Engineering", initials: "PR"},
+        {id: "202367890", name: "Pedro Reyes", course: "BS Electrical Engineering", initials: "PR"},
+        {id: "RFID12345678", name: "Ana Cruz", course: "Graduate School", initials: "AC"},
+        {id: "BC987654321", name: "Carlos Lim", course: "Graduate School", initials: "CL"}
     ];
 
     // ================== INITIALIZATION ================== //
     document.addEventListener('DOMContentLoaded', function() {
         setupEventListeners();
+        scannerInput.focus(); // Focus hidden scanner input on load
+        // Set default borrow type
+        document.querySelector('.dropdown-option[data-type="inside"]').click();
     });
 
-    // ================== LIBRARY SYSTEM FUNCTIONS ================== //
+    // ================== HELPER FUNCTIONS ================== //
+    function normalizeId(id) {
+        return id.replace(/-/g, '').toUpperCase();
+    }
+
+    function showModal(modal) {
+        modal.classList.add('show');
+    }
+
+    function closeModal(modal) {
+        modal.classList.remove('show');
+    }
+
+    function showBookDetailsContainer(book) {
+        const today = new Date();
+        const dueDateObj = new Date();
+        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        bookDetailsContent.innerHTML = `
+            <div class="flex mb-6">
+                <img src="${book.image}" alt="${book.title}" class="w-24 h-32 object-cover rounded-lg mr-4">
+                <div>
+                    <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
+                    <p class="text-gray-600">${book.author}</p>
+                    <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        secondContainer.classList.add('show');
+
+        if (window.innerWidth > 1024) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    }
+
+    function closeBookDetailsContainer() {
+        secondContainer.classList.remove('show');
+        containerWrapper.style.maxWidth = '';
+    }
+
+    function resetForms() {
+        accessionInput.value = '';
+        bookSearch.value = '';
+        studentId.value = '';
+        studentInfo.classList.add('hidden');
+        currentBook = null;
+        currentBorrower = null;
+        borrowType = 'inside';
+        // Reset to default borrow type
+        document.querySelector('.dropdown-option[data-type="inside"]').click();
+    }
+
+    function updateDueDate() {
+        const today = new Date();
+        const dueDateObj = new Date();
+        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    // ================== DROPDOWN FUNCTIONALITY ================== //
+    function setupDropdown() {
+        // Toggle dropdown visibility
+        dropdownBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            dropdown.classList.toggle('show');
+        });
+
+        // Handle option selection
+        document.querySelectorAll('.dropdown-option').forEach(option => {
+            option.addEventListener('click', function() {
+                borrowType = this.getAttribute('data-type');
+                const optionText = this.querySelector('span').textContent;
+
+                // Update displayed text
+                selectedOptionText.textContent = optionText;
+                selectedOptionText.classList.add('selected-option');
+
+                // Highlight selected option
+                document.querySelectorAll('.dropdown-option').forEach(opt => {
+                    opt.classList.remove('bg-gray-100');
+                });
+                this.classList.add('bg-gray-100');
+
+                // Close dropdown
+                dropdown.classList.remove('show');
+
+                // Update due date
+                updateDueDate();
+            });
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        });
+    }
+
+    // ================== SCANNER FUNCTIONS ================== //
+    function handleScannedCode(code) {
+        // Normalize the code by removing hyphens
+        const normalizedCode = normalizeId(code);
+
+        // Find book by either original accession or normalized version
+        const book = bookDatabase.find(b =>
+            b.accession === code || normalizeId(b.accession) === normalizedCode
+        );
+
+        if (book) {
+            if (!book.available) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Book Not Available',
+                    text: 'This book is currently checked out.',
+                    confirmButtonColor: '#800000'
+                });
+                requestAnimationFrame(scanQR);
+                return;
+            }
+
+            currentBook = book;
+
+            if (qrStream) {
+                qrStream.getTracks().forEach(track => track.stop());
+                qrVideo.srcObject = null;
+                qrStream = null;
+            }
+
+            closeModal(qrScannerModal);
+            showBookDetailsContainer(book);
+            Swal.fire({
+                icon: 'success',
+                title: 'Book Found!',
+                text: `${book.title} by ${book.author}`,
+                confirmButtonColor: '#800000'
+            });
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Book Not Found',
+                text: 'Please try another code.',
+                confirmButtonColor: '#800000'
+            });
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    function startQRScanner() {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function (stream) {
+                qrStream = stream;
+                qrVideo.srcObject = stream;
+                qrVideo.setAttribute("playsinline", true);
+                qrVideo.play();
+                requestAnimationFrame(scanQR);
+            })
+            .catch(function (err) {
+                console.error("Error accessing camera: ", err);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Camera Error',
+                    text: 'Could not access camera. Please check permissions.',
+                    confirmButtonColor: '#800000'
+                });
+            });
+    }
+
+    function scanQR() {
+        if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
+            const canvas = document.createElement('canvas');
+            canvas.width = qrVideo.videoWidth;
+            canvas.height = qrVideo.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(qrVideo, 0, 0, canvas.width, canvas.height);
+
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                handleScannedCode(code.data);
+            } else {
+                requestAnimationFrame(scanQR);
+            }
+        } else {
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    // ================== RFID/BARCODE SCANNER HANDLING ================== //
+    function setupScannerInput() {
+        scannerInput.addEventListener('keydown', function(e) {
+            // Clear any existing timeout
+            clearTimeout(scannerTimeout);
+
+            // Append the character to buffer
+            if (e.key.length === 1) {
+                scannerBuffer += e.key;
+            }
+
+            // Set a timeout to process the buffer if no more input comes
+            scannerTimeout = setTimeout(() => {
+                if (scannerBuffer.length > 0) {
+                    processScannedId(scannerBuffer);
+                    scannerBuffer = '';
+                }
+            }, SCANNER_DELAY);
+        });
+    }
+
+    function processScannedId(id) {
+        // If we're in student ID modal, treat as student ID
+        if (studentIdModal.classList.contains('show')) {
+            studentId.value = id;
+            handleStudentIdInput.call(studentId);
+            return;
+        }
+
+        // Otherwise treat as book accession number
+        accessionInput.value = id;
+        findBook();
+    }
+
+    // ================== EVENT HANDLERS ================== //
     function setupEventListeners() {
+        setupDropdown();
+        setupScannerInput();
+
         // Scan QR Code Button
         scanQrBtn.addEventListener('click', () => {
             showModal(qrScannerModal);
@@ -478,13 +776,6 @@
             closeModal(studentIdModal);
         });
 
-        // New Transaction Button
-        newTransactionBtn.addEventListener('click', () => {
-            resetForms();
-            closeModal(successModal);
-            closeBookDetailsContainer();
-        });
-
         // Find Book Button
         findBookBtn.addEventListener('click', findBook);
 
@@ -493,11 +784,6 @@
 
         // Document Click Handler (to hide search results)
         document.addEventListener('click', hideSearchResultsOnClickOutside);
-
-        // Borrow Type Selection
-        document.querySelectorAll('.dropdown-content div').forEach(item => {
-            item.addEventListener('click', setBorrowType);
-        });
 
         // Student ID Input Handler
         studentId.addEventListener('input', handleStudentIdInput);
@@ -511,6 +797,13 @@
         // Print Receipt Button
         printReceiptBtn.addEventListener('click', printReceipt);
 
+        // New Transaction Button
+        newTransactionBtn.addEventListener('click', () => {
+            resetForms();
+            closeModal(successModal);
+            closeBookDetailsContainer();
+        });
+
         // Window Resize Handler
         window.addEventListener('resize', handleWindowResize);
     }
@@ -520,16 +813,33 @@
         const searchTerm = bookSearch.value.trim().toLowerCase();
 
         if (accession) {
-            const book = bookDatabase.find(b => b.accession === accession);
+            // Normalize the accession number by removing hyphens
+            const normalizedAccession = normalizeId(accession);
+
+            // Find book by either original accession or normalized version
+            const book = bookDatabase.find(b =>
+                b.accession === accession || normalizeId(b.accession) === normalizedAccession
+            );
+
             if (book) {
                 if (!book.available) {
-                    alert("This book is currently not available for borrowing.");
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Book Not Available',
+                        text: 'This book is currently checked out.',
+                        confirmButtonColor: '#800000'
+                    });
                     return;
                 }
                 currentBook = book;
                 showBookDetailsContainer(book);
             } else {
-                alert("Book not found with that accession number");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Book Not Found',
+                    text: 'No book found with that accession number',
+                    confirmButtonColor: '#800000'
+                });
             }
         } else if (searchTerm) {
             const results = bookDatabase.filter(book =>
@@ -544,10 +854,20 @@
             } else if (results.length > 1) {
                 showSearchResults(results);
             } else {
-                alert("No available books found matching your search");
+                Swal.fire({
+                    icon: 'error',
+                    title: 'No Books Found',
+                    text: 'No available books match your search',
+                    confirmButtonColor: '#800000'
+                });
             }
         } else {
-            alert("Please enter either an accession number or search term");
+            Swal.fire({
+                icon: 'error',
+                title: 'Missing Information',
+                text: 'Please enter either an accession number or search term',
+                confirmButtonColor: '#800000'
+            });
         }
     }
 
@@ -586,24 +906,16 @@
         }
     }
 
-    function setBorrowType() {
-        borrowType = this.getAttribute('data-type');
-        const today = new Date();
-        const dueDateObj = new Date();
-        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
-
-        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
-
     function handleStudentIdInput() {
         const id = this.value.trim();
-        if (id.length >= 5) {
-            const borrower = borrowerDatabase.find(b => b.id === id);
+        const normalizedId = normalizeId(id);
+
+        if (normalizedId.length >= 5) {
+            // Find borrower by either original ID or normalized version
+            const borrower = borrowerDatabase.find(b =>
+                b.id === id || normalizeId(b.id) === normalizedId
+            );
+
             if (borrower) {
                 currentBorrower = borrower;
                 studentPic.textContent = borrower.initials;
@@ -623,44 +935,59 @@
 
     function showStudentIdModal() {
         if (!currentBook) {
-            alert("Please select a valid book first");
+            Swal.fire({
+                icon: 'error',
+                title: 'No Book Selected',
+                text: 'Please select a valid book first',
+                confirmButtonColor: '#800000'
+            });
             return;
         }
         showModal(studentIdModal);
+        studentId.focus();
     }
 
     function confirmBorrowBook() {
         if (!currentBook) {
-            alert("Please select a valid book first");
+            Swal.fire({
+                icon: 'error',
+                title: 'No Book Selected',
+                text: 'Please select a valid book first',
+                confirmButtonColor: '#800000'
+            });
             return;
         }
 
         if (!currentBorrower) {
-            alert("Please enter a valid student ID");
+            Swal.fire({
+                icon: 'error',
+                title: 'Invalid Student ID',
+                text: 'Please enter a valid student ID',
+                confirmButtonColor: '#800000'
+            });
             return;
         }
-
-        // Set success page details
-        successBook.textContent = `${currentBook.title} by ${currentBook.author} (${currentBook.accession})`;
-        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id}) - ${currentBorrower.course}`;
 
         // Calculate due date based on borrow type
         const today = new Date();
         const dueDate = new Date();
         dueDate.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
 
+        // Mark book as unavailable in the database
+        const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
+        if (bookIndex !== -1) {
+            bookDatabase[bookIndex].available = false;
+        }
+
+        // Set success modal content
+        successBook.textContent = `${currentBook.title} by ${currentBook.author} (${currentBook.accession})`;
+        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id}) - ${currentBorrower.course}`;
         successDueDate.textContent = dueDate.toLocaleDateString('en-US', {
             weekday: 'long',
             year: 'numeric',
             month: 'long',
             day: 'numeric'
         });
-
-        // Mark book as unavailable in the database
-        const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
-        if (bookIndex !== -1) {
-            bookDatabase[bookIndex].available = false;
-        }
 
         closeModal(studentIdModal);
         closeBookDetailsContainer();
@@ -669,121 +996,6 @@
 
     function printReceipt() {
         window.print();
-    }
-
-    function resetForms() {
-        accessionInput.value = '';
-        bookSearch.value = '';
-        studentId.value = '';
-        studentInfo.classList.add('hidden');
-        currentBook = null;
-        currentBorrower = null;
-        borrowType = 'inside';
-    }
-
-    function showBookDetailsContainer(book) {
-        const today = new Date();
-        const dueDateObj = new Date();
-        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
-
-        bookDetailsContent.innerHTML = `
-            <div class="flex mb-6">
-                <img src="${book.image}" alt="${book.title}" class="w-24 h-32 object-cover rounded-lg mr-4">
-                <div>
-                    <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
-                    <p class="text-gray-600">${book.author}</p>
-                    <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
-                </div>
-            </div>
-        `;
-
-        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-
-        secondContainer.classList.add('show');
-
-        if (window.innerWidth > 1024) {
-            containerWrapper.style.maxWidth = '1400px';
-        }
-    }
-
-    function closeBookDetailsContainer() {
-        secondContainer.classList.remove('show');
-        containerWrapper.style.maxWidth = '';
-    }
-
-    function showModal(modal) {
-        modal.classList.add('show');
-    }
-
-    function closeModal(modal) {
-        modal.classList.remove('show');
-    }
-
-    function startQRScanner() {
-        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
-            .then(function (stream) {
-                qrStream = stream;
-                qrVideo.srcObject = stream;
-                qrVideo.setAttribute("playsinline", true);
-                qrVideo.play();
-                requestAnimationFrame(scanQR);
-            })
-            .catch(function (err) {
-                console.error("Error accessing camera: ", err);
-                alert("Could not access camera. Please check permissions.");
-            });
-    }
-
-    function scanQR() {
-        if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
-            const canvas = document.createElement('canvas');
-            canvas.width = qrVideo.videoWidth;
-            canvas.height = qrVideo.videoHeight;
-            const context = canvas.getContext('2d');
-            context.drawImage(qrVideo, 0, 0, canvas.width, canvas.height);
-
-            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-            const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-            if (code) {
-                handleScannedCode(code.data);
-            } else {
-                requestAnimationFrame(scanQR);
-            }
-        } else {
-            requestAnimationFrame(scanQR);
-        }
-    }
-
-    function handleScannedCode(code) {
-        const book = bookDatabase.find(b => b.accession === code);
-
-        if (book) {
-            if (!book.available) {
-                alert("This book is currently not available for borrowing.");
-                requestAnimationFrame(scanQR);
-                return;
-            }
-
-            currentBook = book;
-
-            if (qrStream) {
-                qrStream.getTracks().forEach(track => track.stop());
-                qrVideo.srcObject = null;
-                qrStream = null;
-            }
-
-            closeModal(qrScannerModal);
-            showBookDetailsContainer(book);
-        } else {
-            alert("Book not found in database. Please try another code.");
-            requestAnimationFrame(scanQR);
-        }
     }
 
     function handleWindowResize() {
