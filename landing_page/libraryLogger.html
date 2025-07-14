@@ -73,13 +73,26 @@
             height: 0;
             width: 0;
         }
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+        .status-in {
+            background-color: #10B981;
+        }
+        .status-out {
+            background-color: #EF4444;
+        }
     </style>
 </head>
 <body class="min-h-screen bg-gray-50 font-sans relative flex items-center justify-center bg-cover bg-center" style="background-image: url('images/eagle.jpg')">
 <!-- Alert Message -->
 <div id="alert-message" class="alert-message"></div>
 
-<!-- Hidden input for scanner -->
+<!-- Hidden scanner input -->
 <input type="text" id="scanner-input" class="scanner-input" autocomplete="off">
 
 <div class="w-full max-w-md mx-4 bg-white rounded-xl shadow-lg p-8 transition-all">
@@ -97,30 +110,28 @@
         <h3 class="student-name font-bold" id="student-name"></h3>
         <p class="student-info text-gray-600" id="student-id-display"></p>
         <p class="student-info text-gray-600" id="student-program"></p>
+        <p class="student-info" id="student-status"></p>
     </div>
 
     <!-- Input Section -->
     <div id="input-section" class="mt-5">
         <p class="text-lg font-medium text-center mb-3">Please enter your Student ID</p>
         <input type="text" id="student-id-input" class="input-field" placeholder="e.g. 2023-12345 or 202312345" autofocus>
-        <p class="text-sm text-gray-500 mt-2">Or scan your RFID/Libray card Barcode </p>
+        <p class="text-sm text-gray-500 mt-2">Or scan your RFID/Library card Barcode</p>
     </div>
 </div>
 
 <script>
-    // Sample student database with IDs in both formats
+    // Sample student database with action history
     const studentDatabase = [
-        // With hyphens
-        { id: "2023-12345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", loggedIn: false },
-        { id: "2023-54321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", loggedIn: false },
-        { id: "2023-67890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false },
-        // Without hyphens
-        { id: "202312345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", loggedIn: false },
-        { id: "202354321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", loggedIn: false },
-        { id: "202367890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", loggedIn: false },
-        // RFID samples
-        { id: "RFID12345678", name: "ANA CRUZ", program: "BS Civil Engineering", initials: "AC", loggedIn: false },
-        { id: "BC987654321", name: "CARLOS LIM", program: "BS Mechanical Engineering", initials: "CL", loggedIn: false }
+        { id: "2023-12345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", lastAction: null, history: [] },
+        { id: "2023-54321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", lastAction: null, history: [] },
+        { id: "2023-67890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", lastAction: null, history: [] },
+        { id: "202312345", name: "JUAN BALELOS", program: "BS Computer Science", initials: "JB", lastAction: null, history: [] },
+        { id: "202354321", name: "MARIA SANTOS", program: "BS Information Technology", initials: "MS", lastAction: null, history: [] },
+        { id: "202367890", name: "PEDRO REYES", program: "BS Electrical Engineering", initials: "PR", lastAction: null, history: [] },
+        { id: "RFID12345678", name: "ANA CRUZ", program: "BS Civil Engineering", initials: "AC", lastAction: null, history: [] },
+        { id: "BC987654321", name: "CARLOS LIM", program: "BS Mechanical Engineering", initials: "CL", lastAction: null, history: [] }
     ];
 
     // DOM Elements
@@ -131,90 +142,122 @@
     const studentName = document.getElementById('student-name');
     const studentIdDisplay = document.getElementById('student-id-display');
     const studentProgram = document.getElementById('student-program');
+    const studentStatus = document.getElementById('student-status');
     const alertMessage = document.getElementById('alert-message');
     const headerSection = document.getElementById('header-section');
     const inputSection = document.getElementById('input-section');
 
-    // Scanner configuration
+    // System state
     let scannerBuffer = '';
     let scannerTimeout;
-    const SCANNER_DELAY = 100; // Time to wait for additional scanner input
+    const SCANNER_DELAY = 100;
+    let currentStudent = null;
+    let systemMode = null;
+    let lastModeChange = null;
 
-    // Normalize ID by removing hyphens and converting to uppercase
+    // Normalize ID
     function normalizeId(id) {
         return id.replace(/-/g, '').toUpperCase();
     }
 
-    // Function to process ID (handles both formats)
+    // Set system mode
+    function setSystemMode(mode) {
+        systemMode = mode;
+        lastModeChange = new Date();
+        showAlert(`System ready for CHECK-${mode.toUpperCase()}`, 'success', 1500);
+    }
+
+    // Process student ID
     function processStudentId(id) {
+        if (!systemMode) {
+            showAlert("Please set system mode first (Alt+N for IN, Alt+O for OUT)", 'error');
+            return;
+        }
+
         id = id.trim();
         const normalizedId = normalizeId(id);
 
-        if (normalizedId.length >= 5) {
-            // Find student by either original ID or normalized ID
-            const student = studentDatabase.find(s =>
-                s.id === id || normalizeId(s.id) === normalizedId
-            );
-
-            if (student) {
-                // Display student information
-                studentPic.textContent = student.initials;
-                studentName.textContent = student.name;
-                studentIdDisplay.textContent = `ID: ${student.id}`;
-                studentProgram.textContent = `Program: ${student.program}`;
-
-                // Show the student display and hide other sections
-                studentDisplay.classList.remove('hidden');
-                headerSection.classList.add('hidden');
-                inputSection.classList.add('hidden');
-
-                // Toggle login status and show appropriate message
-                student.loggedIn = !student.loggedIn;
-
-                if (student.loggedIn) {
-                    showAlert(`Welcome ${student.name}! You have been signed in to the library.`, 'success');
-                } else {
-                    showAlert(`${student.name} has been logged out from the library.`, 'success');
-                }
-
-                // Clear the input fields
-                studentIdInput.value = '';
-                scannerInput.value = '';
-                scannerBuffer = '';
-
-                // After 3 seconds, hide student info and show header/input again
-                setTimeout(() => {
-                    studentDisplay.classList.add('hidden');
-                    headerSection.classList.remove('hidden');
-                    inputSection.classList.remove('hidden');
-                    studentIdInput.focus();
-                }, 3000);
-            } else {
-                showAlert("Student ID not found. Please try again.", 'error');
-            }
-        } else {
-            showAlert("Please enter a valid Student ID (at least 5 characters)", 'error');
+        if (normalizedId.length < 5) {
+            showAlert("Invalid ID format (must be at least 5 characters)", 'error');
+            return;
         }
+
+        const student = studentDatabase.find(s =>
+            s.id === id || normalizeId(s.id) === normalizedId
+        );
+
+        if (!student) {
+            showAlert("Student ID not found in database", 'error');
+            return;
+        }
+
+        currentStudent = student;
+        const timestamp = new Date();
+
+        if (systemMode === 'in') {
+            if (student.lastAction === 'in') {
+                showAlert(`${student.name} is already checked IN`, 'error');
+            } else {
+                student.lastAction = 'in';
+                student.history.push({ action: 'in', timestamp });
+                showAlert(`${student.name} checked IN successfully`, 'success');
+            }
+        } else if (systemMode === 'out') {
+            if (student.lastAction !== 'in') {
+                showAlert(`${student.name} must check IN before checking OUT`, 'error');
+            } else {
+                student.lastAction = 'out';
+                student.history.push({ action: 'out', timestamp });
+                showAlert(`${student.name} checked OUT successfully`, 'success');
+            }
+        }
+
+        displayStudentInfo(student);
     }
 
-    // Event listener for manual student ID input
-    studentIdInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter') {
-            processStudentId(this.value);
-        }
-    });
+    // Display student information
+    function displayStudentInfo(student) {
+        studentPic.textContent = student.initials;
+        studentName.textContent = student.name;
+        studentIdDisplay.textContent = `ID: ${student.id}`;
+        studentProgram.textContent = `Program: ${student.program}`;
 
-    // Enhanced scanner input handling
+        // Update status display
+        if (student.lastAction === 'in') {
+            studentStatus.innerHTML = `<span class="status-indicator status-in"></span>Currently IN the library`;
+            studentStatus.className = "student-info text-green-600";
+        } else {
+            studentStatus.innerHTML = `<span class="status-indicator status-out"></span>Currently OUT of the library`;
+            studentStatus.className = "student-info text-red-600";
+        }
+
+        studentDisplay.classList.remove('hidden');
+        headerSection.classList.add('hidden');
+        inputSection.classList.add('hidden');
+
+        // Clear inputs
+        studentIdInput.value = '';
+        scannerInput.value = '';
+        scannerBuffer = '';
+
+        // Return to input after 3 seconds
+        setTimeout(() => {
+            studentDisplay.classList.add('hidden');
+            headerSection.classList.remove('hidden');
+            inputSection.classList.remove('hidden');
+            scannerInput.focus();
+            currentStudent = null;
+        }, 3000);
+    }
+
+    // Scanner input handling
     scannerInput.addEventListener('keydown', function(e) {
-        // Clear any existing timeout
         clearTimeout(scannerTimeout);
 
-        // Append the character to buffer
         if (e.key.length === 1) {
             scannerBuffer += e.key;
         }
 
-        // Set a timeout to process the buffer if no more input comes
         scannerTimeout = setTimeout(() => {
             if (scannerBuffer.length > 0) {
                 processStudentId(scannerBuffer);
@@ -223,24 +266,40 @@
         }, SCANNER_DELAY);
     });
 
-    // Focus scanner input on page load (hidden but ready for scanner input)
-    window.onload = function() {
-        scannerInput.focus();
-        // Also focus the visible input for manual entry
-        studentIdInput.focus();
-    };
+    // Manual ID input
+    studentIdInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            processStudentId(this.value);
+        }
+    });
 
-    // Function to show alert message
-    function showAlert(message, type = 'success') {
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.altKey && e.key.toLowerCase() === 'n') {
+            e.preventDefault();
+            setSystemMode('in');
+        } else if (e.altKey && e.key.toLowerCase() === 'o') {
+            e.preventDefault();
+            setSystemMode('out');
+        }
+    });
+
+    // Show alert message with customizable duration
+    function showAlert(message, type = 'success', duration = 3000) {
         alertMessage.textContent = message;
-        alertMessage.className = 'alert-message'; // Reset classes
+        alertMessage.className = 'alert-message';
         alertMessage.classList.add(type === 'success' ? 'bg-green-600' : 'bg-red-600');
         alertMessage.style.display = 'block';
 
         setTimeout(() => {
             alertMessage.style.display = 'none';
-        }, 3000);
+        }, duration);
     }
+
+    // Initialize
+    window.onload = function() {
+        scannerInput.focus();
+    };
 </script>
 </body>
 </html>
