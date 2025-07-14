@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,9 @@
     <title>USEP Library Borrowing System</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
     <style>
+        /* Profile Picture */
         .profile-pic {
             width: 80px;
             height: 80px;
@@ -19,19 +20,38 @@
             margin: 0 auto;
             font-size: 24px;
             color: #4a5568;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
+
+        /* Custom Colors */
         .bg-usepgold { background-color: #FFD700; }
         .bg-usepmaroon { background-color: #800000; }
         .text-usepmaroon { color: #800000; }
         .focus\:ring-usepmaroon:focus { --tw-ring-color: #800000; }
 
-        /* Main container styling */
+        /* Body Background with Overlay */
         body {
+            position: relative;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            background-image: url('images/eagle.jpg');
+            background-size: cover;
+            background-position: center;
+            z-index: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
         }
 
+        body::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-color: rgba(255, 255, 255, 0.7);
+            z-index: -1;
+        }
+
+        /* Main Layout */
         #main-content {
             flex: 1;
             display: flex;
@@ -40,7 +60,6 @@
             padding: 2rem 0;
         }
 
-        /* Container positioning */
         #container-wrapper {
             display: flex;
             justify-content: center;
@@ -50,7 +69,6 @@
             max-width: 1400px;
             margin: 0 auto;
             padding: 0 1rem;
-            align-items: stretch;
         }
 
         .form-container {
@@ -61,6 +79,19 @@
             flex-direction: column;
         }
 
+        /* Form Box Styling */
+        .form-box {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+            padding: 2rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        /* Container Transitions */
         #first-container {
             opacity: 1;
             transition: all 0.3s ease;
@@ -74,7 +105,6 @@
             position: absolute;
         }
 
-        /* Active state for second container */
         #second-container.show {
             opacity: 1;
             transform: translateX(0);
@@ -82,18 +112,7 @@
             position: relative;
         }
 
-        /* Container box styling */
-        .form-box {
-            background: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            padding: 2rem;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Mobile view */
+        /* Mobile Adjustments */
         @media (max-width: 1024px) {
             #container-wrapper {
                 flex-direction: column;
@@ -116,7 +135,7 @@
             }
         }
 
-        /* Modal styles */
+        /* Modal Styling */
         .modal {
             display: none;
             position: fixed;
@@ -124,160 +143,56 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: rgba(0,0,0,0.5);
+            background-color: rgba(0, 0, 0, 0.4);
             z-index: 100;
             justify-content: center;
             align-items: center;
+            transition: background-color 0.3s ease;
         }
+
         .modal.show {
             display: flex;
         }
+
         .modal-content {
             background: white;
-            border-radius: 0.5rem;
+            border-radius: 0.75rem;
             width: 90%;
             max-width: 400px;
-            padding: 1.5rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 1.75rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: fadeIn 0.3s ease;
         }
 
-        /* Dropdown styles */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        /* Dropdown Styling */
         .dropdown {
             position: relative;
         }
+
         .dropdown-content {
             display: none;
             position: absolute;
             background-color: white;
             min-width: 100%;
-            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
-            z-index: 1;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            z-index: 10;
             border-radius: 0.5rem;
             overflow: hidden;
+            transition: all 0.2s ease-in-out;
         }
+
         .dropdown:hover .dropdown-content {
             display: block;
         }
-
-        /* Peer connection status indicator */
-        .peer-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 8px 12px;
-            border-radius: 20px;
-            font-size: 14px;
-            z-index: 1000;
-        }
-        .peer-connected {
-            background-color: #d4edda;
-            color: #155724;
-        }
-        .peer-disconnected {
-            background-color: #f8d7da;
-            color: #721c24;
-        }
-
-        /* Phone scanner UI */
-        #phone-scan-ui {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.8);
-            z-index: 1000;
-            display: none;
-            justify-content: center;
-            align-items: center;
-        }
-
-        /* Mobile scanner styles */
-        #mobile-scanner {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: white;
-            z-index: 1000;
-            flex-direction: column;
-        }
-
-        /* Loading overlay styles */
-        #loading-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255,255,255,0.9);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-        }
-
-        .loading-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #e2e8f0;
-            border-top: 5px solid #800000;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        #loading-message {
-            font-size: 1.2rem;
-            color: #4a5568;
-            margin-top: 10px;
-            text-align: center;
-            max-width: 80%;
-        }
-
-        #retry-button {
-            margin-top: 20px;
-            padding: 8px 16px;
-            background-color: #800000;
-            color: white;
-            border-radius: 4px;
-            display: none;
-        }
-
-        /* Error message styles */
-        .error-message {
-            background-color: #fee2e2;
-            border-left: 4px solid #b91c1c;
-            padding: 1rem;
-            margin: 1rem 0;
-            border-radius: 0.375rem;
-        }
     </style>
+
 </head>
-<body class="bg-gray-50 font-sans">
-<!-- Loading Overlay -->
-<div id="loading-overlay">
-    <div class="loading-spinner"></div>
-    <div id="loading-message">Initializing library system...</div>
-    <button id="retry-button" onclick="window.location.reload()">
-        <i class="fas fa-sync-alt mr-2"></i>Retry
-    </button>
-</div>
-
-<!-- Peer Connection Status Indicator -->
-<div id="peer-status" class="peer-status peer-disconnected">
-    <i class="fas fa-plug mr-2"></i>
-    <span id="peer-status-text">Disconnected</span>
-</div>
-
+<body class="bg-gray-50 font-sans ">
 <!-- Main Content Area -->
 <div id="main-content">
     <!-- Container Wrapper -->
@@ -286,12 +201,13 @@
         <div id="first-container" class="form-container">
             <div class="form-box">
                 <div class="text-center mb-8">
-                    <img src="https://www.usep.edu.ph/wp-content/uploads/2023/04/cropped-USeP-Logo-512x512-1-32x32.png" alt="USEP Logo" class="h-10 mx-auto mb-2">
+                    <img src="images/usep-logo-small.png" alt="USEP Logo" class="h-20 mx-auto mb-2">
                     <h1 class="text-2xl font-bold text-usepmaroon">USEP Library Borrowing System</h1>
                     <p class="text-gray-600 mt-1">Tagum-Mabini Campus</p>
                 </div>
 
-                <div class="space-y-4 flex-grow">
+
+        <div class="space-y-4 flex-grow">
                     <button id="scan-qr-btn" class="w-full flex items-center justify-center bg-usepmaroon hover:bg-usepmaroon/90 text-white py-3 px-6 rounded-lg text-lg transition-all shadow-md hover:shadow-lg">
                         <i class="fas fa-qrcode mr-3"></i>
                         Scan Book QR Code
@@ -375,23 +291,6 @@
     </div>
 </div>
 
-<!-- Phone Scanner UI -->
-<div id="phone-scan-ui">
-    <!-- Content will be inserted here dynamically -->
-</div>
-
-<!-- Mobile Scanner Interface -->
-<div id="mobile-scanner">
-    <div class="p-4 h-screen flex flex-col">
-        <h1 class="text-xl font-bold text-usepmaroon mb-4 text-center">USEP Library Scanner</h1>
-        <video id="mobile-camera" class="flex-grow object-cover border-2 border-usepmaroon rounded-lg"></video>
-        <div id="mobile-status" class="my-2 text-center"></div>
-        <button id="cancel-mobile-scan" class="bg-usepmaroon text-white px-4 py-2 rounded-lg mt-2">
-            Cancel
-        </button>
-    </div>
-</div>
-
 <!-- Student ID Modal -->
 <div id="student-id-modal" class="modal">
     <div class="modal-content">
@@ -441,12 +340,6 @@
         </div>
 
         <p class="text-sm text-gray-500 text-center">Point your camera at the book's QR code</p>
-
-        <div class="mt-4 pt-4 border-t border-gray-200">
-            <button id="use-phone-scanner" class="w-full bg-usepmaroon text-white px-4 py-2 rounded-lg text-sm">
-                <i class="fas fa-mobile-alt mr-2"></i>Use Phone Scanner
-            </button>
-        </div>
     </div>
 </div>
 
@@ -486,61 +379,60 @@
     </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/peerjs@1.4.7/dist/peerjs.min.js"></script>
 <script>
     // ================== GLOBAL VARIABLES ================== //
-    const urlParams = new URLSearchParams(window.location.search);
-    const isMobileSession = urlParams.has('mobile');
-    let peer;
-    let conn;
     let currentBook = null;
     let currentBorrower = null;
     let qrStream = null;
     let borrowType = 'inside';
-    let mobileScannerInterval = null;
-    let initializationAttempts = 0;
-    const maxInitializationAttempts = 3;
 
     // ================== DOM ELEMENTS ================== //
-    const loadingOverlay = document.getElementById('loading-overlay');
-    const loadingMessage = document.getElementById('loading-message');
-    const retryButton = document.getElementById('retry-button');
-    const peerStatus = document.getElementById('peer-status');
-    const peerStatusText = document.getElementById('peer-status-text');
-    const phoneScanUI = document.getElementById('phone-scan-ui');
-    const mobileScanner = document.getElementById('mobile-scanner');
-    const mobileCamera = document.getElementById('mobile-camera');
-    const mobileStatus = document.getElementById('mobile-status');
+    // Main UI Elements
     const containerWrapper = document.getElementById('container-wrapper');
     const firstContainer = document.getElementById('first-container');
     const secondContainer = document.getElementById('second-container');
     const bookDetailsContent = document.getElementById('book-details-content');
+
+    // Buttons
     const scanQrBtn = document.getElementById('scan-qr-btn');
-    const usePhoneScannerBtn = document.getElementById('use-phone-scanner');
+    const findBookBtn = document.getElementById('find-book-btn');
     const closeBookDetails = document.getElementById('close-book-details');
     const borrowBtn = document.getElementById('borrow-btn');
-    const cancelMobileScanBtn = document.getElementById('cancel-mobile-scan');
     const printReceiptBtn = document.getElementById('print-receipt');
     const newTransactionBtn = document.getElementById('new-transaction');
+
+    // Input Fields
     const accessionInput = document.getElementById('accession-input');
     const bookSearch = document.getElementById('book-search');
-    const searchResults = document.getElementById('search-results');
     const studentId = document.getElementById('student-id');
+
+    // Search Results
+    const searchResults = document.getElementById('search-results');
+
+    // Modals
+    const studentIdModal = document.getElementById('student-id-modal');
+    const qrScannerModal = document.getElementById('qr-scanner-modal');
+    const successModal = document.getElementById('success-modal');
+    const closeStudentModal = document.getElementById('close-student-modal');
+    const closeQrScanner = document.getElementById('close-qr-scanner');
+    const confirmBorrow = document.getElementById('confirm-borrow');
+
+    // Video Elements
+    const qrVideo = document.getElementById('qr-video');
+
+    // Success Modal Elements
+    const successBook = document.getElementById('success-book');
+    const successBorrower = document.getElementById('success-borrower');
+    const successDueDate = document.getElementById('success-due-date');
+
+    // Student Info Elements
     const studentInfo = document.getElementById('student-info');
     const studentPic = document.getElementById('student-pic');
     const studentName = document.getElementById('student-name');
     const studentCourse = document.getElementById('student-course');
     const studentIdDisplay = document.getElementById('student-id-display');
-    const closeStudentModal = document.getElementById('close-student-modal');
-    const closeQrScanner = document.getElementById('close-qr-scanner');
-    const qrVideo = document.getElementById('qr-video');
-    const confirmBorrow = document.getElementById('confirm-borrow');
-    const successBook = document.getElementById('success-book');
-    const successBorrower = document.getElementById('success-borrower');
-    const successDueDate = document.getElementById('success-due-date');
 
-    // Sample data
+    // ================== SAMPLE DATA ================== //
     const bookDatabase = [
         {accession: "ACC-001", title: "Introduction to Computer Science", author: "John Doe", available: true, image: "https://m.media-amazon.com/images/I/71tR3ZEQZBL._AC_UF1000,1000_QL80_.jpg"},
         {accession: "ACC-002", title: "Advanced Programming", author: "Jane Smith", available: true, image: "https://m.media-amazon.com/images/I/81s6DUyQCZL._AC_UF1000,1000_QL80_.jpg"},
@@ -557,794 +449,355 @@
 
     // ================== INITIALIZATION ================== //
     document.addEventListener('DOMContentLoaded', function() {
-        updateLoadingMessage("Starting system...");
-
-        // First attempt initialization
-        initializeSystem();
-
-        // Set timeout for initialization
-        const initTimeout = setTimeout(() => {
-            if (initializationAttempts < maxInitializationAttempts) {
-                initializationAttempts++;
-                updateLoadingMessage(`Attempt ${initializationAttempts} of ${maxInitializationAttempts}...`);
-                initializeSystem();
-            } else {
-                showInitializationError();
-            }
-        }, 5000);
-
-        function initializeSystem() {
-            try {
-                if (isMobileSession) {
-                    initializeMobileScanner();
-                } else {
-                    initializeLibrarySystem();
-                }
-                clearTimeout(initTimeout);
-            } catch (err) {
-                console.error("Initialization error:", err);
-                updateLoadingMessage(`Error: ${err.message}`);
-                retryButton.style.display = 'inline-block';
-            }
-        }
+        setupEventListeners();
     });
 
-    function updateLoadingMessage(message) {
-        loadingMessage.textContent = message;
-    }
+    // ================== LIBRARY SYSTEM FUNCTIONS ================== //
+    function setupEventListeners() {
+        // Scan QR Code Button
+        scanQrBtn.addEventListener('click', () => {
+            showModal(qrScannerModal);
+            startQRScanner();
+        });
 
-    function showInitializationError() {
-        loadingOverlay.innerHTML = `
-            <div style="text-align: center; padding: 20px; max-width: 400px;">
-                <div style="color: #b91c1c; font-size: 4rem; margin-bottom: 20px;">
-                    <i class="fas fa-exclamation-triangle"></i>
-                </div>
-                <h2 style="font-size: 1.5rem; color: #800000; margin-bottom: 15px;">
-                    System Initialization Failed
-                </h2>
-                <p style="margin-bottom: 20px;">
-                    The library system could not start properly. Please try:
-                </p>
-                <ul style="text-align: left; margin-bottom: 25px; padding-left: 20px;">
-                    <li style="margin-bottom: 8px;">Refreshing the page</li>
-                    <li style="margin-bottom: 8px;">Checking your internet connection</li>
-                    <li style="margin-bottom: 8px;">Using Google Chrome browser</li>
-                    <li>Contacting library staff if problem persists</li>
-                </ul>
-                <button onclick="window.location.reload()"
-                        style="padding: 10px 20px; background-color: #800000; color: white; border-radius: 5px;">
-                    <i class="fas fa-sync-alt mr-2"></i>Try Again
-                </button>
-            </div>
-        `;
-    }
-
-    function hideLoadingOverlay() {
-        loadingOverlay.style.display = 'none';
-    }
-
-    // ================== LIBRARY SYSTEM INITIALIZATION ================== //
-    function initializeLibrarySystem() {
-        updateLoadingMessage("Connecting to library network...");
-
-        peer = new Peer({
-            host: '0.peerjs.com',
-            port: 443,
-            secure: true,
-            debug: 3,
-            config: {
-                iceServers: [
-                    { url: 'stun:stun.l.google.com:19302' },
-                    { url: 'turn:numb.viagenie.ca', username: 'webrtc@live.com', credential: 'muazkh' }
-                ]
+        // Close QR Scanner Button
+        closeQrScanner.addEventListener('click', () => {
+            closeModal(qrScannerModal);
+            if (qrStream) {
+                qrStream.getTracks().forEach(track => track.stop());
+                qrVideo.srcObject = null;
+                qrStream = null;
             }
         });
 
-        peer.on('open', (id) => {
-            console.log('PeerJS connected with ID:', id);
-            updatePeerStatus('connected', 'Ready for phone connection');
-            updateLoadingMessage("Loading interface...");
+        // Close Book Details Button
+        closeBookDetails.addEventListener('click', closeBookDetailsContainer);
 
-            setTimeout(() => {
-                hideLoadingOverlay();
-                setupEventListeners();
-            }, 500);
+        // Close Student Modal Button
+        closeStudentModal.addEventListener('click', () => {
+            closeModal(studentIdModal);
         });
 
-        peer.on('connection', (connection) => {
-            console.log('Phone connected');
-            conn = connection;
-            updatePeerStatus('connected', 'Phone connected');
+        // New Transaction Button
+        newTransactionBtn.addEventListener('click', () => {
+            resetForms();
+            closeModal(successModal);
+            closeBookDetailsContainer();
+        });
 
-            conn.on('data', (data) => {
-                if (data.type === 'qr_result') {
-                    console.log('Received QR code:', data.code);
-                    handleScannedCode(data.code);
-                    hidePhoneScannerUI();
+        // Find Book Button
+        findBookBtn.addEventListener('click', findBook);
+
+        // Search Results Click Handler
+        searchResults.addEventListener('click', handleSearchResultClick);
+
+        // Document Click Handler (to hide search results)
+        document.addEventListener('click', hideSearchResultsOnClickOutside);
+
+        // Borrow Type Selection
+        document.querySelectorAll('.dropdown-content div').forEach(item => {
+            item.addEventListener('click', setBorrowType);
+        });
+
+        // Student ID Input Handler
+        studentId.addEventListener('input', handleStudentIdInput);
+
+        // Borrow Button
+        borrowBtn.addEventListener('click', showStudentIdModal);
+
+        // Confirm Borrow Button
+        confirmBorrow.addEventListener('click', confirmBorrowBook);
+
+        // Print Receipt Button
+        printReceiptBtn.addEventListener('click', printReceipt);
+
+        // Window Resize Handler
+        window.addEventListener('resize', handleWindowResize);
+    }
+
+    function findBook() {
+        const accession = accessionInput.value.trim();
+        const searchTerm = bookSearch.value.trim().toLowerCase();
+
+        if (accession) {
+            const book = bookDatabase.find(b => b.accession === accession);
+            if (book) {
+                if (!book.available) {
+                    alert("This book is currently not available for borrowing.");
+                    return;
                 }
-            });
+                currentBook = book;
+                showBookDetailsContainer(book);
+            } else {
+                alert("Book not found with that accession number");
+            }
+        } else if (searchTerm) {
+            const results = bookDatabase.filter(book =>
+                (book.title.toLowerCase().includes(searchTerm) ||
+                    book.author.toLowerCase().includes(searchTerm)) &&
+                book.available
+            );
 
-            conn.on('close', () => {
-                console.log('Phone disconnected');
-                updatePeerStatus('disconnected', 'Phone disconnected');
-            });
-
-            conn.on('error', (err) => {
-                console.error('Connection error:', err);
-                updatePeerStatus('error', 'Connection error');
-            });
-        });
-
-        peer.on('error', (err) => {
-            console.error('Peer error:', err);
-            updatePeerStatus('error', `Error: ${err.type}`);
-            updateLoadingMessage(`Connection error: ${err.type}`);
-            retryButton.style.display = 'inline-block';
-        });
-    }
-
-    // ================== MOBILE SCANNER INITIALIZATION ================== //
-    function initializeMobileScanner() {
-        updateLoadingMessage("Starting mobile scanner...");
-
-        // Check if on mobile device
-        if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
-            showInitializationError("This page is for mobile devices only");
-            return;
-        }
-
-        // Hide all library UI elements
-        document.getElementById('main-content').style.display = 'none';
-        peerStatus.style.display = 'none';
-
-        // Show mobile scanner interface
-        mobileScanner.style.display = 'flex';
-
-        // Get the desktop peer ID from URL
-        const desktopPeerId = urlParams.get('peer');
-
-        if (!desktopPeerId) {
-            showInitializationError("Invalid scanner link");
-            return;
-        }
-
-        peer = new Peer({
-            host: '0.peerjs.com',
-            port: 443,
-            secure: true,
-            debug: 3
-        });
-
-        peer.on('open', (id) => {
-            console.log('Mobile peer ID:', id);
-            updateLoadingMessage("Connecting to library computer...");
-
-            // Connect to the desktop peer
-            conn = peer.connect(desktopPeerId);
-
-            conn.on('open', () => {
-                console.log('Connected to library system');
-                hideLoadingOverlay();
-                mobileStatus.textContent = "Connected. Point camera at book QR code.";
-                startMobileCamera();
-            });
-
-            conn.on('error', (err) => {
-                console.error('Connection error:', err);
-                mobileStatus.textContent = "Connection error: " + err;
-                retryButton.style.display = 'inline-block';
-            });
-        });
-
-        peer.on('error', (err) => {
-            console.error('Peer error:', err);
-            mobileStatus.textContent = "Error: " + err;
-            retryButton.style.display = 'inline-block';
-        });
-    }
-
-    // ================== PEER CONNECTION FUNCTIONS ================== //
-    function updatePeerStatus(status, message) {
-        const statusMap = {
-            'connected': { class: 'peer-connected', text: message },
-            'disconnected': { class: 'peer-disconnected', text: message },
-            'error': { class: 'peer-disconnected', text: message }
-        };
-
-        peerStatus.className = `peer-status ${statusMap[status].class}`;
-        peerStatusText.textContent = statusMap[status].text;
-    }
-
-    // ================== PHONE SCANNER FUNCTIONS ================== //
-    function showPhoneScannerUI() {
-        if (!peer || !peer.id) {
-            alert("System not ready yet. Please try again.");
-            return;
-        }
-
-        // Generate the URL for the mobile scanner
-        let qrUrl;
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            // For local development - use your local IP address
-            qrUrl = `http://${getLocalIP()}:${window.location.port || 80}${window.location.pathname}?mobile=1&peer=${peer.id}`;
+            if (results.length === 1) {
+                currentBook = results[0];
+                showBookDetailsContainer(results[0]);
+            } else if (results.length > 1) {
+                showSearchResults(results);
+            } else {
+                alert("No available books found matching your search");
+            }
         } else {
-            // For production - use the current host
-            qrUrl = `${window.location.origin}${window.location.pathname}?mobile=1&peer=${peer.id}`;
+            alert("Please enter either an accession number or search term");
         }
+    }
 
-        phoneScanUI.innerHTML = `
-            <div class="bg-white p-6 rounded-lg max-w-md w-full">
-                <h3 class="text-xl font-bold text-usepmaroon mb-4">Scan with Phone</h3>
-                <p class="mb-2 text-sm">On your phone:</p>
-                <ol class="list-decimal pl-5 mb-4 text-sm space-y-2">
-                    <li>Connect to the same WiFi as this computer</li>
-                    <li>Open your camera app and scan this QR code</li>
-                    <li>Or open the link below in your phone's browser</li>
-                </ol>
-                <div class="bg-white p-2 rounded-lg border border-gray-200 mb-4">
-                    <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(qrUrl)}"
-                         alt="Scan QR" class="mx-auto">
+    function showSearchResults(results) {
+        searchResults.innerHTML = results.map(book => `
+            <div class="p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 last:border-0 flex items-center"
+                 data-accession="${book.accession}">
+                <img src="${book.image}" alt="${book.title}" class="w-10 h-14 object-cover mr-3">
+                <div>
+                    <div class="font-medium text-usepmaroon">${book.title}</div>
+                    <div class="text-sm text-gray-600">${book.author}</div>
                 </div>
-                <div class="text-center mb-4">
-                    <p class="text-xs text-gray-500 mb-1">Alternative method:</p>
-                    <input type="text" value="${qrUrl}" id="scanner-link"
-                           class="w-full p-2 border rounded text-xs" readonly>
-                    <button onclick="copyScannerLink()" class="mt-1 text-xs text-blue-500 hover:text-blue-700">
-                        <i class="fas fa-copy mr-1"></i>Copy Link
-                    </button>
-                </div>
-                <button id="cancel-phone-scan" class="w-full bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded-lg">
-                    Cancel
-                </button>
             </div>
-        `;
-
-        phoneScanUI.style.display = 'flex';
-
-        document.getElementById('cancel-phone-scan').addEventListener('click', hidePhoneScannerUI);
-    }
-
-    function hidePhoneScannerUI() {
-        phoneScanUI.style.display = 'none';
-
-        if (conn) {
-            conn.close();
-            conn = null;
-        }
-    }
-
-    function getLocalIP() {
-        // Note: This is just for display - you need to manually enter your local IP
-        return '192.168.1.37'; // Replace with your computer's local IP
-    }
-
-    function copyScannerLink() {
-        const linkInput = document.getElementById('scanner-link');
-        linkInput.select();
-        document.execCommand('copy');
-
-        // Show a brief confirmation
-        const copyBtn = document.querySelector('[onclick="copyScannerLink()"]');
-        const originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i>Copied!';
-
-        setTimeout(() => {
-            copyBtn.innerHTML = originalText;
-        }, 2000);
-    }
-
-    // ================== MOBILE CAMERA FUNCTIONS ================== //
-    function startMobileCamera() {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            mobileStatus.innerHTML = `
-                <div class="error-message">
-                    <p><b>Camera access not supported</b></p>
-                    <p class="text-sm">Try using Chrome or Firefox on Android</p>
-                </div>
-            `;
-            return;
-        }
-
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: 'environment',
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            }
-        })
-            .then(stream => {
-                mobileCamera.srcObject = stream;
-                mobileCamera.play();
-                mobileStatus.textContent = "Scanning for QR codes...";
-
-                // Start QR code scanning
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-                mobileScannerInterval = setInterval(() => {
-                    if (mobileCamera.readyState === mobileCamera.HAVE_ENOUGH_DATA) {
-                        canvas.width = mobileCamera.videoWidth;
-                        canvas.height = mobileCamera.videoHeight;
-                        context.drawImage(mobileCamera, 0, 0, canvas.width, canvas.height);
-
-                        try {
-                            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                            const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                            if (code) {
-                                console.log('QR code detected:', code.data);
-                                mobileStatus.textContent = "Code detected!";
-
-                                // Send the QR code data to the desktop
-                                conn.send({
-                                    type: 'qr_result',
-                                    code: code.data
-                                });
-
-                                // Stop scanning
-                                clearInterval(mobileScannerInterval);
-                                mobileScannerInterval = null;
-
-                                // Show success message
-                                mobileStatus.innerHTML = `
-                                <div class="text-green-600 font-semibold">
-                                    <i class="fas fa-check-circle mr-1"></i> Code scanned successfully!
-                                </div>
-                                <div class="text-sm mt-1">
-                                    You can close this window or scan another code.
-                                </div>
-                            `;
-                            }
-                        } catch (err) {
-                            console.error('QR scanning error:', err);
-                        }
-                    }
-                }, 500);
-            })
-            .catch(err => {
-                console.error('Camera error:', err);
-                mobileStatus.innerHTML = `
-                <div class="error-message">
-                    <p><b>Camera access denied</b></p>
-                    <p class="text-sm">Please allow camera access to scan QR codes</p>
-                </div>
-            `;
-            });
-    }
-
-    function stopMobileCamera() {
-        if (mobileScannerInterval) {
-            clearInterval(mobileScannerInterval);
-            mobileScannerInterval = null;
-        }
-
-        if (mobileCamera.srcObject) {
-            mobileCamera.srcObject.getTracks().forEach(track => track.stop());
-            mobileCamera.srcObject = null;
-        }
-    }
-
-    // ================== QR SCANNER FUNCTIONS ================== //
-    function startQRScanner() {
-        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-            alert("QR scanning is not supported in your browser. Please use Chrome or Firefox.");
-            return;
-        }
-
-        document.getElementById('qr-scanner-modal').classList.add('show');
-
-        navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: 'environment',
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            }
-        })
-            .then(stream => {
-                qrStream = stream;
-                qrVideo.srcObject = stream;
-                qrVideo.play();
-
-                // Start QR code scanning
-                const canvas = document.createElement('canvas');
-                const context = canvas.getContext('2d');
-
-                const scanInterval = setInterval(() => {
-                    if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
-                        canvas.width = qrVideo.videoWidth;
-                        canvas.height = qrVideo.videoHeight;
-                        context.drawImage(qrVideo, 0, 0, canvas.width, canvas.height);
-
-                        try {
-                            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-                            const code = jsQR(imageData.data, imageData.width, imageData.height);
-
-                            if (code) {
-                                console.log('QR code detected:', code.data);
-                                handleScannedCode(code.data);
-                                stopQRScanner();
-                                document.getElementById('qr-scanner-modal').classList.remove('show');
-                            }
-                        } catch (err) {
-                            console.error('QR scanning error:', err);
-                        }
-                    }
-                }, 500);
-
-                // Store the interval ID so we can clear it later
-                qrVideo.dataset.scanInterval = scanInterval;
-            })
-            .catch(err => {
-                console.error('Camera error:', err);
-                alert("Could not access camera. Please make sure you've granted camera permissions.");
-            });
-    }
-
-    function stopQRScanner() {
-        if (qrVideo.dataset.scanInterval) {
-            clearInterval(parseInt(qrVideo.dataset.scanInterval));
-            delete qrVideo.dataset.scanInterval;
-        }
-
-        if (qrStream) {
-            qrStream.getTracks().forEach(track => track.stop());
-            qrStream = null;
-        }
-
-        qrVideo.srcObject = null;
-    }
-
-    // ================== BOOK SEARCH FUNCTIONS ================== //
-    function handleScannedCode(code) {
-        // Check if the code is an accession number
-        if (code.startsWith('ACC-')) {
-            accessionInput.value = code;
-            findBookByAccession(code);
-        } else {
-            // Check if it's a student ID
-            if (/^\d{4}-\d{5}$/.test(code)) {
-                studentId.value = code;
-                verifyStudent(code);
-            } else {
-                showError("Invalid QR code. Please scan a valid book accession number or student ID.");
-            }
-        }
-    }
-
-    function findBookByAccession(accession) {
-        const book = bookDatabase.find(b => b.accession === accession);
-
-        if (book) {
-            if (book.available) {
-                showBookDetails(book);
-            } else {
-                showError("This book is currently not available for borrowing.");
-            }
-        } else {
-            showError("Book not found. Please check the accession number and try again.");
-        }
-    }
-
-    function searchBooks(query) {
-        if (query.length < 2) {
-            searchResults.classList.add('hidden');
-            return;
-        }
-
-        const results = bookDatabase.filter(book =>
-            book.title.toLowerCase().includes(query.toLowerCase()) ||
-            book.author.toLowerCase().includes(query.toLowerCase())
-        );
-
-        displaySearchResults(results);
-    }
-
-    function displaySearchResults(results) {
-        searchResults.innerHTML = '';
-
-        if (results.length === 0) {
-            searchResults.innerHTML = '<div class="p-3 text-gray-500">No books found</div>';
-            searchResults.classList.remove('hidden');
-            return;
-        }
-
-        results.forEach(book => {
-            const resultItem = document.createElement('div');
-            resultItem.className = `p-3 hover:bg-gray-100 cursor-pointer border-b border-gray-200 ${book.available ? '' : 'bg-gray-50 text-gray-400'}`;
-            resultItem.innerHTML = `
-                <div class="font-medium ${book.available ? 'text-usepmaroon' : 'text-gray-500'}">${book.title}</div>
-                <div class="text-sm">${book.author}</div>
-                <div class="flex justify-between items-center mt-1">
-                    <span class="text-xs ${book.available ? 'text-green-600' : 'text-red-600'}">
-                        ${book.available ? 'Available' : 'Not Available'}
-                    </span>
-                    <span class="text-xs font-mono">${book.accession}</span>
-                </div>
-            `;
-
-            if (book.available) {
-                resultItem.addEventListener('click', () => {
-                    searchResults.classList.add('hidden');
-                    bookSearch.value = `${book.title} - ${book.author}`;
-                    showBookDetails(book);
-                });
-            }
-
-            searchResults.appendChild(resultItem);
-        });
+        `).join('');
 
         searchResults.classList.remove('hidden');
     }
 
-    // ================== BOOK DETAILS FUNCTIONS ================== //
-    function showBookDetails(book) {
-        currentBook = book;
-
-        const dueDate = calculateDueDate();
-
-        bookDetailsContent.innerHTML = `
-            <div class="flex flex-col md:flex-row gap-4 mb-6">
-                <div class="w-full md:w-1/3">
-                    <img src="${book.image}" alt="${book.title}" class="w-full h-auto rounded-lg shadow-md">
-                </div>
-                <div class="w-full md:w-2/3">
-                    <h3 class="text-xl font-bold text-usepmaroon mb-2">${book.title}</h3>
-                    <p class="text-gray-600 mb-1"><span class="font-semibold">Author:</span> ${book.author}</p>
-                    <p class="text-gray-600 mb-1"><span class="font-semibold">Accession:</span> ${book.accession}</p>
-                    <p class="text-gray-600 mb-1"><span class="font-semibold">Status:</span> <span class="text-green-600">Available</span></p>
-                </div>
-            </div>
-        `;
-
-        document.getElementById('due-date').textContent = dueDate;
-
-        // Show the second container
-        firstContainer.style.opacity = '0';
-        firstContainer.style.transform = 'translateX(-20px)';
-        setTimeout(() => {
-            firstContainer.style.visibility = 'hidden';
-            secondContainer.classList.add('show');
-        }, 300);
-    }
-
-    function calculateDueDate() {
-        const today = new Date();
-        let dueDate = new Date(today);
-
-        if (borrowType === 'inside') {
-            // Due same day by closing time (5 PM)
-            dueDate.setHours(17, 0, 0, 0);
-            return dueDate.toLocaleString('en-US', {
-                weekday: 'short',
-                month: 'short',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-            });
-        } else {
-            // Due in 7 days
-            dueDate.setDate(dueDate.getDate() + 7);
-            return dueDate.toLocaleDateString('en-US', {
-                weekday: 'long',
-                month: 'long',
-                day: 'numeric',
-                year: 'numeric'
-            });
-        }
-    }
-
-    // ================== STUDENT VERIFICATION FUNCTIONS ================== //
-    function verifyStudent(id) {
-        const student = borrowerDatabase.find(s => s.id === id);
-
-        if (student) {
-            currentBorrower = student;
-
-            // Display student info
-            studentName.textContent = student.name;
-            studentCourse.textContent = student.course;
-            studentIdDisplay.textContent = student.id;
-            studentPic.textContent = student.initials;
-
-            studentInfo.classList.remove('hidden');
-        } else {
-            showError("Student ID not found. Please check your ID or contact library staff.");
-        }
-    }
-
-    // ================== BORROWING FUNCTIONS ================== //
-    function processBorrowing() {
-        if (!currentBook) {
-            showError("No book selected for borrowing.");
-            return;
-        }
-
-        // Show student ID modal
-        document.getElementById('student-id-modal').classList.add('show');
-    }
-
-    function completeBorrowing() {
-        if (!currentBorrower) {
-            const id = studentId.value.trim();
-
-            if (!id) {
-                showError("Please enter a valid student ID.");
-                return;
-            }
-
-            verifyStudent(id);
-
-            if (!currentBorrower) {
-                return;
-            }
-        }
-
-        // Close the student modal
-        document.getElementById('student-id-modal').classList.remove('show');
-
-        // Show success modal
-        showSuccessModal();
-    }
-
-    function showSuccessModal() {
-        const dueDate = calculateDueDate();
-
-        successBook.textContent = `${currentBook.title} (${currentBook.accession})`;
-        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id})`;
-        successDueDate.textContent = dueDate;
-
-        document.getElementById('success-modal').classList.add('show');
-    }
-
-    function resetTransaction() {
-        // Reset all fields
-        currentBook = null;
-        currentBorrower = null;
-        studentId.value = '';
-        accessionInput.value = '';
-        bookSearch.value = '';
-        studentInfo.classList.add('hidden');
-
-        // Hide all modals
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.classList.remove('show');
-        });
-
-        // Hide second container
-        secondContainer.classList.remove('show');
-        secondContainer.style.opacity = '0';
-        secondContainer.style.transform = 'translateX(20px)';
-        secondContainer.style.visibility = 'hidden';
-
-        // Show first container
-        firstContainer.style.opacity = '1';
-        firstContainer.style.transform = 'translateX(0)';
-        firstContainer.style.visibility = 'visible';
-    }
-
-    // ================== UTILITY FUNCTIONS ================== //
-    function showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'error-message';
-        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle mr-2"></i> ${message}`;
-
-        // Insert at the top of the current container
-        const currentContainer = secondContainer.classList.contains('show') ? secondContainer : firstContainer;
-        currentContainer.querySelector('.form-box').insertBefore(errorDiv, currentContainer.querySelector('.form-box').firstChild);
-
-        // Remove after 5 seconds
-        setTimeout(() => {
-            errorDiv.remove();
-        }, 5000);
-    }
-
-    // ================== EVENT LISTENERS ================== //
-    function setupEventListeners() {
-        // QR Scanner button
-        scanQrBtn.addEventListener('click', startQRScanner);
-
-        // Use phone scanner button
-        usePhoneScannerBtn.addEventListener('click', showPhoneScannerUI);
-
-        // Close QR scanner
-        closeQrScanner.addEventListener('click', () => {
-            stopQRScanner();
-            document.getElementById('qr-scanner-modal').classList.remove('show');
-        });
-
-        // Close book details
-        closeBookDetails.addEventListener('click', () => {
-            secondContainer.classList.remove('show');
-            secondContainer.style.opacity = '0';
-            secondContainer.style.transform = 'translateX(20px)';
-            secondContainer.style.visibility = 'hidden';
-
-            firstContainer.style.opacity = '1';
-            firstContainer.style.transform = 'translateX(0)';
-            firstContainer.style.visibility = 'visible';
-        });
-
-        // Borrow button
-        borrowBtn.addEventListener('click', processBorrowing);
-
-        // Cancel mobile scan
-        cancelMobileScanBtn.addEventListener('click', () => {
-            stopMobileCamera();
-            mobileScanner.style.display = 'none';
-            window.location.href = window.location.pathname;
-        });
-
-        // Print receipt
-        printReceiptBtn.addEventListener('click', () => {
-            alert("Receipt printing would be implemented here");
-            resetTransaction();
-        });
-
-        // New transaction
-        newTransactionBtn.addEventListener('click', resetTransaction);
-
-        // Find book button
-        document.getElementById('find-book-btn').addEventListener('click', () => {
-            const accession = accessionInput.value.trim();
-            if (accession) {
-                findBookByAccession(accession);
-            } else {
-                showError("Please enter an accession number or search for a book.");
-            }
-        });
-
-        // Book search input
-        bookSearch.addEventListener('input', (e) => {
-            searchBooks(e.target.value);
-        });
-
-        // Hide search results when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!bookSearch.contains(e.target) && !searchResults.contains(e.target)) {
+    function handleSearchResultClick(e) {
+        const resultItem = e.target.closest('[data-accession]');
+        if (resultItem) {
+            const accession = resultItem.getAttribute('data-accession');
+            const book = bookDatabase.find(b => b.accession === accession);
+            if (book) {
+                currentBook = book;
+                showBookDetailsContainer(book);
                 searchResults.classList.add('hidden');
+                bookSearch.value = book.title;
             }
-        });
+        }
+    }
 
-        // Student ID input
-        studentId.addEventListener('input', (e) => {
-            if (e.target.value.length === 10 && e.target.value[4] === '-') {
-                verifyStudent(e.target.value);
+    function hideSearchResultsOnClickOutside(e) {
+        if (!bookSearch.contains(e.target) && !searchResults.contains(e.target)) {
+            searchResults.classList.add('hidden');
+        }
+    }
+
+    function setBorrowType() {
+        borrowType = this.getAttribute('data-type');
+        const today = new Date();
+        const dueDateObj = new Date();
+        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
+    function handleStudentIdInput() {
+        const id = this.value.trim();
+        if (id.length >= 5) {
+            const borrower = borrowerDatabase.find(b => b.id === id);
+            if (borrower) {
+                currentBorrower = borrower;
+                studentPic.textContent = borrower.initials;
+                studentName.textContent = borrower.name;
+                studentCourse.textContent = borrower.course;
+                studentIdDisplay.textContent = borrower.id;
+                studentInfo.classList.remove('hidden');
             } else {
                 studentInfo.classList.add('hidden');
                 currentBorrower = null;
             }
-        });
-
-        // Close student modal
-        closeStudentModal.addEventListener('click', () => {
-            document.getElementById('student-id-modal').classList.remove('show');
-        });
-
-        // Confirm borrow
-        confirmBorrow.addEventListener('click', completeBorrowing);
-
-        // Borrowing type dropdown
-        document.querySelectorAll('.dropdown-content div').forEach(item => {
-            item.addEventListener('click', () => {
-                borrowType = item.dataset.type;
-                document.querySelector('.dropdown button span').textContent = item.textContent.trim();
-
-                // Update due date
-                if (currentBook) {
-                    document.getElementById('due-date').textContent = calculateDueDate();
-                }
-            });
-        });
-
-        // Handle Enter key in accession input
-        accessionInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const accession = accessionInput.value.trim();
-                if (accession) {
-                    findBookByAccession(accession);
-                }
-            }
-        });
+        } else {
+            studentInfo.classList.add('hidden');
+            currentBorrower = null;
+        }
     }
+
+    function showStudentIdModal() {
+        if (!currentBook) {
+            alert("Please select a valid book first");
+            return;
+        }
+        showModal(studentIdModal);
+    }
+
+    function confirmBorrowBook() {
+        if (!currentBook) {
+            alert("Please select a valid book first");
+            return;
+        }
+
+        if (!currentBorrower) {
+            alert("Please enter a valid student ID");
+            return;
+        }
+
+        // Set success page details
+        successBook.textContent = `${currentBook.title} by ${currentBook.author} (${currentBook.accession})`;
+        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id}) - ${currentBorrower.course}`;
+
+        // Calculate due date based on borrow type
+        const today = new Date();
+        const dueDate = new Date();
+        dueDate.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        successDueDate.textContent = dueDate.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        // Mark book as unavailable in the database
+        const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
+        if (bookIndex !== -1) {
+            bookDatabase[bookIndex].available = false;
+        }
+
+        closeModal(studentIdModal);
+        closeBookDetailsContainer();
+        showModal(successModal);
+    }
+
+    function printReceipt() {
+        window.print();
+    }
+
+    function resetForms() {
+        accessionInput.value = '';
+        bookSearch.value = '';
+        studentId.value = '';
+        studentInfo.classList.add('hidden');
+        currentBook = null;
+        currentBorrower = null;
+        borrowType = 'inside';
+    }
+
+    function showBookDetailsContainer(book) {
+        const today = new Date();
+        const dueDateObj = new Date();
+        dueDateObj.setDate(today.getDate() + (borrowType === 'inside' ? 7 : 14));
+
+        bookDetailsContent.innerHTML = `
+            <div class="flex mb-6">
+                <img src="${book.image}" alt="${book.title}" class="w-24 h-32 object-cover rounded-lg mr-4">
+                <div>
+                    <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
+                    <p class="text-gray-600">${book.author}</p>
+                    <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
+                </div>
+            </div>
+        `;
+
+        document.getElementById('due-date').textContent = dueDateObj.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        secondContainer.classList.add('show');
+
+        if (window.innerWidth > 1024) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    }
+
+    function closeBookDetailsContainer() {
+        secondContainer.classList.remove('show');
+        containerWrapper.style.maxWidth = '';
+    }
+
+    function showModal(modal) {
+        modal.classList.add('show');
+    }
+
+    function closeModal(modal) {
+        modal.classList.remove('show');
+    }
+
+    function startQRScanner() {
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+            .then(function (stream) {
+                qrStream = stream;
+                qrVideo.srcObject = stream;
+                qrVideo.setAttribute("playsinline", true);
+                qrVideo.play();
+                requestAnimationFrame(scanQR);
+            })
+            .catch(function (err) {
+                console.error("Error accessing camera: ", err);
+                alert("Could not access camera. Please check permissions.");
+            });
+    }
+
+    function scanQR() {
+        if (qrVideo.readyState === qrVideo.HAVE_ENOUGH_DATA) {
+            const canvas = document.createElement('canvas');
+            canvas.width = qrVideo.videoWidth;
+            canvas.height = qrVideo.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(qrVideo, 0, 0, canvas.width, canvas.height);
+
+            const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+            const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+            if (code) {
+                handleScannedCode(code.data);
+            } else {
+                requestAnimationFrame(scanQR);
+            }
+        } else {
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    function handleScannedCode(code) {
+        const book = bookDatabase.find(b => b.accession === code);
+
+        if (book) {
+            if (!book.available) {
+                alert("This book is currently not available for borrowing.");
+                requestAnimationFrame(scanQR);
+                return;
+            }
+
+            currentBook = book;
+
+            if (qrStream) {
+                qrStream.getTracks().forEach(track => track.stop());
+                qrVideo.srcObject = null;
+                qrStream = null;
+            }
+
+            closeModal(qrScannerModal);
+            showBookDetailsContainer(book);
+        } else {
+            alert("Book not found in database. Please try another code.");
+            requestAnimationFrame(scanQR);
+        }
+    }
+
+    function handleWindowResize() {
+        if (window.innerWidth <= 1024) {
+            containerWrapper.style.maxWidth = '';
+        } else if (secondContainer.classList.contains('show')) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    }
+
+    // Clean up when page is closed
+    window.addEventListener('beforeunload', () => {
+        if (qrStream) qrStream.getTracks().forEach(track => track.stop());
+    });
 </script>
 </body>
 </html>
