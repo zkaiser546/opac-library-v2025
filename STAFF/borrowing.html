@@ -36,7 +36,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            background-image: url('images/eagle.jpg');
+            background-image: url('../landing_page/images/eagle.jpg');
             background-size: cover;
             background-position: center;
             z-index: 0;
@@ -113,6 +113,21 @@
             position: relative;
         }
 
+        #second-container_returning {
+            opacity: 0;
+            transform: translateX(20px);
+            visibility: hidden;
+            transition: all 0.3s ease;
+            position: absolute;
+        }
+
+        #second-container_returning.show {
+            opacity: 1;
+            transform: translateX(0);
+            visibility: visible;
+            position: relative;
+        }
+
         /* Mobile Adjustments */
         @media (max-width: 1024px) {
             #container-wrapper {
@@ -126,12 +141,12 @@
                 min-height: auto;
             }
 
-            #second-container {
+            #second-container, #second-container_returning {
                 position: relative;
                 transform: translateY(20px);
             }
 
-            #second-container.show {
+            #second-container.show, #second-container_returning.show {
                 transform: translateY(0);
             }
         }
@@ -253,7 +268,7 @@
         <div id="first-container" class="form-container">
             <div class="form-box">
                 <div class="text-center mb-8">
-                    <img src="images/usep-logo-small.png" alt="USEP Logo" class="h-20 mx-auto mb-2">
+                    <img src="../landing_page/images/usep-logo-small.png" alt="USEP Logo" class="h-20 mx-auto mb-2">
                     <h1 class="text-2xl font-bold text-usepmaroon">USEP Library Borrowing System</h1>
                     <p class="text-gray-600 mt-1">Tagum-Mabini Campus</p>
                 </div>
@@ -290,7 +305,31 @@
             </div>
         </div>
 
-        <!-- Second Container (Book Details) -->
+        <!-- Second Container (Book Details for Returning) -->
+        <div id="second-container_returning" class="form-container">
+            <div class="form-box">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-xl font-bold text-usepmaroon">Book Details</h2>
+                    <button id="close-return-details" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+
+                <div id="return-book-details-content" class="flex-grow">
+                    <!-- Content will be inserted here -->
+                </div>
+
+                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                    <p class="text-sm text-gray-600">Return date: <span id="return-date" class="font-medium"></span></p>
+                </div>
+
+                <button id="return-btn" class="w-full bg-usepmaroon hover:bg-usepmaroon/90 text-white py-3 px-6 rounded-lg font-medium transition-all shadow-md hover:shadow-lg">
+                    Return Book
+                </button>
+            </div>
+        </div>
+
+        <!-- Second Container (Book Details for Borrowing) -->
         <div id="second-container" class="form-container">
             <div class="form-box">
                 <div class="flex justify-between items-center mb-6">
@@ -326,14 +365,14 @@
                     </div>
                 </div>
 
-                <div class="text-left bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg mb-4">
+                <div id="outside-borrow-warning" class="text-left bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg mb-4 hidden">
                     <p class="text-sm text-yellow-800 font-semibold flex items-center">
                         <i class="fas fa-exclamation-triangle mr-2"></i>
                         Please make sure to return the book on or before the due date to avoid penalties. Thank you!
                     </p>
                 </div>
 
-                <div class="bg-gray-50 p-4 rounded-lg mb-6">
+                <div id="due-date-container" class="bg-gray-50 p-4 rounded-lg mb-6 hidden">
                     <p class="text-sm text-gray-600">Due date: <span id="due-date" class="font-medium"></span></p>
                 </div>
 
@@ -397,42 +436,6 @@
     </div>
 </div>
 
-<!-- Success Modal -->
-<div id="success-modal" class="modal">
-    <div class="modal-content">
-        <div class="mb-6 text-center">
-            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                <i class="fas fa-check text-green-500 text-2xl"></i>
-            </div>
-            <h2 class="text-xl font-bold text-green-600">Book Borrowed Successfully!</h2>
-        </div>
-
-        <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
-            <h3 class="font-semibold text-usepmaroon mb-2">Book Details:</h3>
-            <p id="success-book" class="text-gray-700"></p>
-        </div>
-
-        <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
-            <h3 class="font-semibold text-usepmaroon mb-2">Borrower Details:</h3>
-            <p id="success-borrower" class="text-gray-700"></p>
-        </div>
-
-        <div class="bg-gray-50 rounded-lg p-4 mb-6 text-left">
-            <h3 class="font-semibold text-usepmaroon mb-2">Due Date:</h3>
-            <p id="success-due-date" class="text-gray-700"></p>
-        </div>
-
-        <div class="flex space-x-4">
-            <button id="print-receipt" class="flex-1 bg-usepgold hover:bg-usepgold/90 text-usepmaroon py-2 px-4 rounded-lg font-medium transition-all">
-                Print Receipt
-            </button>
-            <button id="new-transaction" class="flex-1 bg-usepmaroon hover:bg-usepmaroon/90 text-white py-2 px-4 rounded-lg font-medium transition-all">
-                New Transaction
-            </button>
-        </div>
-    </div>
-</div>
-
 <script>
     // ================== GLOBAL VARIABLES ================== //
     let currentBook = null;
@@ -447,11 +450,15 @@
     const containerWrapper = document.getElementById('container-wrapper');
     const firstContainer = document.getElementById('first-container');
     const secondContainer = document.getElementById('second-container');
+    const secondContainerReturning = document.getElementById('second-container_returning');
     const bookDetailsContent = document.getElementById('book-details-content');
+    const returnBookDetailsContent = document.getElementById('return-book-details-content');
     const scanQrBtn = document.getElementById('scan-qr-btn');
     const findBookBtn = document.getElementById('find-book-btn');
     const closeBookDetails = document.getElementById('close-book-details');
+    const closeReturnDetails = document.getElementById('close-return-details');
     const borrowBtn = document.getElementById('borrow-btn');
+    const returnBtn = document.getElementById('return-btn');
     const accessionInput = document.getElementById('accession-input');
     const bookSearch = document.getElementById('book-search');
     const studentId = document.getElementById('student-id');
@@ -471,11 +478,9 @@
     const dropdown = document.getElementById('borrow-type-dropdown');
     const dropdownBtn = document.getElementById('dropdown-btn');
     const selectedOptionText = document.getElementById('selected-option-text');
-    const successBook = document.getElementById('success-book');
-    const successBorrower = document.getElementById('success-borrower');
-    const successDueDate = document.getElementById('success-due-date');
-    const printReceiptBtn = document.getElementById('print-receipt');
-    const newTransactionBtn = document.getElementById('new-transaction');
+    const returnDate = document.getElementById('return-date');
+    const dueDateContainer = document.getElementById('due-date-container');
+    const outsideBorrowWarning = document.getElementById('outside-borrow-warning');
 
     // ================== SAMPLE DATA ================== //
     const bookDatabase = [
@@ -535,6 +540,9 @@
                     <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
                     <p class="text-gray-600">${book.author}</p>
                     <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
+                    <p class="text-sm ${book.available ? 'text-green-600' : 'text-red-600'} font-medium mt-1">
+                        ${book.available ? 'Available' : 'Checked Out'}
+                    </p>
                 </div>
             </div>
         `;
@@ -546,7 +554,45 @@
             day: 'numeric'
         });
 
-        secondContainer.classList.add('show');
+        // Show appropriate container based on availability
+        if (book.available) {
+            secondContainer.classList.add('show');
+            secondContainerReturning.classList.remove('show');
+        } else {
+            showReturnBookDetailsContainer(book);
+        }
+
+        if (window.innerWidth > 1024) {
+            containerWrapper.style.maxWidth = '1400px';
+        }
+    }
+
+    function showReturnBookDetailsContainer(book) {
+        const today = new Date();
+
+        returnBookDetailsContent.innerHTML = `
+            <div class="flex mb-6">
+                <img src="${book.image}" alt="${book.title}" class="w-24 h-32 object-cover rounded-lg mr-4">
+                <div>
+                    <h3 class="font-bold text-lg text-usepmaroon">${book.title}</h3>
+                    <p class="text-gray-600">${book.author}</p>
+                    <p class="text-sm text-gray-500 mt-2">Accession: ${book.accession}</p>
+                    <p class="text-sm text-red-600 font-medium mt-1">
+                        Currently Checked Out
+                    </p>
+                </div>
+            </div>
+        `;
+
+        returnDate.textContent = today.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        secondContainerReturning.classList.add('show');
+        secondContainer.classList.remove('show');
 
         if (window.innerWidth > 1024) {
             containerWrapper.style.maxWidth = '1400px';
@@ -555,6 +601,7 @@
 
     function closeBookDetailsContainer() {
         secondContainer.classList.remove('show');
+        secondContainerReturning.classList.remove('show');
         containerWrapper.style.maxWidth = '';
     }
 
@@ -581,6 +628,15 @@
             month: 'long',
             day: 'numeric'
         });
+
+        // Show/hide warning and due date based on borrow type
+        if (borrowType === 'inside') {
+            outsideBorrowWarning.classList.add('hidden');
+            dueDateContainer.classList.add('hidden');
+        } else {
+            outsideBorrowWarning.classList.remove('hidden');
+            dueDateContainer.classList.remove('hidden');
+        }
     }
 
     // ================== DROPDOWN FUNCTIONALITY ================== //
@@ -634,17 +690,6 @@
         );
 
         if (book) {
-            if (!book.available) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Book Not Available',
-                    text: 'This book is currently checked out.',
-                    confirmButtonColor: '#800000'
-                });
-                requestAnimationFrame(scanQR);
-                return;
-            }
-
             currentBook = book;
 
             if (qrStream) {
@@ -770,6 +815,7 @@
 
         // Close Book Details Button
         closeBookDetails.addEventListener('click', closeBookDetailsContainer);
+        closeReturnDetails.addEventListener('click', closeBookDetailsContainer);
 
         // Close Student Modal Button
         closeStudentModal.addEventListener('click', () => {
@@ -789,20 +835,13 @@
         studentId.addEventListener('input', handleStudentIdInput);
 
         // Borrow Button
-        borrowBtn.addEventListener('click', showStudentIdModal);
+        borrowBtn.addEventListener('click', borrowBook);
+
+        // Return Button
+        returnBtn.addEventListener('click', returnBook);
 
         // Confirm Borrow Button
         confirmBorrow.addEventListener('click', confirmBorrowBook);
-
-        // Print Receipt Button
-        printReceiptBtn.addEventListener('click', printReceipt);
-
-        // New Transaction Button
-        newTransactionBtn.addEventListener('click', () => {
-            resetForms();
-            closeModal(successModal);
-            closeBookDetailsContainer();
-        });
 
         // Window Resize Handler
         window.addEventListener('resize', handleWindowResize);
@@ -822,15 +861,6 @@
             );
 
             if (book) {
-                if (!book.available) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Book Not Available',
-                        text: 'This book is currently checked out.',
-                        confirmButtonColor: '#800000'
-                    });
-                    return;
-                }
                 currentBook = book;
                 showBookDetailsContainer(book);
             } else {
@@ -844,8 +874,7 @@
         } else if (searchTerm) {
             const results = bookDatabase.filter(book =>
                 (book.title.toLowerCase().includes(searchTerm) ||
-                    book.author.toLowerCase().includes(searchTerm)) &&
-                book.available
+                    book.author.toLowerCase().includes(searchTerm))
             );
 
             if (results.length === 1) {
@@ -857,7 +886,7 @@
                 Swal.fire({
                     icon: 'error',
                     title: 'No Books Found',
-                    text: 'No available books match your search',
+                    text: 'No books match your search',
                     confirmButtonColor: '#800000'
                 });
             }
@@ -879,6 +908,9 @@
                 <div>
                     <div class="font-medium text-usepmaroon">${book.title}</div>
                     <div class="text-sm text-gray-600">${book.author}</div>
+                    <div class="text-xs ${book.available ? 'text-green-600' : 'text-red-600'}">
+                        ${book.available ? 'Available' : 'Checked Out'}
+                    </div>
                 </div>
             </div>
         `).join('');
@@ -933,7 +965,7 @@
         }
     }
 
-    function showStudentIdModal() {
+    function borrowBook() {
         if (!currentBook) {
             Swal.fire({
                 icon: 'error',
@@ -943,8 +975,28 @@
             });
             return;
         }
-        showModal(studentIdModal);
-        studentId.focus();
+
+        if (borrowType === 'inside') {
+            // For inside borrowing, just show success message
+            const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
+            if (bookIndex !== -1) {
+                bookDatabase[bookIndex].available = false;
+            }
+
+            Swal.fire({
+                icon: 'success',
+                title: 'Book Borrowed!',
+                text: `${currentBook.title} has been borrowed for in-library use.`,
+                confirmButtonColor: '#800000'
+            }).then(() => {
+                closeBookDetailsContainer();
+                resetForms();
+            });
+        } else {
+            // For outside borrowing, show student ID modal
+            showModal(studentIdModal);
+            studentId.focus();
+        }
     }
 
     function confirmBorrowBook() {
@@ -979,29 +1031,56 @@
             bookDatabase[bookIndex].available = false;
         }
 
-        // Set success modal content
-        successBook.textContent = `${currentBook.title} by ${currentBook.author} (${currentBook.accession})`;
-        successBorrower.textContent = `${currentBorrower.name} (${currentBorrower.id}) - ${currentBorrower.course}`;
-        successDueDate.textContent = dueDate.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+        Swal.fire({
+            icon: 'success',
+            title: 'Book Borrowed!',
+            html: `
+                <div class="text-left">
+                    <p><strong>Book:</strong> ${currentBook.title}</p>
+                    <p><strong>Borrower:</strong> ${currentBorrower.name}</p>
+                    <p><strong>Due Date:</strong> ${dueDate.toLocaleDateString()}</p>
+                </div>
+            `,
+            confirmButtonColor: '#800000'
+        }).then(() => {
+            closeModal(studentIdModal);
+            closeBookDetailsContainer();
+            resetForms();
         });
-
-        closeModal(studentIdModal);
-        closeBookDetailsContainer();
-        showModal(successModal);
     }
 
-    function printReceipt() {
-        window.print();
+    function returnBook() {
+        if (!currentBook) {
+            Swal.fire({
+                icon: 'error',
+                title: 'No Book Selected',
+                text: 'Please select a valid book first',
+                confirmButtonColor: '#800000'
+            });
+            return;
+        }
+
+        // Mark book as available in the database
+        const bookIndex = bookDatabase.findIndex(b => b.accession === currentBook.accession);
+        if (bookIndex !== -1) {
+            bookDatabase[bookIndex].available = true;
+        }
+
+        Swal.fire({
+            icon: 'success',
+            title: 'Book Returned!',
+            text: `${currentBook.title} has been successfully returned.`,
+            confirmButtonColor: '#800000'
+        }).then(() => {
+            closeBookDetailsContainer();
+            resetForms();
+        });
     }
 
     function handleWindowResize() {
         if (window.innerWidth <= 1024) {
             containerWrapper.style.maxWidth = '';
-        } else if (secondContainer.classList.contains('show')) {
+        } else if (secondContainer.classList.contains('show') || secondContainerReturning.classList.contains('show')) {
             containerWrapper.style.maxWidth = '1400px';
         }
     }
